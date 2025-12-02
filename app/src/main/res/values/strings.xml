@@ -1,0 +1,101 @@
+<resources>
+    <string name="app_name">Calorie Tracker</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">Trang chủ</string>
+    <string name="nav_diary">Nhật ký</string>
+    <string name="nav_add">Thêm</string>
+    <string name="nav_profile">Hồ sơ</string>
+
+    <!-- Dashboard -->
+    <string name="today">Hôm nay</string>
+    <string name="calories_consumed">Đã ăn</string>
+    <string name="calories_burned">Đã đốt</string>
+    <string name="calories_remaining">Còn lại</string>
+    <string name="calories_net">Calo NET</string>
+    <string name="goal">Mục tiêu</string>
+    <string name="goal_format">Mục tiêu: %d cal</string>
+    <string name="cal">cal</string>
+    <string name="kcal">kcal</string>
+
+    <!-- Meals -->
+    <string name="breakfast">Bữa sáng</string>
+    <string name="lunch">Bữa trưa</string>
+    <string name="dinner">Bữa tối</string>
+    <string name="snack">Bữa phụ</string>
+
+    <!-- Food -->
+    <string name="add_food">Thêm thực phẩm</string>
+    <string name="search_food">Tìm kiếm thực phẩm...</string>
+    <string name="food_name">Tên thực phẩm</string>
+    <string name="quantity">Khối lượng (gram)</string>
+    <string name="calories">Calo</string>
+    <string name="protein">Protein</string>
+    <string name="carbs">Carbs</string>
+    <string name="fat">Chất béo</string>
+    <string name="per_100g">per 100g</string>
+    <string name="select_meal_type">Chọn bữa ăn</string>
+
+    <!-- Workout -->
+    <string name="add_workout">Thêm bài tập</string>
+    <string name="search_workout">Tìm kiếm bài tập...</string>
+    <string name="workout_name">Tên bài tập</string>
+    <string name="duration">Thời gian (phút)</string>
+    <string name="distance">Khoảng cách</string>
+    <string name="calories_burned_label">Calo đốt cháy</string>
+    <string name="cardio">Cardio</string>
+    <string name="strength">Sức mạnh</string>
+    <string name="flexibility">Linh hoạt</string>
+
+    <!-- Profile -->
+    <string name="profile">Hồ sơ cá nhân</string>
+    <string name="name">Tên</string>
+    <string name="age">Tuổi</string>
+    <string name="gender">Giới tính</string>
+    <string name="male">Nam</string>
+    <string name="female">Nữ</string>
+    <string name="height">Chiều cao (cm)</string>
+    <string name="weight">Cân nặng (kg)</string>
+    <string name="activity_level">Mức độ hoạt động</string>
+    <string name="weight_goal">Mục tiêu</string>
+    <string name="daily_calorie_goal">Mục tiêu calo/ngày</string>
+
+    <!-- Activity Levels -->
+    <string name="sedentary">Ít vận động</string>
+    <string name="light_active">Vận động nhẹ</string>
+    <string name="moderate_active">Vận động vừa</string>
+    <string name="active">Vận động nhiều</string>
+    <string name="very_active">Vận động rất nhiều</string>
+
+    <!-- Weight Goals -->
+    <string name="lose_weight">Giảm cân</string>
+    <string name="maintain_weight">Duy trì</string>
+    <string name="gain_weight">Tăng cân</string>
+
+    <!-- Onboarding -->
+    <string name="welcome">Chào mừng!</string>
+    <string name="onboarding_intro">Hãy nhập thông tin của bạn để bắt đầu theo dõi calo</string>
+    <string name="next">Tiếp tục</string>
+    <string name="finish">Hoàn thành</string>
+    <string name="skip">Bỏ qua</string>
+
+    <!-- Actions -->
+    <string name="save">Lưu</string>
+    <string name="cancel">Hủy</string>
+    <string name="delete">Xóa</string>
+    <string name="edit">Sửa</string>
+    <string name="add">Thêm</string>
+    <string name="confirm">Xác nhận</string>
+
+    <!-- Messages -->
+    <string name="no_entries">Chưa có dữ liệu</string>
+    <string name="no_food_entries">Chưa có thực phẩm nào được ghi</string>
+    <string name="no_workout_entries">Chưa có bài tập nào được ghi</string>
+    <string name="entry_added">Đã thêm thành công</string>
+    <string name="entry_deleted">Đã xóa</string>
+    <string name="error_occurred">Đã xảy ra lỗi</string>
+
+    <!-- Validation -->
+    <string name="field_required">Trường này là bắt buộc</string>
+    <string name="invalid_value">Giá trị không hợp lệ</string>
+</resources>
