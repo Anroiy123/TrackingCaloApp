@@ -13,8 +13,15 @@ public class DiaryPagerAdapter extends FragmentStateAdapter {
     private FoodEntriesFragment foodFragment;
     private WorkoutEntriesFragment workoutFragment;
 
+    // Constructor cho FragmentActivity (deprecated, keep for backward compatibility)
     public DiaryPagerAdapter(@NonNull FragmentActivity fragmentActivity, long selectedDate) {
         super(fragmentActivity);
+        this.selectedDate = selectedDate;
+    }
+
+    // Constructor cho Fragment parent (nested fragments trong DiaryFragment)
+    public DiaryPagerAdapter(@NonNull Fragment fragment, long selectedDate) {
+        super(fragment);
         this.selectedDate = selectedDate;
     }
 

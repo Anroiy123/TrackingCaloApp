@@ -1,13 +1,19 @@
 package com.example.trackingcaloapp.ui.addworkout;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,17 +25,20 @@ import com.example.trackingcaloapp.data.local.entity.WorkoutEntry;
 import com.example.trackingcaloapp.data.repository.WorkoutEntryRepository;
 import com.example.trackingcaloapp.data.repository.WorkoutRepository;
 import com.example.trackingcaloapp.utils.Constants;
-import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.chip.Chip;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.List;
 
-public class AddWorkoutActivity extends AppCompatActivity implements WorkoutAdapter.OnWorkoutClickListener {
+/**
+ * Bottom Sheet Dialog để thêm bài tập
+ */
+public class AddWorkoutDialogFragment extends BottomSheetDialogFragment implements WorkoutAdapter.OnWorkoutClickListener {
 
-    private MaterialToolbar toolbar;
     private TextInputEditText etSearch;
     private ChipGroup chipGroupCategory;
     private RecyclerView rvWorkouts;
@@ -39,40 +48,52 @@ public class AddWorkoutActivity extends AppCompatActivity implements WorkoutAdap
     private WorkoutEntryRepository workoutEntryRepository;
     private WorkoutAdapter workoutAdapter;
 
-    private String selectedCategory = null; // null means all
+    private String selectedCategory = null;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_workout);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_add_workout, container, false);
+    }
 
-        // Initialize repositories
-        AppDatabase db = AppDatabase.getInstance(this);
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        AppDatabase db = AppDatabase.getInstance(requireContext());
         workoutRepository = new WorkoutRepository(db.workoutDao());
         workoutEntryRepository = new WorkoutEntryRepository(db.workoutEntryDao());
 
-        initViews();
-        setupToolbar();
+        initViews(view);
         setupSearch();
         setupCategoryChips();
         loadWorkouts();
     }
 
-    private void initViews() {
-        toolbar = findViewById(R.id.toolbar);
-        etSearch = findViewById(R.id.etSearch);
-        chipGroupCategory = findViewById(R.id.chipGroupCategory);
-        rvWorkouts = findViewById(R.id.rvWorkouts);
-        tvEmpty = findViewById(R.id.tvEmpty);
-
-        // Setup RecyclerView
-        workoutAdapter = new WorkoutAdapter(this);
-        rvWorkouts.setLayoutManager(new LinearLayoutManager(this));
-        rvWorkouts.setAdapter(workoutAdapter);
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Expand bottom sheet
+        Dialog dialog = getDialog();
+        if (dialog != null) {
+            View bottomSheet = dialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
+            if (bottomSheet != null) {
+                BottomSheetBehavior<View> behavior = BottomSheetBehavior.from(bottomSheet);
+                behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                behavior.setSkipCollapsed(true);
+            }
+        }
     }
 
-    private void setupToolbar() {
-        toolbar.setNavigationOnClickListener(v -> finish());
+    private void initViews(View view) {
+        etSearch = view.findViewById(R.id.etSearch);
+        chipGroupCategory = view.findViewById(R.id.chipGroupCategory);
+        rvWorkouts = view.findViewById(R.id.rvWorkouts);
+        tvEmpty = view.findViewById(R.id.tvEmpty);
+
+        workoutAdapter = new WorkoutAdapter(this);
+        rvWorkouts.setLayoutManager(new LinearLayoutManager(requireContext()));
+        rvWorkouts.setAdapter(workoutAdapter);
     }
 
     private void setupSearch() {
@@ -96,14 +117,9 @@ public class AddWorkoutActivity extends AppCompatActivity implements WorkoutAdap
     }
 
     private void setupCategoryChips() {
-        Chip chipAll = findViewById(R.id.chipAll);
-        Chip chipCardio = findViewById(R.id.chipCardio);
-        Chip chipStrength = findViewById(R.id.chipStrength);
-        Chip chipFlexibility = findViewById(R.id.chipFlexibility);
-
         chipGroupCategory.setOnCheckedStateChangeListener((group, checkedIds) -> {
             if (checkedIds.isEmpty()) return;
-            
+
             int checkedId = checkedIds.get(0);
             if (checkedId == R.id.chipAll) {
                 selectedCategory = null;
@@ -125,8 +141,8 @@ public class AddWorkoutActivity extends AppCompatActivity implements WorkoutAdap
         } else {
             workoutsLiveData = workoutRepository.getWorkoutsByCategory(selectedCategory);
         }
-        
-        workoutsLiveData.observe(this, workouts -> {
+
+        workoutsLiveData.observe(getViewLifecycleOwner(), workouts -> {
             if (workouts != null && !workouts.isEmpty()) {
                 workoutAdapter.setWorkouts(workouts);
                 rvWorkouts.setVisibility(View.VISIBLE);
@@ -140,7 +156,7 @@ public class AddWorkoutActivity extends AppCompatActivity implements WorkoutAdap
 
     private void searchWorkouts(String query) {
         LiveData<List<Workout>> searchLiveData = workoutRepository.searchWorkouts(query);
-        searchLiveData.observe(this, workouts -> {
+        searchLiveData.observe(getViewLifecycleOwner(), workouts -> {
             if (workouts != null && !workouts.isEmpty()) {
                 workoutAdapter.setWorkouts(workouts);
                 rvWorkouts.setVisibility(View.VISIBLE);
@@ -154,12 +170,13 @@ public class AddWorkoutActivity extends AppCompatActivity implements WorkoutAdap
 
     @Override
     public void onWorkoutClick(Workout workout) {
-        showAddWorkoutDialog(workout);
+        showAddWorkoutEntryDialog(workout);
     }
 
-    private void showAddWorkoutDialog(Workout workout) {
-        View dialogView = getLayoutInflater().inflate(R.layout.dialog_add_workout_entry, null);
-        
+    private void showAddWorkoutEntryDialog(Workout workout) {
+        View dialogView = LayoutInflater.from(requireContext())
+                .inflate(R.layout.dialog_add_workout_entry, null);
+
         TextView tvWorkoutName = dialogView.findViewById(R.id.tvWorkoutName);
         TextView tvWorkoutInfo = dialogView.findViewById(R.id.tvWorkoutInfo);
         TextInputLayout tilQuantity = dialogView.findViewById(R.id.tilQuantity);
@@ -170,12 +187,11 @@ public class AddWorkoutActivity extends AppCompatActivity implements WorkoutAdap
 
         tvWorkoutName.setText(workout.getName());
         String categoryName = Constants.getWorkoutCategoryName(workout.getCategory());
-        tvWorkoutInfo.setText(String.format("%.0f cal/%s • %s", 
+        tvWorkoutInfo.setText(String.format("%.0f cal/%s • %s",
                 workout.getCaloriesPerUnit(), workout.getUnit(), categoryName));
-        
+
         tilQuantity.setHint("Số lượng (" + workout.getUnit() + ")");
 
-        // Update calories when quantity changes
         etQuantity.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -195,17 +211,19 @@ public class AddWorkoutActivity extends AppCompatActivity implements WorkoutAdap
             }
         });
 
-        // Set default quantity
         etQuantity.setText("30");
 
-        new AlertDialog.Builder(this)
+        new AlertDialog.Builder(requireContext())
                 .setView(dialogView)
                 .setPositiveButton("Thêm", (dialog, which) -> {
                     try {
                         float quantity = Float.parseFloat(etQuantity.getText().toString());
-                        String durationStr = etDuration.getText().toString();
-                        int duration = durationStr.isEmpty() ? 0 : Integer.parseInt(durationStr);
-                        String note = etNote.getText().toString();
+                        int duration = 0;
+                        String durationText = etDuration.getText().toString();
+                        if (!durationText.isEmpty()) {
+                            duration = Integer.parseInt(durationText);
+                        }
+                        String note = etNote.getText().toString().trim();
                         addWorkoutEntry(workout, quantity, duration, note);
                     } catch (NumberFormatException e) {
                         // Ignore
@@ -220,12 +238,14 @@ public class AddWorkoutActivity extends AppCompatActivity implements WorkoutAdap
         entry.setWorkoutId(workout.getId());
         entry.setQuantity(quantity);
         entry.setDuration(duration);
+        entry.setNote(note);
         entry.setDate(System.currentTimeMillis());
         entry.setCaloriesBurned(workout.calculateCaloriesBurned(quantity));
-        entry.setNote(note);
 
         workoutEntryRepository.insert(entry);
-        finish();
+
+        Toast.makeText(requireContext(), R.string.workout_entry_added, Toast.LENGTH_SHORT).show();
+        dismiss(); // Close bottom sheet
     }
 }
 

@@ -49,6 +49,24 @@ public class Constants {
     public static final float DEFAULT_HEIGHT = 170f;
     public static final int DEFAULT_AGE = 25;
     
+    // ==================== AUTO MEAL SUGGESTION HOURS ====================
+    public static final int BREAKFAST_START_HOUR = 6;
+    public static final int BREAKFAST_END_HOUR = 10;
+    public static final int LUNCH_START_HOUR = 10;
+    public static final int LUNCH_END_HOUR = 14;
+    public static final int DINNER_START_HOUR = 18;
+    public static final int DINNER_END_HOUR = 22;
+
+    // ==================== MACRO RATIOS (30/40/30) ====================
+    public static final float PROTEIN_RATIO = 0.30f;  // 30% calories from protein
+    public static final float CARBS_RATIO = 0.40f;    // 40% calories from carbs
+    public static final float FAT_RATIO = 0.30f;      // 30% calories from fat
+
+    // Calories per gram
+    public static final float PROTEIN_CAL_PER_GRAM = 4f;
+    public static final float CARBS_CAL_PER_GRAM = 4f;
+    public static final float FAT_CAL_PER_GRAM = 9f;
+
     // ==================== LIMITS ====================
     public static final int MIN_AGE = 10;
     public static final int MAX_AGE = 120;

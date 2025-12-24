@@ -7,6 +7,9 @@ import androidx.lifecycle.LiveData;
 import com.example.trackingcaloapp.data.local.dao.FoodEntryDao;
 import com.example.trackingcaloapp.data.local.database.AppDatabase;
 import com.example.trackingcaloapp.data.local.entity.FoodEntry;
+import com.example.trackingcaloapp.model.DailySummary;
+import com.example.trackingcaloapp.model.FoodEntryWithFood;
+import com.example.trackingcaloapp.utils.DateUtils;
 
 import java.util.List;
 
@@ -135,6 +138,78 @@ public class FoodEntryRepository {
         AppDatabase.databaseWriteExecutor.execute(() -> {
             foodEntryDao.deleteById(entryId);
         });
+    }
+
+    // ==================== ENTRIES WITH FOOD ====================
+
+    /**
+     * Lấy entries trong một ngày kèm thông tin Food
+     */
+    public LiveData<List<FoodEntryWithFood>> getEntriesWithFoodByDate(long startOfDay, long endOfDay) {
+        return foodEntryDao.getEntriesWithFoodByDate(startOfDay, endOfDay);
+    }
+
+    /**
+     * Lấy entries trong một ngày kèm thông tin Food (không LiveData)
+     */
+    public List<FoodEntryWithFood> getEntriesWithFoodByDateSync(long startOfDay, long endOfDay) {
+        return foodEntryDao.getEntriesWithFoodByDateSync(startOfDay, endOfDay);
+    }
+
+    /**
+     * Lấy entries theo meal type trong một ngày kèm thông tin Food
+     */
+    public LiveData<List<FoodEntryWithFood>> getEntriesWithFoodByMealType(long startOfDay, long endOfDay, int mealType) {
+        return foodEntryDao.getEntriesWithFoodByMealType(startOfDay, endOfDay, mealType);
+    }
+
+    /**
+     * Lấy entry theo ID kèm thông tin Food
+     */
+    public FoodEntryWithFood getEntryWithFoodById(int entryId) {
+        return foodEntryDao.getEntryWithFoodById(entryId);
+    }
+
+    // ==================== DAILY SUMMARY ====================
+
+    /**
+     * Tính toán DailySummary cho một ngày
+     * @param date Timestamp của ngày (bất kỳ thời điểm trong ngày)
+     * @param dailyGoal Mục tiêu calo/ngày
+     * @param caloriesBurned Calo đốt cháy từ workout
+     * @return DailySummary đã tính toán đầy đủ
+     */
+    public DailySummary getDailySummary(long date, int dailyGoal, float caloriesBurned) {
+        long startOfDay = DateUtils.getStartOfDay(date);
+        long endOfDay = DateUtils.getEndOfDay(date);
+
+        DailySummary summary = new DailySummary(date, dailyGoal);
+
+        // Lấy totals từ database
+        float totalCalories = foodEntryDao.getTotalCaloriesByDateSync(startOfDay, endOfDay);
+
+        summary.setCaloriesConsumed(totalCalories);
+        summary.setCaloriesBurned(caloriesBurned);
+
+        // Lấy entries sync
+        List<FoodEntry> entries = foodEntryDao.getEntriesByDateSync(startOfDay, endOfDay);
+        if (entries != null) {
+            float proteinTotal = 0;
+            float carbsTotal = 0;
+            float fatTotal = 0;
+            for (FoodEntry entry : entries) {
+                proteinTotal += entry.getTotalProtein();
+                carbsTotal += entry.getTotalCarbs();
+                fatTotal += entry.getTotalFat();
+            }
+            summary.setProteinTotal(proteinTotal);
+            summary.setCarbsTotal(carbsTotal);
+            summary.setFatTotal(fatTotal);
+            summary.setFoodEntries(entries);
+        }
+
+        summary.calculateMacroGoals();
+        return summary;
     }
 }
 

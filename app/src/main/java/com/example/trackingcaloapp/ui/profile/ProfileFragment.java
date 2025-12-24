@@ -1,36 +1,35 @@
 package com.example.trackingcaloapp.ui.profile;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.example.trackingcaloapp.R;
 import com.example.trackingcaloapp.data.preferences.UserPreferences;
-import com.example.trackingcaloapp.ui.addfood.AddFoodActivity;
-import com.example.trackingcaloapp.ui.diary.DiaryActivity;
-import com.example.trackingcaloapp.ui.main.MainActivity;
 import com.example.trackingcaloapp.utils.CalorieCalculator;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.textfield.TextInputEditText;
 
-public class ProfileActivity extends AppCompatActivity {
+/**
+ * Fragment quản lý thông tin cá nhân và mục tiêu calo
+ */
+public class ProfileFragment extends Fragment {
 
     private TextInputEditText etName, etAge, etHeight, etWeight, etCalorieGoal;
     private Spinner spinnerGender, spinnerActivityLevel, spinnerWeightGoal;
     private TextView tvBMI, tvBMICategory;
     private MaterialButton btnCalculateGoal, btnSave;
-    private BottomNavigationView bottomNavigation;
 
     private UserPreferences userPreferences;
 
@@ -45,48 +44,51 @@ public class ProfileActivity extends AppCompatActivity {
     private final String[] weightGoals = {"Giảm cân", "Giữ cân", "Tăng cân"};
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_profile, container, false);
+    }
 
-        userPreferences = new UserPreferences(this);
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        initViews();
+        userPreferences = new UserPreferences(requireContext());
+
+        initViews(view);
         setupSpinners();
         setupButtons();
-        setupBottomNavigation();
         loadUserData();
     }
 
-    private void initViews() {
-        etName = findViewById(R.id.etName);
-        etAge = findViewById(R.id.etAge);
-        etHeight = findViewById(R.id.etHeight);
-        etWeight = findViewById(R.id.etWeight);
-        etCalorieGoal = findViewById(R.id.etCalorieGoal);
-        spinnerGender = findViewById(R.id.spinnerGender);
-        spinnerActivityLevel = findViewById(R.id.spinnerActivityLevel);
-        spinnerWeightGoal = findViewById(R.id.spinnerWeightGoal);
-        tvBMI = findViewById(R.id.tvBMI);
-        tvBMICategory = findViewById(R.id.tvBMICategory);
-        btnCalculateGoal = findViewById(R.id.btnCalculateGoal);
-        btnSave = findViewById(R.id.btnSave);
-        bottomNavigation = findViewById(R.id.bottomNavigation);
+    private void initViews(View view) {
+        etName = view.findViewById(R.id.etName);
+        etAge = view.findViewById(R.id.etAge);
+        etHeight = view.findViewById(R.id.etHeight);
+        etWeight = view.findViewById(R.id.etWeight);
+        etCalorieGoal = view.findViewById(R.id.etCalorieGoal);
+        spinnerGender = view.findViewById(R.id.spinnerGender);
+        spinnerActivityLevel = view.findViewById(R.id.spinnerActivityLevel);
+        spinnerWeightGoal = view.findViewById(R.id.spinnerWeightGoal);
+        tvBMI = view.findViewById(R.id.tvBMI);
+        tvBMICategory = view.findViewById(R.id.tvBMICategory);
+        btnCalculateGoal = view.findViewById(R.id.btnCalculateGoal);
+        btnSave = view.findViewById(R.id.btnSave);
     }
 
     private void setupSpinners() {
         ArrayAdapter<String> genderAdapter = new ArrayAdapter<>(
-                this, android.R.layout.simple_spinner_item, genders);
+                requireContext(), android.R.layout.simple_spinner_item, genders);
         genderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerGender.setAdapter(genderAdapter);
 
         ArrayAdapter<String> activityAdapter = new ArrayAdapter<>(
-                this, android.R.layout.simple_spinner_item, activityLevels);
+                requireContext(), android.R.layout.simple_spinner_item, activityLevels);
         activityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerActivityLevel.setAdapter(activityAdapter);
 
         ArrayAdapter<String> goalAdapter = new ArrayAdapter<>(
-                this, android.R.layout.simple_spinner_item, weightGoals);
+                requireContext(), android.R.layout.simple_spinner_item, weightGoals);
         goalAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerWeightGoal.setAdapter(goalAdapter);
     }
@@ -111,30 +113,6 @@ public class ProfileActivity extends AppCompatActivity {
 
         etHeight.addTextChangedListener(bmiWatcher);
         etWeight.addTextChangedListener(bmiWatcher);
-    }
-
-    private void setupBottomNavigation() {
-        bottomNavigation.setSelectedItemId(R.id.nav_profile);
-        bottomNavigation.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                int itemId = item.getItemId();
-                if (itemId == R.id.nav_home) {
-                    startActivity(new Intent(ProfileActivity.this, MainActivity.class));
-                    finish();
-                    return true;
-                } else if (itemId == R.id.nav_diary) {
-                    startActivity(new Intent(ProfileActivity.this, DiaryActivity.class));
-                    return true;
-                } else if (itemId == R.id.nav_add) {
-                    startActivity(new Intent(ProfileActivity.this, AddFoodActivity.class));
-                    return true;
-                } else if (itemId == R.id.nav_profile) {
-                    return true;
-                }
-                return false;
-            }
-        });
     }
 
     private void loadUserData() {
@@ -181,8 +159,8 @@ public class ProfileActivity extends AppCompatActivity {
             } else {
                 colorRes = R.color.error;
             }
-            tvBMI.setTextColor(getColor(colorRes));
-            tvBMICategory.setTextColor(getColor(colorRes));
+            tvBMI.setTextColor(requireContext().getColor(colorRes));
+            tvBMICategory.setTextColor(requireContext().getColor(colorRes));
 
         } catch (NumberFormatException e) {
             tvBMI.setText("--");
@@ -204,10 +182,10 @@ public class ProfileActivity extends AppCompatActivity {
                     weight, height, age, isMale, activityMultiplier, weightGoal);
 
             etCalorieGoal.setText(String.valueOf(calorieGoal));
-            Toast.makeText(this, "Đã tính mục tiêu calo!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "Đã tính mục tiêu calo!", Toast.LENGTH_SHORT).show();
 
         } catch (NumberFormatException e) {
-            Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -242,11 +220,11 @@ public class ProfileActivity extends AppCompatActivity {
             userPreferences.setWeightGoal(weightGoal);
             userPreferences.setDailyCalorieGoal(calorieGoal);
 
-            Toast.makeText(this, "Đã lưu thông tin!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "Đã lưu thông tin!", Toast.LENGTH_SHORT).show();
             updateBMI();
 
         } catch (NumberFormatException e) {
-            Toast.makeText(this, "Vui lòng nhập số hợp lệ", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "Vui lòng nhập số hợp lệ", Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -4,9 +4,12 @@ import android.app.Application;
 
 import androidx.lifecycle.LiveData;
 
+import com.example.trackingcaloapp.data.local.dao.FavoriteFoodDao;
 import com.example.trackingcaloapp.data.local.dao.FoodDao;
 import com.example.trackingcaloapp.data.local.database.AppDatabase;
+import com.example.trackingcaloapp.data.local.entity.FavoriteFood;
 import com.example.trackingcaloapp.data.local.entity.Food;
+import com.example.trackingcaloapp.model.FoodWithDetails;
 
 import java.util.List;
 
@@ -17,17 +20,27 @@ import java.util.List;
 public class FoodRepository {
 
     private final FoodDao foodDao;
+    private final FavoriteFoodDao favoriteFoodDao;
     private final LiveData<List<Food>> allFoods;
 
     public FoodRepository(Application application) {
         AppDatabase db = AppDatabase.getDatabase(application);
         foodDao = db.foodDao();
+        favoriteFoodDao = db.favoriteFoodDao();
         allFoods = foodDao.getAllFoods();
     }
 
     // Constructor overload for direct DAO injection
     public FoodRepository(FoodDao foodDao) {
         this.foodDao = foodDao;
+        this.favoriteFoodDao = null;
+        this.allFoods = foodDao.getAllFoods();
+    }
+
+    // Constructor overload for both DAOs
+    public FoodRepository(FoodDao foodDao, FavoriteFoodDao favoriteFoodDao) {
+        this.foodDao = foodDao;
+        this.favoriteFoodDao = favoriteFoodDao;
         this.allFoods = foodDao.getAllFoods();
     }
     
@@ -122,6 +135,100 @@ public class FoodRepository {
         AppDatabase.databaseWriteExecutor.execute(() -> {
             foodDao.deleteById(foodId);
         });
+    }
+
+    // ==================== FOOD WITH DETAILS ====================
+
+    /**
+     * Lấy tất cả foods kèm thông tin favorite
+     */
+    public LiveData<List<FoodWithDetails>> getAllFoodsWithDetails() {
+        return foodDao.getAllFoodsWithDetails();
+    }
+
+    /**
+     * Tìm kiếm foods kèm thông tin favorite (search name + aliasVi)
+     */
+    public LiveData<List<FoodWithDetails>> searchFoodsWithDetails(String query) {
+        return foodDao.searchFoodsWithDetails(query);
+    }
+
+    /**
+     * Lấy foods theo category kèm thông tin favorite
+     */
+    public LiveData<List<FoodWithDetails>> getFoodsByCategoryWithDetails(String category) {
+        return foodDao.getFoodsByCategoryWithDetails(category);
+    }
+
+    /**
+     * Lấy một food theo ID kèm thông tin favorite
+     */
+    public FoodWithDetails getFoodWithDetailsById(int foodId) {
+        return foodDao.getFoodWithDetailsById(foodId);
+    }
+
+    // ==================== FAVORITES ====================
+
+    /**
+     * Lấy tất cả favorites
+     */
+    public LiveData<List<FavoriteFood>> getAllFavorites() {
+        if (favoriteFoodDao == null) return null;
+        return favoriteFoodDao.getAllFavorites();
+    }
+
+    /**
+     * Lấy danh sách Food yêu thích kèm thông tin chi tiết
+     */
+    public LiveData<List<FoodWithDetails>> getAllFavoriteFoodsWithDetails() {
+        if (favoriteFoodDao == null) return null;
+        return favoriteFoodDao.getAllFavoriteFoodsWithDetails();
+    }
+
+    /**
+     * Toggle favorite status của một food
+     */
+    public void toggleFavorite(int foodId, float defaultQuantity, OnToggleCallback callback) {
+        if (favoriteFoodDao == null) {
+            if (callback != null) callback.onResult(false);
+            return;
+        }
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            boolean isFav = favoriteFoodDao.isFavorite(foodId);
+            if (isFav) {
+                favoriteFoodDao.deleteByFoodId(foodId);
+                if (callback != null) callback.onResult(false);
+            } else {
+                FavoriteFood favorite = new FavoriteFood(foodId, defaultQuantity);
+                favoriteFoodDao.insert(favorite);
+                if (callback != null) callback.onResult(true);
+            }
+        });
+    }
+
+    /**
+     * Increment use count khi dùng favorite
+     */
+    public void incrementFavoriteUseCount(int foodId) {
+        if (favoriteFoodDao == null) return;
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            favoriteFoodDao.incrementUseCount(foodId, System.currentTimeMillis());
+        });
+    }
+
+    /**
+     * Kiểm tra food có phải là favorite không
+     */
+    public boolean isFavorite(int foodId) {
+        if (favoriteFoodDao == null) return false;
+        return favoriteFoodDao.isFavorite(foodId);
+    }
+
+    /**
+     * Interface callback cho toggle operation
+     */
+    public interface OnToggleCallback {
+        void onResult(boolean isNowFavorite);
     }
 }
 

@@ -6,9 +6,11 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Transaction;
 import androidx.room.Update;
 
 import com.example.trackingcaloapp.data.local.entity.Food;
+import com.example.trackingcaloapp.model.FoodWithDetails;
 
 import java.util.List;
 
@@ -22,8 +24,8 @@ public interface FoodDao {
     // ==================== INSERT ====================
     
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(Food food);
-    
+    long insert(Food food);
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<Food> foods);
     
@@ -70,15 +72,17 @@ public interface FoodDao {
     LiveData<Food> getFoodByIdLive(int foodId);
     
     /**
-     * Tìm kiếm thực phẩm theo tên
+     * Tìm kiếm thực phẩm theo tên hoặc alias tiếng Việt
      */
-    @Query("SELECT * FROM foods WHERE name LIKE '%' || :searchQuery || '%' ORDER BY name ASC")
+    @Query("SELECT * FROM foods WHERE LOWER(name) LIKE '%' || LOWER(:searchQuery) || '%' " +
+           "OR LOWER(aliasVi) LIKE '%' || LOWER(:searchQuery) || '%' ORDER BY name ASC")
     LiveData<List<Food>> searchFoods(String searchQuery);
     
     /**
-     * Tìm kiếm thực phẩm theo tên (không LiveData)
+     * Tìm kiếm thực phẩm theo tên hoặc alias (không LiveData)
      */
-    @Query("SELECT * FROM foods WHERE name LIKE '%' || :searchQuery || '%' ORDER BY name ASC")
+    @Query("SELECT * FROM foods WHERE LOWER(name) LIKE '%' || LOWER(:searchQuery) || '%' " +
+           "OR LOWER(aliasVi) LIKE '%' || LOWER(:searchQuery) || '%' ORDER BY name ASC")
     List<Food> searchFoodsSync(String searchQuery);
     
     /**
@@ -110,5 +114,50 @@ public interface FoodDao {
      */
     @Query("SELECT DISTINCT category FROM foods ORDER BY category ASC")
     LiveData<List<String>> getAllCategories();
+
+    // ==================== FOOD WITH DETAILS (JOIN với FavoriteFood) ====================
+
+    /**
+     * Lấy tất cả foods kèm thông tin favorite
+     */
+    @Query("SELECT f.*, ff.id as favoriteId, ff.defaultQuantity, ff.lastUsed, ff.useCount, " +
+           "(ff.id IS NOT NULL) as isFavorite " +
+           "FROM foods f " +
+           "LEFT JOIN favorite_foods ff ON f.id = ff.foodId " +
+           "ORDER BY f.name ASC")
+    LiveData<List<FoodWithDetails>> getAllFoodsWithDetails();
+
+    /**
+     * Tìm kiếm foods kèm thông tin favorite (search name + aliasVi)
+     */
+    @Query("SELECT f.*, ff.id as favoriteId, ff.defaultQuantity, ff.lastUsed, ff.useCount, " +
+           "(ff.id IS NOT NULL) as isFavorite " +
+           "FROM foods f " +
+           "LEFT JOIN favorite_foods ff ON f.id = ff.foodId " +
+           "WHERE LOWER(f.name) LIKE '%' || LOWER(:searchQuery) || '%' " +
+           "OR LOWER(f.aliasVi) LIKE '%' || LOWER(:searchQuery) || '%' " +
+           "ORDER BY f.name ASC")
+    LiveData<List<FoodWithDetails>> searchFoodsWithDetails(String searchQuery);
+
+    /**
+     * Lấy foods theo category kèm thông tin favorite
+     */
+    @Query("SELECT f.*, ff.id as favoriteId, ff.defaultQuantity, ff.lastUsed, ff.useCount, " +
+           "(ff.id IS NOT NULL) as isFavorite " +
+           "FROM foods f " +
+           "LEFT JOIN favorite_foods ff ON f.id = ff.foodId " +
+           "WHERE f.category = :category " +
+           "ORDER BY f.name ASC")
+    LiveData<List<FoodWithDetails>> getFoodsByCategoryWithDetails(String category);
+
+    /**
+     * Lấy một food theo ID kèm thông tin favorite
+     */
+    @Query("SELECT f.*, ff.id as favoriteId, ff.defaultQuantity, ff.lastUsed, ff.useCount, " +
+           "(ff.id IS NOT NULL) as isFavorite " +
+           "FROM foods f " +
+           "LEFT JOIN favorite_foods ff ON f.id = ff.foodId " +
+           "WHERE f.id = :foodId")
+    FoodWithDetails getFoodWithDetailsById(int foodId);
 }
 

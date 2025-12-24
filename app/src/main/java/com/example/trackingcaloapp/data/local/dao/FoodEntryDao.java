@@ -6,9 +6,11 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Transaction;
 import androidx.room.Update;
 
 import com.example.trackingcaloapp.data.local.entity.FoodEntry;
+import com.example.trackingcaloapp.model.FoodEntryWithFood;
 
 import java.util.List;
 
@@ -22,8 +24,8 @@ public interface FoodEntryDao {
     // ==================== INSERT ====================
     
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(FoodEntry foodEntry);
-    
+    long insert(FoodEntry foodEntry);
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<FoodEntry> foodEntries);
     
@@ -120,5 +122,42 @@ public interface FoodEntryDao {
      */
     @Query("SELECT COUNT(*) FROM food_entries WHERE date BETWEEN :startOfDay AND :endOfDay")
     int getEntryCountByDate(long startOfDay, long endOfDay);
+
+    // ==================== ENTRIES WITH FOOD (JOIN) ====================
+
+    /**
+     * Lấy entries trong một ngày kèm thông tin Food
+     */
+    @Transaction
+    @Query("SELECT * FROM food_entries WHERE date BETWEEN :startOfDay AND :endOfDay ORDER BY mealType ASC, date ASC")
+    LiveData<List<FoodEntryWithFood>> getEntriesWithFoodByDate(long startOfDay, long endOfDay);
+
+    /**
+     * Lấy entries trong một ngày kèm thông tin Food (không LiveData)
+     */
+    @Transaction
+    @Query("SELECT * FROM food_entries WHERE date BETWEEN :startOfDay AND :endOfDay ORDER BY mealType ASC, date ASC")
+    List<FoodEntryWithFood> getEntriesWithFoodByDateSync(long startOfDay, long endOfDay);
+
+    /**
+     * Lấy entries theo meal type trong một ngày kèm thông tin Food
+     */
+    @Transaction
+    @Query("SELECT * FROM food_entries WHERE date BETWEEN :startOfDay AND :endOfDay AND mealType = :mealType ORDER BY date ASC")
+    LiveData<List<FoodEntryWithFood>> getEntriesWithFoodByMealType(long startOfDay, long endOfDay, int mealType);
+
+    /**
+     * Lấy tất cả entries kèm thông tin Food (không LiveData)
+     */
+    @Transaction
+    @Query("SELECT * FROM food_entries ORDER BY date DESC")
+    List<FoodEntryWithFood> getAllEntriesWithFoodSync();
+
+    /**
+     * Lấy entry theo ID kèm thông tin Food
+     */
+    @Transaction
+    @Query("SELECT * FROM food_entries WHERE id = :entryId")
+    FoodEntryWithFood getEntryWithFoodById(int entryId);
 }
 
