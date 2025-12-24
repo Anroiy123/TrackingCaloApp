@@ -1,0 +1,38 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Dark Theme - Premium Wellness -->
+    <style name="Base.Theme.TrackingCaloApp" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Primary Branding Colors -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorPrimaryContainer">@color/primary_light</item>
+        <item name="colorOnPrimary">@color/text_on_primary</item>
+        <item name="colorOnPrimaryContainer">@color/primary</item>
+
+        <!-- Secondary Colors -->
+        <item name="colorSecondary">@color/secondary</item>
+        <item name="colorSecondaryContainer">@color/secondary_light</item>
+        <item name="colorOnSecondary">@color/background</item>
+
+        <!-- Tertiary/Accent -->
+        <item name="colorTertiary">@color/accent</item>
+        <item name="colorTertiaryContainer">@color/accent_light</item>
+
+        <!-- Background & Surface -->
+        <item name="android:colorBackground">@color/background</item>
+        <item name="colorSurface">@color/surface</item>
+        <item name="colorSurfaceVariant">@color/surface_variant</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+        <item name="colorOnSurfaceVariant">@color/text_secondary</item>
+
+        <!-- Error -->
+        <item name="colorError">@color/error</item>
+
+        <!-- Ripple -->
+        <item name="android:colorControlHighlight">@color/ripple_color</item>
+
+        <!-- Navigation Bar -->
+        <item name="android:navigationBarColor">@color/surface</item>
+        <item name="android:statusBarColor">@color/background</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+</resources>

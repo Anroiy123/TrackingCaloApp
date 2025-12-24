@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingVertical="@dimen/padding_medium"
+    android:paddingHorizontal="@dimen/padding_small">
+
+    <!-- Type Indicator - Rounded -->
+    <View
+        android:id="@+id/viewTypeIndicator"
+        android:layout_width="4dp"
+        android:layout_height="36dp"
+        android:background="@drawable/bg_indicator_primary" />
+
+    <!-- Activity Info -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_medium"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvActivityName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="Phở bò"
+            android:textColor="@color/text_primary"
+            android:textSize="@dimen/text_size_medium"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-medium" />
+
+        <TextView
+            android:id="@+id/tvActivityInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="Bữa sáng • 08:30"
+            android:textColor="@color/text_hint"
+            android:textSize="@dimen/text_size_small" />
+
+    </LinearLayout>
+
+    <!-- Calories -->
+    <TextView
+        android:id="@+id/tvCalories"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="+450 cal"
+        android:textColor="@color/calories_consumed"
+        android:textSize="@dimen/text_size_medium"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif-medium" />
+
+</LinearLayout>
