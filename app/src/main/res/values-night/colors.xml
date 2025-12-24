@@ -1,75 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <!-- Dark Theme Colors - Premium Wellness -->
 
-    <!-- PRIMARY PALETTE - Warm Coral/Terracotta (Bold & Distinctive) -->
+    <!-- PRIMARY - Keep warm coral but slightly muted -->
     <color name="primary">#E85D4C</color>
     <color name="primary_dark">#C94C3D</color>
-    <color name="primary_light">#FFEAE8</color>
+    <color name="primary_light">#3D2420</color>
     <color name="primary_gradient_start">#E85D4C</color>
     <color name="primary_gradient_end">#F4A261</color>
 
-    <!-- SECONDARY - Deep Teal (Contrast & Balance) -->
-    <color name="secondary">#1D3557</color>
-    <color name="secondary_dark">#0D1F33</color>
+    <!-- SECONDARY - Deep Teal -->
+    <color name="secondary">#E0E8F0</color>
+    <color name="secondary_dark">#F0F4F8</color>
     <color name="secondary_light">#457B9D</color>
 
-    <!-- ACCENT - Warm Gold (Premium Feel) -->
+    <!-- ACCENT - Warm Gold -->
     <color name="accent">#F4A261</color>
-    <color name="accent_light">#FFE5C4</color>
+    <color name="accent_light">#4D3D2F</color>
 
-    <!-- BACKGROUND - Soft Warm Off-White -->
-    <color name="background">#FBF7F4</color>
-    <color name="background_elevated">#FFFFFF</color>
-    <color name="surface">#FFFFFF</color>
-    <color name="card_background">#FFFFFF</color>
-    <color name="surface_variant">#F5EDE8</color>
+    <!-- BACKGROUND - Rich Dark -->
+    <color name="background">#121518</color>
+    <color name="background_elevated">#1C2025</color>
+    <color name="surface">#1C2025</color>
+    <color name="card_background">#1C2025</color>
+    <color name="surface_variant">#262D35</color>
 
-    <!-- TEXT - Rich, Warm Contrast -->
-    <color name="text_primary">#1D3557</color>
-    <color name="text_secondary">#6B7B8A</color>
-    <color name="text_hint">#A8B5C2</color>
+    <!-- TEXT - Crisp Light -->
+    <color name="text_primary">#F5F5F5</color>
+    <color name="text_secondary">#A0AAB4</color>
+    <color name="text_hint">#5C6670</color>
     <color name="text_on_primary">#FFFFFF</color>
     <color name="text_accent">#E85D4C</color>
 
-    <!-- STATUS COLORS - Refined -->
+    <!-- STATUS COLORS -->
     <color name="success">#2A9D8F</color>
     <color name="warning">#E9C46A</color>
     <color name="error">#E76F51</color>
     <color name="info">#457B9D</color>
 
-    <!-- CALORIE TRACKING - Vibrant & Clear -->
+    <!-- CALORIE TRACKING -->
     <color name="calories_consumed">#E85D4C</color>
     <color name="calories_burned">#2A9D8F</color>
-    <color name="calories_remaining">#457B9D</color>
+    <color name="calories_remaining">#6BA3C9</color>
     <color name="calories_net">#F4A261</color>
 
-    <!-- MEAL TYPE COLORS - Warm, Organic Palette -->
+    <!-- MEAL TYPE COLORS -->
     <color name="breakfast">#F4A261</color>
     <color name="lunch">#2A9D8F</color>
-    <color name="dinner">#457B9D</color>
+    <color name="dinner">#6BA3C9</color>
     <color name="snack">#E9C46A</color>
     <color name="meal_breakfast">#F4A261</color>
     <color name="meal_lunch">#2A9D8F</color>
-    <color name="meal_dinner">#457B9D</color>
+    <color name="meal_dinner">#6BA3C9</color>
     <color name="meal_snack">#E9C46A</color>
 
-    <!-- WORKOUT CATEGORY COLORS - Energetic -->
+    <!-- WORKOUT CATEGORY COLORS -->
     <color name="cardio">#E76F51</color>
-    <color name="strength">#264653</color>
+    <color name="strength">#6BA3C9</color>
     <color name="flexibility">#2A9D8F</color>
     <color name="workout_cardio">#E76F51</color>
-    <color name="workout_strength">#264653</color>
+    <color name="workout_strength">#6BA3C9</color>
     <color name="workout_flexibility">#2A9D8F</color>
 
-    <!-- NUTRITION MACROS - Distinct & Memorable -->
+    <!-- NUTRITION MACROS -->
     <color name="protein">#E85D4C</color>
     <color name="carbs">#F4A261</color>
-    <color name="fat">#457B9D</color>
+    <color name="fat">#6BA3C9</color>
 
-    <!-- PROGRESS BAR - Subtle Background -->
-    <color name="progress_background">#F0E6E0</color>
+    <!-- PROGRESS BAR -->
+    <color name="progress_background">#2A3038</color>
     <color name="progress_normal">#2A9D8F</color>
     <color name="progress_warning">#E9C46A</color>
     <color name="progress_over">#E76F51</color>
@@ -77,14 +76,15 @@
     <!-- GRADIENT OVERLAY COLORS -->
     <color name="gradient_warm_start">#E85D4C</color>
     <color name="gradient_warm_end">#F4A261</color>
-    <color name="gradient_cool_start">#264653</color>
+    <color name="gradient_cool_start">#1D3557</color>
     <color name="gradient_cool_end">#2A9D8F</color>
 
     <!-- SHADOW & ELEVATION -->
-    <color name="shadow_light">#1A1D3557</color>
-    <color name="ripple_color">#20E85D4C</color>
+    <color name="shadow_light">#40000000</color>
+    <color name="ripple_color">#30E85D4C</color>
 
     <!-- BOTTOM NAV -->
-    <color name="nav_inactive">#A8B5C2</color>
+    <color name="nav_inactive">#5C6670</color>
     <color name="nav_active">#E85D4C</color>
 </resources>
+

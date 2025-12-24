@@ -1,80 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
     android:fillViewport="true"
-    tools:context=".ui.onboarding.OnboardingActivity">
+    android:clipToPadding="false">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingHorizontal="@dimen/padding_large"
-        android:paddingTop="@dimen/padding_xxlarge"
-        android:paddingBottom="@dimen/padding_xlarge">
+        android:paddingTop="@dimen/padding_xlarge"
+        android:paddingBottom="@dimen/padding_large">
 
-        <!-- Welcome Header with Illustration Area -->
-        <LinearLayout
-            android:layout_width="match_parent"
+        <!-- Header -->
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:text="@string/profile"
+            android:textColor="@color/text_primary"
+            android:textSize="@dimen/text_size_title"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-medium" />
 
-            <!-- App Icon/Logo Area -->
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                app:cardCornerRadius="40dp"
-                app:cardElevation="8dp"
-                app:strokeWidth="0dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/bg_gradient_warm"
-                    android:gravity="center">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="🔥"
-                        android:textSize="32sp" />
-
-                </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_large"
-                android:text="@string/welcome"
-                android:textColor="@color/primary"
-                android:textSize="@dimen/text_size_headline"
-                android:textStyle="bold"
-                android:fontFamily="sans-serif-medium" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_small"
-                android:gravity="center"
-                android:lineSpacingMultiplier="1.3"
-                android:paddingHorizontal="@dimen/padding_large"
-                android:text="@string/onboarding_intro"
-                android:textColor="@color/text_secondary"
-                android:textSize="@dimen/text_size_medium" />
-
-        </LinearLayout>
-
-        <!-- Form Card -->
+        <!-- BMI Card - Hero Display -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_xlarge"
+            android:layout_marginTop="@dimen/margin_large"
+            app:cardCornerRadius="@dimen/card_corner_radius_large"
+            app:cardElevation="@dimen/card_elevation"
+            app:strokeWidth="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_gradient_cool"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="@dimen/card_padding_large">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Chỉ số BMI"
+                    android:textColor="#99FFFFFF"
+                    android:textSize="@dimen/text_size_small"
+                    android:textAllCaps="true"
+                    android:letterSpacing="0.15" />
+
+                <TextView
+                    android:id="@+id/tvBMI"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:text="--"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_calorie"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-medium"
+                    android:includeFontPadding="false" />
+
+                <TextView
+                    android:id="@+id/tvBMICategory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:text=""
+                    android:textColor="#B3FFFFFF"
+                    android:textSize="@dimen/text_size_medium" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- User Info Card -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_large"
             app:cardCornerRadius="@dimen/card_corner_radius"
             app:cardElevation="@dimen/card_elevation"
             app:strokeWidth="0dp">
@@ -83,9 +89,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="@dimen/card_padding_large">
+                android:padding="@dimen/card_padding">
 
-                <!-- Section Title -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -118,65 +123,61 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Tuổi -->
-                <com.google.android.material.textfield.TextInputLayout
+                <!-- Row: Tuổi & Giới tính -->
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_medium"
-                    android:hint="@string/age"
-                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-                    app:boxCornerRadiusBottomEnd="@dimen/input_corner_radius"
-                    app:boxCornerRadiusBottomStart="@dimen/input_corner_radius"
-                    app:boxCornerRadiusTopEnd="@dimen/input_corner_radius"
-                    app:boxCornerRadiusTopStart="@dimen/input_corner_radius"
-                    app:boxStrokeColor="@color/primary"
-                    app:hintTextColor="@color/primary">
+                    android:orientation="horizontal"
+                    android:weightSum="2">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etAge"
-                        android:layout_width="match_parent"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:inputType="number"
-                        android:textColor="@color/text_primary" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!-- Giới tính -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_large"
-                    android:text="@string/gender"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="@dimen/text_size_medium" />
-
-                <RadioGroup
-                    android:id="@+id/rgGender"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_small"
-                    android:orientation="horizontal">
-
-                    <com.google.android.material.radiobutton.MaterialRadioButton
-                        android:id="@+id/rbMale"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/margin_small"
                         android:layout_weight="1"
-                        android:checked="true"
-                        android:text="@string/male"
-                        android:textColor="@color/text_primary"
-                        app:buttonTint="@color/primary" />
+                        android:hint="@string/age"
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                        app:boxCornerRadiusBottomEnd="@dimen/input_corner_radius"
+                        app:boxCornerRadiusBottomStart="@dimen/input_corner_radius"
+                        app:boxCornerRadiusTopEnd="@dimen/input_corner_radius"
+                        app:boxCornerRadiusTopStart="@dimen/input_corner_radius"
+                        app:boxStrokeColor="@color/primary"
+                        app:hintTextColor="@color/primary">
 
-                    <com.google.android.material.radiobutton.MaterialRadioButton
-                        android:id="@+id/rbFemale"
-                        android:layout_width="wrap_content"
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etAge"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="number"
+                            android:textColor="@color/text_primary" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_small"
                         android:layout_weight="1"
-                        android:text="@string/female"
-                        android:textColor="@color/text_primary"
-                        app:buttonTint="@color/primary" />
+                        android:orientation="vertical">
 
-                </RadioGroup>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/margin_small"
+                            android:text="@string/gender"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="@dimen/text_size_small" />
+
+                        <Spinner
+                            android:id="@+id/spinnerGender"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/input_height"
+                            android:background="@drawable/spinner_background" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
 
                 <!-- Row: Chiều cao & Cân nặng -->
                 <LinearLayout
@@ -186,7 +187,6 @@
                     android:orientation="horizontal"
                     android:weightSum="2">
 
-                    <!-- Chiều cao -->
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -211,7 +211,6 @@
 
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <!-- Cân nặng -->
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -238,6 +237,34 @@
 
                 </LinearLayout>
 
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Goals Card -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_medium"
+            app:cardCornerRadius="@dimen/card_corner_radius"
+            app:cardElevation="@dimen/card_elevation"
+            app:strokeWidth="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/card_padding">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mục tiêu"
+                    android:textColor="@color/text_primary"
+                    android:textSize="@dimen/text_size_large"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-medium" />
+
                 <!-- Mức độ hoạt động -->
                 <TextView
                     android:layout_width="wrap_content"
@@ -254,7 +281,7 @@
                     android:layout_marginTop="@dimen/margin_small"
                     android:background="@drawable/spinner_background" />
 
-                <!-- Mục tiêu -->
+                <!-- Mục tiêu cân nặng -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -270,58 +297,54 @@
                     android:layout_marginTop="@dimen/margin_small"
                     android:background="@drawable/spinner_background" />
 
-            </LinearLayout>
+                <!-- Mục tiêu calo -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_large"
+                    android:hint="@string/daily_calorie_goal"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                    app:boxCornerRadiusBottomEnd="@dimen/input_corner_radius"
+                    app:boxCornerRadiusBottomStart="@dimen/input_corner_radius"
+                    app:boxCornerRadiusTopEnd="@dimen/input_corner_radius"
+                    app:boxCornerRadiusTopStart="@dimen/input_corner_radius"
+                    app:boxStrokeColor="@color/primary"
+                    app:hintTextColor="@color/primary"
+                    app:suffixText="cal">
 
-        </com.google.android.material.card.MaterialCardView>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etCalorieGoal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:textColor="@color/text_primary" />
 
-        <!-- Calculated Goal Card -->
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_medium"
-            app:cardCornerRadius="@dimen/card_corner_radius"
-            app:cardElevation="@dimen/card_elevation"
-            app:strokeWidth="0dp">
+                </com.google.android.material.textfield.TextInputLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_gradient_warm"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="@dimen/card_padding_large">
-
-                <TextView
+                <!-- Nút tính tự động -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnCalculateGoal"
+                    style="@style/Widget.Material3.Button.TextButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Mục tiêu calo hàng ngày"
-                    android:textColor="#B3FFFFFF"
-                    android:textSize="@dimen/text_size_small"
-                    android:textAllCaps="true"
-                    android:letterSpacing="0.1" />
-
-                <TextView
-                    android:id="@+id/tvCalculatedGoal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
                     android:layout_marginTop="@dimen/margin_small"
-                    android:text="2000 cal"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/text_size_headline"
-                    android:textStyle="bold"
-                    android:fontFamily="sans-serif-medium" />
+                    android:text="Tính tự động"
+                    android:textColor="@color/primary"
+                    app:rippleColor="@color/ripple_color" />
 
             </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Button Hoàn thành -->
+        <!-- Save Button -->
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnFinish"
+            android:id="@+id/btnSave"
             android:layout_width="match_parent"
             android:layout_height="@dimen/button_height"
             android:layout_marginTop="@dimen/margin_xlarge"
-            android:text="@string/finish"
+            android:layout_marginBottom="@dimen/margin_large"
+            android:text="@string/save"
             android:textColor="@color/white"
             android:textSize="@dimen/text_size_large"
             android:textStyle="bold"

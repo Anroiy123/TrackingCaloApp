@@ -13,7 +13,7 @@
         android:theme="@style/Theme.TrackingCaloApp"
         tools:targetApi="31">
 
-        <!-- Main Activity -->
+        <!-- Main Activity - Container duy nhất -->
         <activity
             android:name=".ui.main.MainActivity"
             android:exported="true">
@@ -27,30 +27,6 @@
         <activity
             android:name=".ui.onboarding.OnboardingActivity"
             android:exported="false" />
-
-        <!-- Add Food Activity -->
-        <activity
-            android:name=".ui.addfood.AddFoodActivity"
-            android:exported="false"
-            android:parentActivityName=".ui.main.MainActivity" />
-
-        <!-- Add Workout Activity -->
-        <activity
-            android:name=".ui.addworkout.AddWorkoutActivity"
-            android:exported="false"
-            android:parentActivityName=".ui.main.MainActivity" />
-
-        <!-- Diary Activity -->
-        <activity
-            android:name=".ui.diary.DiaryActivity"
-            android:exported="false"
-            android:parentActivityName=".ui.main.MainActivity" />
-
-        <!-- Profile Activity -->
-        <activity
-            android:name=".ui.profile.ProfileActivity"
-            android:exported="false"
-            android:parentActivityName=".ui.main.MainActivity" />
 
     </application>
 

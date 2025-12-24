@@ -1,25 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/margin_small"
-    app:cardCornerRadius="@dimen/card_corner_radius"
-    app:cardElevation="2dp">
+    app:cardCornerRadius="@dimen/list_item_corner_radius"
+    app:cardElevation="2dp"
+    app:strokeWidth="0dp"
+    app:rippleColor="@color/ripple_color">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="@dimen/padding_medium">
+        android:paddingVertical="@dimen/padding_medium"
+        android:paddingHorizontal="@dimen/padding_medium">
 
-        <!-- Category Indicator -->
+        <!-- Category Indicator - Rounded -->
         <View
             android:id="@+id/viewCategoryIndicator"
             android:layout_width="4dp"
-            android:layout_height="48dp"
-            android:background="@color/workout_cardio" />
+            android:layout_height="@dimen/indicator_height"
+            android:background="@drawable/bg_indicator_primary" />
 
         <!-- Workout Info -->
         <LinearLayout
@@ -33,14 +36,19 @@
                 android:id="@+id/tvWorkoutName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:text="Chạy bộ"
                 android:textColor="@color/text_primary"
-                android:textSize="@dimen/text_size_medium"
-                android:textStyle="bold" />
+                android:textSize="@dimen/text_size_large"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_tiny"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <TextView
@@ -54,7 +62,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="4dp"
+                    android:layout_marginHorizontal="6dp"
                     android:text="•"
                     android:textColor="@color/text_hint" />
 
@@ -64,22 +72,24 @@
                     android:layout_height="wrap_content"
                     android:text="Cardio"
                     android:textColor="@color/workout_cardio"
-                    android:textSize="@dimen/text_size_small" />
+                    android:textSize="@dimen/text_size_small"
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
         </LinearLayout>
 
-        <!-- Calories Burned -->
+        <!-- Calories Burned Display -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="end"
+            android:gravity="end|center_vertical"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="baseline"
                 android:orientation="horizontal">
 
                 <TextView
@@ -87,8 +97,9 @@
                     android:layout_height="wrap_content"
                     android:text="-"
                     android:textColor="@color/calories_burned"
-                    android:textSize="@dimen/text_size_large"
-                    android:textStyle="bold" />
+                    android:textSize="@dimen/text_size_xlarge"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-medium" />
 
                 <TextView
                     android:id="@+id/tvCaloriesBurned"
@@ -96,30 +107,34 @@
                     android:layout_height="wrap_content"
                     android:text="300"
                     android:textColor="@color/calories_burned"
-                    android:textSize="@dimen/text_size_large"
-                    android:textStyle="bold" />
+                    android:textSize="@dimen/text_size_xlarge"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-medium" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="2dp"
                     android:text="cal"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="@dimen/text_size_small" />
+                    android:textColor="@color/text_hint"
+                    android:textSize="@dimen/text_size_tiny" />
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/tvTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="18:00"
-                android:textColor="@color/text_hint"
-                android:textSize="@dimen/text_size_small" />
-
         </LinearLayout>
+
+        <!-- Delete Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnDelete"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="@dimen/margin_small"
+            app:icon="@drawable/ic_delete"
+            app:iconSize="20dp"
+            app:iconTint="@color/text_hint"
+            app:rippleColor="@color/ripple_color" />
 
     </LinearLayout>
 
-</androidx.cardview.widget.CardView>
-
+</com.google.android.material.card.MaterialCardView>
