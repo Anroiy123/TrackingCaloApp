@@ -21,9 +21,13 @@ public class Food {
     private float fat;             // Chất béo (g) per 100g
     private String category;       // Loại: "com", "pho", "thit", "rau", "trai_cay", "do_uong", "an_vat"
     private boolean isCustom;      // true = user tự tạo, false = có sẵn trong app
-    
-    // Constructor đầy đủ
-    public Food(String name, float calories, float protein, float carbs, float fat, String category, boolean isCustom) {
+    private String aliasVi;        // Alias tiếng Việt để search (VD: "com trang, com te, gao")
+    private float servingSize;     // Khối lượng 1 khẩu phần (default 100)
+    private String servingUnit;    // Đơn vị (g, ml, miếng, bát, tô)
+
+    // Constructor đầy đủ với tất cả fields
+    public Food(String name, float calories, float protein, float carbs, float fat,
+                String category, boolean isCustom, String aliasVi, float servingSize, String servingUnit) {
         this.name = name;
         this.calories = calories;
         this.protein = protein;
@@ -31,12 +35,28 @@ public class Food {
         this.fat = fat;
         this.category = category;
         this.isCustom = isCustom;
+        this.aliasVi = aliasVi;
+        this.servingSize = servingSize;
+        this.servingUnit = servingUnit;
+    }
+
+    // Constructor cho thực phẩm có sẵn với serving info
+    @Ignore
+    public Food(String name, float calories, float protein, float carbs, float fat,
+                String category, String aliasVi, float servingSize, String servingUnit) {
+        this(name, calories, protein, carbs, fat, category, false, aliasVi, servingSize, servingUnit);
     }
     
-    // Constructor cho thực phẩm có sẵn (isCustom = false)
+    // Constructor backward compatible (isCustom = false, default serving)
     @Ignore
     public Food(String name, float calories, float protein, float carbs, float fat, String category) {
-        this(name, calories, protein, carbs, fat, category, false);
+        this(name, calories, protein, carbs, fat, category, false, null, 100f, "g");
+    }
+
+    // Constructor backward compatible với isCustom
+    @Ignore
+    public Food(String name, float calories, float protein, float carbs, float fat, String category, boolean isCustom) {
+        this(name, calories, protein, carbs, fat, category, isCustom, null, 100f, "g");
     }
     
     // Getters and Setters
@@ -104,6 +124,30 @@ public class Food {
         isCustom = custom;
     }
     
+    public String getAliasVi() {
+        return aliasVi;
+    }
+
+    public void setAliasVi(String aliasVi) {
+        this.aliasVi = aliasVi;
+    }
+
+    public float getServingSize() {
+        return servingSize;
+    }
+
+    public void setServingSize(float servingSize) {
+        this.servingSize = servingSize;
+    }
+
+    public String getServingUnit() {
+        return servingUnit;
+    }
+
+    public void setServingUnit(String servingUnit) {
+        this.servingUnit = servingUnit;
+    }
+
     /**
      * Tính calo dựa trên khối lượng thực tế (gram)
      * @param grams Khối lượng thực phẩm (gram)

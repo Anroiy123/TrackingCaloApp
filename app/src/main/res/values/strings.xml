@@ -98,4 +98,51 @@
     <!-- Validation -->
     <string name="field_required">Trường này là bắt buộc</string>
     <string name="invalid_value">Giá trị không hợp lệ</string>
+
+    <!-- Remaining Calories -->
+    <string name="remaining_calories">Còn lại: %d cal</string>
+    <string name="over_goal">Vượt mục tiêu: %d cal</string>
+    <string name="remaining_format">Còn %d cal</string>
+    <string name="over_format">Vượt %d cal</string>
+
+    <!-- Favorites & Tabs -->
+    <string name="tab_all_foods">Tất cả</string>
+    <string name="tab_favorites">Yêu thích</string>
+    <string name="favorites">Yêu thích</string>
+    <string name="no_favorites">Chưa có món yêu thích</string>
+    <string name="added_to_favorites">Đã thêm vào yêu thích</string>
+    <string name="removed_from_favorites">Đã xóa khỏi yêu thích</string>
+
+    <!-- Auto Suggestion -->
+    <string name="auto_suggested">Gợi ý tự động</string>
+    <string name="suggested_meal">Gợi ý: %s</string>
+
+    <!-- Macro Nutrients -->
+    <string name="protein_label">Protein</string>
+    <string name="carbs_label">Carbs</string>
+    <string name="fat_label">Fat</string>
+    <string name="macro_format">%.0fg / %.0fg</string>
+    <string name="macro_remaining">Còn %.0fg</string>
+
+    <!-- BMI -->
+    <string name="bmi">Chỉ số BMI</string>
+    <string name="bmi_value">BMI: %.1f</string>
+    <string name="bmi_underweight">Thiếu cân</string>
+    <string name="bmi_normal">Bình thường</string>
+    <string name="bmi_overweight">Thừa cân</string>
+    <string name="bmi_obese">Béo phì</string>
+
+    <!-- Meal Icons/Labels -->
+    <string name="meal_breakfast">🌅 Bữa sáng</string>
+    <string name="meal_lunch">🌞 Bữa trưa</string>
+    <string name="meal_dinner">🌙 Bữa tối</string>
+    <string name="meal_snack">🍟 Ăn vặt</string>
+
+    <!-- Swipe Actions -->
+    <string name="swipe_to_delete">Vuốt để xóa</string>
+    <string name="confirm_delete">Bạn có chắc muốn xóa?</string>
+
+    <!-- Quick Add -->
+    <string name="quick_add">Thêm nhanh</string>
+    <string name="recent_foods">Gần đây</string>
 </resources>

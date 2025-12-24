@@ -1,15 +1,21 @@
 package com.example.trackingcaloapp.ui.diary;
 
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -53,9 +59,63 @@ public class WorkoutEntriesFragment extends Fragment {
         rvWorkoutEntries.setLayoutManager(new LinearLayoutManager(requireContext()));
         rvWorkoutEntries.setAdapter(adapter);
         
+        // Setup swipe-to-delete
+        setupSwipeToDelete();
+
         loadData();
         
         return view;
+    }
+
+    private void setupSwipeToDelete() {
+        ItemTouchHelper.SimpleCallback swipeCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            private final ColorDrawable background = new ColorDrawable(Color.parseColor("#F44336"));
+
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView,
+                                  @NonNull RecyclerView.ViewHolder viewHolder,
+                                  @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                int position = viewHolder.getAdapterPosition();
+                WorkoutEntry entry = adapter.getEntryAt(position);
+
+                if (entry != null) {
+                    new AlertDialog.Builder(requireContext())
+                            .setTitle(R.string.confirm_delete)
+                            .setMessage(R.string.swipe_to_delete)
+                            .setPositiveButton(R.string.delete, (dialog, which) -> {
+                                repository.deleteById(entry.getId());
+                                Toast.makeText(requireContext(), R.string.entry_deleted, Toast.LENGTH_SHORT).show();
+                            })
+                            .setNegativeButton(R.string.cancel, (dialog, which) -> adapter.notifyItemChanged(position))
+                            .setOnCancelListener(dialog -> adapter.notifyItemChanged(position))
+                            .show();
+                }
+            }
+
+            @Override
+            public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView,
+                                    @NonNull RecyclerView.ViewHolder viewHolder,
+                                    float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                View itemView = viewHolder.itemView;
+                if (dX < 0) {
+                    background.setBounds(
+                            itemView.getRight() + (int) dX,
+                            itemView.getTop(),
+                            itemView.getRight(),
+                            itemView.getBottom()
+                    );
+                    background.draw(c);
+                }
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+            }
+        };
+
+        new ItemTouchHelper(swipeCallback).attachToRecyclerView(rvWorkoutEntries);
     }
 
     public void updateDate(long newDate) {

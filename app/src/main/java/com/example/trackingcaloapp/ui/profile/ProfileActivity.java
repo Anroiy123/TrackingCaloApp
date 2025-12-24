@@ -2,6 +2,8 @@ package com.example.trackingcaloapp.ui.profile;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
@@ -92,6 +94,23 @@ public class ProfileActivity extends AppCompatActivity {
     private void setupButtons() {
         btnCalculateGoal.setOnClickListener(v -> calculateAndSetGoal());
         btnSave.setOnClickListener(v -> saveProfile());
+
+        // Auto-update BMI when height or weight changes
+        TextWatcher bmiWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                updateBMI();
+            }
+        };
+
+        etHeight.addTextChangedListener(bmiWatcher);
+        etWeight.addTextChangedListener(bmiWatcher);
     }
 
     private void setupBottomNavigation() {

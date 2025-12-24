@@ -186,5 +186,70 @@ public class DateUtils {
         long diff = end - start;
         return (int) (diff / (24 * 60 * 60 * 1000));
     }
+
+    /**
+     * Auto-suggest meal type dựa trên giờ hiện tại
+     * 06:00-10:00 → Sáng
+     * 10:00-14:00 → Trưa
+     * 18:00-22:00 → Tối
+     * Còn lại → Ăn vặt
+     */
+    public static int getMealTypeByTime() {
+        Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+
+        if (hour >= Constants.BREAKFAST_START_HOUR && hour < Constants.BREAKFAST_END_HOUR) {
+            return Constants.MEAL_BREAKFAST;
+        } else if (hour >= Constants.LUNCH_START_HOUR && hour < Constants.LUNCH_END_HOUR) {
+            return Constants.MEAL_LUNCH;
+        } else if (hour >= Constants.DINNER_START_HOUR && hour < Constants.DINNER_END_HOUR) {
+            return Constants.MEAL_DINNER;
+        } else {
+            return Constants.MEAL_SNACK;
+        }
+    }
+
+    /**
+     * Auto-suggest meal type dựa trên timestamp
+     */
+    public static int getMealTypeByTime(long timestamp) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(timestamp);
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+
+        if (hour >= Constants.BREAKFAST_START_HOUR && hour < Constants.BREAKFAST_END_HOUR) {
+            return Constants.MEAL_BREAKFAST;
+        } else if (hour >= Constants.LUNCH_START_HOUR && hour < Constants.LUNCH_END_HOUR) {
+            return Constants.MEAL_LUNCH;
+        } else if (hour >= Constants.DINNER_START_HOUR && hour < Constants.DINNER_END_HOUR) {
+            return Constants.MEAL_DINNER;
+        } else {
+            return Constants.MEAL_SNACK;
+        }
+    }
+
+    /**
+     * Format ngày theo tiếng Việt đầy đủ
+     * VD: "Thứ Hai, 10/12/2025"
+     */
+    public static String formatDateVietnamese(long timestamp) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(timestamp);
+
+        String dayOfWeek;
+        int dow = calendar.get(Calendar.DAY_OF_WEEK);
+        switch (dow) {
+            case Calendar.MONDAY: dayOfWeek = "Thứ Hai"; break;
+            case Calendar.TUESDAY: dayOfWeek = "Thứ Ba"; break;
+            case Calendar.WEDNESDAY: dayOfWeek = "Thứ Tư"; break;
+            case Calendar.THURSDAY: dayOfWeek = "Thứ Năm"; break;
+            case Calendar.FRIDAY: dayOfWeek = "Thứ Sáu"; break;
+            case Calendar.SATURDAY: dayOfWeek = "Thứ Bảy"; break;
+            case Calendar.SUNDAY: dayOfWeek = "Chủ Nhật"; break;
+            default: dayOfWeek = "";
+        }
+
+        return dayOfWeek + ", " + formatDate(timestamp);
+    }
 }
 

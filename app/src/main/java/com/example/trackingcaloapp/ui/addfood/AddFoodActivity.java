@@ -5,6 +5,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,19 +19,25 @@ import com.example.trackingcaloapp.data.local.entity.Food;
 import com.example.trackingcaloapp.data.local.entity.FoodEntry;
 import com.example.trackingcaloapp.data.repository.FoodEntryRepository;
 import com.example.trackingcaloapp.data.repository.FoodRepository;
+import com.example.trackingcaloapp.model.FoodWithDetails;
 import com.example.trackingcaloapp.utils.Constants;
+import com.example.trackingcaloapp.utils.DateUtils;
 import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class AddFoodActivity extends AppCompatActivity implements FoodAdapter.OnFoodClickListener {
 
     private MaterialToolbar toolbar;
     private TextInputEditText etSearch;
     private ChipGroup chipGroupMealType;
+    private TabLayout tabLayout;
     private RecyclerView rvFoods;
     private TextView tvEmpty;
 
@@ -39,6 +46,8 @@ public class AddFoodActivity extends AppCompatActivity implements FoodAdapter.On
     private FoodAdapter foodAdapter;
 
     private int selectedMealType = Constants.MEAL_BREAKFAST;
+    private int currentTab = 0; // 0 = All Foods, 1 = Favorites
+    private String currentSearchQuery = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,13 +56,17 @@ public class AddFoodActivity extends AppCompatActivity implements FoodAdapter.On
 
         // Initialize repositories
         AppDatabase db = AppDatabase.getInstance(this);
-        foodRepository = new FoodRepository(db.foodDao());
+        foodRepository = new FoodRepository(db.foodDao(), db.favoriteFoodDao());
         foodEntryRepository = new FoodEntryRepository(db.foodEntryDao());
 
         initViews();
         setupToolbar();
         setupSearch();
         setupMealTypeChips();
+
+        // Auto-suggest meal type based on current time
+        autoSelectMealType();
+
         loadFoods();
     }
 
@@ -61,13 +74,42 @@ public class AddFoodActivity extends AppCompatActivity implements FoodAdapter.On
         toolbar = findViewById(R.id.toolbar);
         etSearch = findViewById(R.id.etSearch);
         chipGroupMealType = findViewById(R.id.chipGroupMealType);
+        tabLayout = findViewById(R.id.tabLayout);
         rvFoods = findViewById(R.id.rvFoods);
         tvEmpty = findViewById(R.id.tvEmpty);
 
         // Setup RecyclerView
         foodAdapter = new FoodAdapter(this);
+        foodAdapter.setFavoriteClickListener((food, isCurrentlyFavorite) -> toggleFavorite(food));
         rvFoods.setLayoutManager(new LinearLayoutManager(this));
         rvFoods.setAdapter(foodAdapter);
+
+        // Setup TabLayout
+        setupTabLayout();
+    }
+
+    private void setupTabLayout() {
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                currentTab = tab.getPosition();
+                if (currentSearchQuery.isEmpty()) {
+                    if (currentTab == 0) {
+                        loadFoods();
+                    } else {
+                        loadFavorites();
+                    }
+                } else {
+                    searchFoods(currentSearchQuery);
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {}
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {}
+        });
     }
 
     private void setupToolbar() {
@@ -84,22 +126,21 @@ public class AddFoodActivity extends AppCompatActivity implements FoodAdapter.On
 
             @Override
             public void afterTextChanged(Editable s) {
-                String query = s.toString().trim();
-                if (query.isEmpty()) {
-                    loadFoods();
+                currentSearchQuery = s.toString().trim();
+                if (currentSearchQuery.isEmpty()) {
+                    if (currentTab == 0) {
+                        loadFoods();
+                    } else {
+                        loadFavorites();
+                    }
                 } else {
-                    searchFoods(query);
+                    searchFoods(currentSearchQuery);
                 }
             }
         });
     }
 
     private void setupMealTypeChips() {
-        Chip chipBreakfast = findViewById(R.id.chipBreakfast);
-        Chip chipLunch = findViewById(R.id.chipLunch);
-        Chip chipDinner = findViewById(R.id.chipDinner);
-        Chip chipSnack = findViewById(R.id.chipSnack);
-
         chipGroupMealType.setOnCheckedStateChangeListener((group, checkedIds) -> {
             if (checkedIds.isEmpty()) return;
             
@@ -121,6 +162,7 @@ public class AddFoodActivity extends AppCompatActivity implements FoodAdapter.On
         foodsLiveData.observe(this, foods -> {
             if (foods != null && !foods.isEmpty()) {
                 foodAdapter.setFoods(foods);
+                loadFavoriteIds();
                 rvFoods.setVisibility(View.VISIBLE);
                 tvEmpty.setVisibility(View.GONE);
             } else {
@@ -128,6 +170,52 @@ public class AddFoodActivity extends AppCompatActivity implements FoodAdapter.On
                 tvEmpty.setVisibility(View.VISIBLE);
             }
         });
+    }
+
+    private void loadFavorites() {
+        LiveData<List<FoodWithDetails>> favoritesLiveData = foodRepository.getAllFavoriteFoodsWithDetails();
+        if (favoritesLiveData == null) {
+            tvEmpty.setText(R.string.no_favorites);
+            rvFoods.setVisibility(View.GONE);
+            tvEmpty.setVisibility(View.VISIBLE);
+            return;
+        }
+
+        favoritesLiveData.observe(this, favorites -> {
+            if (favorites != null && !favorites.isEmpty()) {
+                // Convert FoodWithDetails to Food list
+                List<Food> foods = new ArrayList<>();
+                Set<Integer> favIds = new HashSet<>();
+                for (FoodWithDetails fwd : favorites) {
+                    foods.add(fwd.getFood());
+                    favIds.add(fwd.getFoodId());
+                }
+                foodAdapter.setFoods(foods);
+                foodAdapter.setFavoriteIds(favIds);
+                rvFoods.setVisibility(View.VISIBLE);
+                tvEmpty.setVisibility(View.GONE);
+            } else {
+                tvEmpty.setText(R.string.no_favorites);
+                rvFoods.setVisibility(View.GONE);
+                tvEmpty.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+    private void loadFavoriteIds() {
+        // Load all favorite IDs to show stars
+        LiveData<List<FoodWithDetails>> favoritesLiveData = foodRepository.getAllFavoriteFoodsWithDetails();
+        if (favoritesLiveData != null) {
+            favoritesLiveData.observe(this, favorites -> {
+                if (favorites != null) {
+                    Set<Integer> favIds = new HashSet<>();
+                    for (FoodWithDetails fwd : favorites) {
+                        favIds.add(fwd.getFoodId());
+                    }
+                    foodAdapter.setFavoriteIds(favIds);
+                }
+            });
+        }
     }
 
     private void searchFoods(String query) {
@@ -219,7 +307,60 @@ public class AddFoodActivity extends AppCompatActivity implements FoodAdapter.On
         entry.setTotalFat(food.calculateFat(quantity));
 
         foodEntryRepository.insert(entry);
+
+        // Increment favorite use count if this food is a favorite
+        foodRepository.incrementFavoriteUseCount(food.getId());
+
+        Toast.makeText(this, R.string.entry_added, Toast.LENGTH_SHORT).show();
         finish();
+    }
+
+    /**
+     * Auto-select meal type chip based on current time
+     */
+    private void autoSelectMealType() {
+        selectedMealType = DateUtils.getMealTypeByTime();
+
+        int chipIdToCheck;
+        switch (selectedMealType) {
+            case Constants.MEAL_BREAKFAST:
+                chipIdToCheck = R.id.chipBreakfast;
+                break;
+            case Constants.MEAL_LUNCH:
+                chipIdToCheck = R.id.chipLunch;
+                break;
+            case Constants.MEAL_DINNER:
+                chipIdToCheck = R.id.chipDinner;
+                break;
+            case Constants.MEAL_SNACK:
+            default:
+                chipIdToCheck = R.id.chipSnack;
+                break;
+        }
+
+        chipGroupMealType.check(chipIdToCheck);
+    }
+
+    /**
+     * Toggle favorite status of a food
+     */
+    private void toggleFavorite(Food food) {
+        foodRepository.toggleFavorite(food.getId(), food.getServingSize(), isNowFavorite -> {
+            runOnUiThread(() -> {
+                if (isNowFavorite) {
+                    Toast.makeText(this, R.string.added_to_favorites, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, R.string.removed_from_favorites, Toast.LENGTH_SHORT).show();
+                }
+                // Update the specific item
+                foodAdapter.updateFavorite(food.getId(), isNowFavorite);
+
+                // If on favorites tab and removed, reload
+                if (currentTab == 1 && !isNowFavorite) {
+                    loadFavorites();
+                }
+            });
+        });
     }
 }
 

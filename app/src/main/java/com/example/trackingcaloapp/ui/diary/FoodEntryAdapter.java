@@ -25,6 +25,20 @@ public class FoodEntryAdapter extends RecyclerView.Adapter<FoodEntryAdapter.View
         notifyDataSetChanged();
     }
 
+    public FoodEntry getEntryAt(int position) {
+        if (position >= 0 && position < entries.size()) {
+            return entries.get(position);
+        }
+        return null;
+    }
+
+    public void removeEntry(int position) {
+        if (position >= 0 && position < entries.size()) {
+            entries.remove(position);
+            notifyItemRemoved(position);
+        }
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

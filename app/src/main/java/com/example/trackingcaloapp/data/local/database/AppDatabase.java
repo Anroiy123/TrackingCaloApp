@@ -8,10 +8,12 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
+import com.example.trackingcaloapp.data.local.dao.FavoriteFoodDao;
 import com.example.trackingcaloapp.data.local.dao.FoodDao;
 import com.example.trackingcaloapp.data.local.dao.FoodEntryDao;
 import com.example.trackingcaloapp.data.local.dao.WorkoutDao;
 import com.example.trackingcaloapp.data.local.dao.WorkoutEntryDao;
+import com.example.trackingcaloapp.data.local.entity.FavoriteFood;
 import com.example.trackingcaloapp.data.local.entity.Food;
 import com.example.trackingcaloapp.data.local.entity.FoodEntry;
 import com.example.trackingcaloapp.data.local.entity.Workout;
@@ -25,8 +27,8 @@ import java.util.concurrent.Executors;
  * Singleton pattern để đảm bảo chỉ có một instance duy nhất.
  */
 @Database(
-    entities = {Food.class, FoodEntry.class, Workout.class, WorkoutEntry.class},
-    version = 1,
+    entities = {Food.class, FoodEntry.class, Workout.class, WorkoutEntry.class, FavoriteFood.class},
+    version = 2,
     exportSchema = false
 )
 public abstract class AppDatabase extends RoomDatabase {
@@ -36,7 +38,8 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract FoodEntryDao foodEntryDao();
     public abstract WorkoutDao workoutDao();
     public abstract WorkoutEntryDao workoutEntryDao();
-    
+    public abstract FavoriteFoodDao favoriteFoodDao();
+
     // Singleton instance
     private static volatile AppDatabase INSTANCE;
     
@@ -57,6 +60,7 @@ public abstract class AppDatabase extends RoomDatabase {
                             AppDatabase.class,
                             "calorie_tracker_db"
                     )
+                    .fallbackToDestructiveMigration()
                     .addCallback(sRoomDatabaseCallback)
                     .build();
                 }
@@ -96,70 +100,71 @@ public abstract class AppDatabase extends RoomDatabase {
     
     /**
      * Populate thực phẩm Việt Nam phổ biến
+     * Format: new Food(name, calories, protein, carbs, fat, category, aliasVi, servingSize, servingUnit)
      */
     private static void populateFoods(FoodDao foodDao) {
         // ==================== CƠM & BÚN & PHỞ ====================
-        foodDao.insert(new Food("Cơm trắng", 130, 2.7f, 28, 0.3f, "com"));
-        foodDao.insert(new Food("Cơm rang", 180, 4, 25, 7, "com"));
-        foodDao.insert(new Food("Phở bò", 450, 20, 60, 12, "pho"));
-        foodDao.insert(new Food("Phở gà", 380, 18, 55, 8, "pho"));
-        foodDao.insert(new Food("Bún bò Huế", 480, 22, 58, 15, "bun"));
-        foodDao.insert(new Food("Bún chả", 550, 25, 50, 25, "bun"));
-        foodDao.insert(new Food("Bún riêu", 420, 18, 52, 14, "bun"));
-        foodDao.insert(new Food("Bánh mì thịt", 350, 15, 40, 14, "banh"));
-        foodDao.insert(new Food("Bánh cuốn", 180, 6, 28, 5, "banh"));
-        foodDao.insert(new Food("Xôi xéo", 280, 6, 45, 8, "xoi"));
-        
+        foodDao.insert(new Food("Cơm trắng", 130, 2.7f, 28, 0.3f, "com", "com trang, com te, gao, rice", 150, "g"));
+        foodDao.insert(new Food("Cơm rang", 180, 4, 25, 7, "com", "com chien, fried rice, com xao", 200, "g"));
+        foodDao.insert(new Food("Phở bò", 450, 20, 60, 12, "pho", "pho bo, beef pho, pho tai, pho chin", 400, "tô"));
+        foodDao.insert(new Food("Phở gà", 380, 18, 55, 8, "pho", "pho ga, chicken pho", 400, "tô"));
+        foodDao.insert(new Food("Bún bò Huế", 480, 22, 58, 15, "bun", "bun bo hue, bun bo", 450, "tô"));
+        foodDao.insert(new Food("Bún chả", 550, 25, 50, 25, "bun", "bun cha, bun cha ha noi", 400, "suất"));
+        foodDao.insert(new Food("Bún riêu", 420, 18, 52, 14, "bun", "bun rieu, bun rieu cua", 400, "tô"));
+        foodDao.insert(new Food("Bánh mì thịt", 350, 15, 40, 14, "banh", "banh mi, banh my, bread, sandwich", 150, "ổ"));
+        foodDao.insert(new Food("Bánh cuốn", 180, 6, 28, 5, "banh", "banh cuon, banh cuon nong", 200, "đĩa"));
+        foodDao.insert(new Food("Xôi xéo", 280, 6, 45, 8, "xoi", "xoi xeo, xoi dau xanh, sticky rice", 150, "gói"));
+
         // ==================== THỊT ====================
-        foodDao.insert(new Food("Thịt heo luộc", 250, 27, 0, 15, "thit"));
-        foodDao.insert(new Food("Thịt heo kho", 300, 25, 5, 20, "thit"));
-        foodDao.insert(new Food("Thịt bò xào", 280, 26, 3, 18, "thit"));
-        foodDao.insert(new Food("Thịt gà luộc", 165, 31, 0, 3.6f, "thit"));
-        foodDao.insert(new Food("Thịt gà rán", 260, 27, 8, 14, "thit"));
-        foodDao.insert(new Food("Sườn nướng", 320, 22, 5, 24, "thit"));
-        foodDao.insert(new Food("Thịt kho tàu", 350, 20, 8, 26, "thit"));
-        
+        foodDao.insert(new Food("Thịt heo luộc", 250, 27, 0, 15, "thit", "thit heo luoc, thit lon luoc, boiled pork", 100, "g"));
+        foodDao.insert(new Food("Thịt heo kho", 300, 25, 5, 20, "thit", "thit heo kho, thit kho, thit lon kho", 100, "g"));
+        foodDao.insert(new Food("Thịt bò xào", 280, 26, 3, 18, "thit", "thit bo xao, bo xao, stir fried beef", 100, "g"));
+        foodDao.insert(new Food("Thịt gà luộc", 165, 31, 0, 3.6f, "thit", "thit ga luoc, ga luoc, boiled chicken", 100, "g"));
+        foodDao.insert(new Food("Thịt gà rán", 260, 27, 8, 14, "thit", "thit ga ran, ga ran, fried chicken, ga chien", 100, "g"));
+        foodDao.insert(new Food("Sườn nướng", 320, 22, 5, 24, "thit", "suon nuong, suon heo nuong, grilled ribs", 150, "g"));
+        foodDao.insert(new Food("Thịt kho tàu", 350, 20, 8, 26, "thit", "thit kho tau, thit kho trung", 100, "g"));
+
         // ==================== HẢI SẢN ====================
-        foodDao.insert(new Food("Cá kho", 180, 22, 3, 9, "hai_san"));
-        foodDao.insert(new Food("Cá chiên", 220, 20, 5, 13, "hai_san"));
-        foodDao.insert(new Food("Tôm luộc", 99, 21, 0.2f, 1, "hai_san"));
-        foodDao.insert(new Food("Tôm chiên", 150, 18, 8, 6, "hai_san"));
-        foodDao.insert(new Food("Mực xào", 140, 18, 4, 5, "hai_san"));
-        
+        foodDao.insert(new Food("Cá kho", 180, 22, 3, 9, "hai_san", "ca kho, ca kho to, braised fish", 150, "g"));
+        foodDao.insert(new Food("Cá chiên", 220, 20, 5, 13, "hai_san", "ca chien, ca ran, fried fish", 150, "g"));
+        foodDao.insert(new Food("Tôm luộc", 99, 21, 0.2f, 1, "hai_san", "tom luoc, boiled shrimp, tom hap", 100, "g"));
+        foodDao.insert(new Food("Tôm chiên", 150, 18, 8, 6, "hai_san", "tom chien, tom ran, fried shrimp", 100, "g"));
+        foodDao.insert(new Food("Mực xào", 140, 18, 4, 5, "hai_san", "muc xao, squid, muc chien", 100, "g"));
+
         // ==================== RAU CỦ ====================
-        foodDao.insert(new Food("Rau muống xào", 80, 3, 4, 6, "rau"));
-        foodDao.insert(new Food("Rau cải luộc", 25, 2, 3, 0.3f, "rau"));
-        foodDao.insert(new Food("Canh rau", 35, 2, 4, 1, "rau"));
-        foodDao.insert(new Food("Salad rau trộn", 50, 2, 6, 2, "rau"));
-        foodDao.insert(new Food("Đậu phụ chiên", 180, 12, 5, 13, "rau"));
-        foodDao.insert(new Food("Đậu phụ sốt cà", 120, 10, 8, 6, "rau"));
-        
+        foodDao.insert(new Food("Rau muống xào", 80, 3, 4, 6, "rau", "rau muong xao, rau muong, water spinach", 150, "đĩa"));
+        foodDao.insert(new Food("Rau cải luộc", 25, 2, 3, 0.3f, "rau", "rau cai luoc, cai luoc, boiled vegetables", 100, "g"));
+        foodDao.insert(new Food("Canh rau", 35, 2, 4, 1, "rau", "canh rau, canh, vegetable soup", 200, "bát"));
+        foodDao.insert(new Food("Salad rau trộn", 50, 2, 6, 2, "rau", "salad, rau tron, vegetable salad", 150, "đĩa"));
+        foodDao.insert(new Food("Đậu phụ chiên", 180, 12, 5, 13, "rau", "dau phu chien, dau hu chien, tofu, tau hu", 100, "g"));
+        foodDao.insert(new Food("Đậu phụ sốt cà", 120, 10, 8, 6, "rau", "dau phu sot ca, dau hu sot ca", 150, "đĩa"));
+
         // ==================== TRỨNG ====================
-        foodDao.insert(new Food("Trứng luộc", 155, 13, 1.1f, 11, "trung"));
-        foodDao.insert(new Food("Trứng chiên", 196, 14, 1, 15, "trung"));
-        foodDao.insert(new Food("Trứng ốp la", 180, 12, 1, 14, "trung"));
-        
+        foodDao.insert(new Food("Trứng luộc", 155, 13, 1.1f, 11, "trung", "trung luoc, boiled egg, hot vit lon", 50, "quả"));
+        foodDao.insert(new Food("Trứng chiên", 196, 14, 1, 15, "trung", "trung chien, fried egg, trung ran", 60, "quả"));
+        foodDao.insert(new Food("Trứng ốp la", 180, 12, 1, 14, "trung", "trung op la, sunny side up", 60, "quả"));
+
         // ==================== ĐỒ UỐNG ====================
-        foodDao.insert(new Food("Trà sữa trân châu", 300, 2, 50, 10, "do_uong"));
-        foodDao.insert(new Food("Cà phê sữa đá", 120, 2, 18, 4, "do_uong"));
-        foodDao.insert(new Food("Cà phê đen", 5, 0.3f, 0, 0, "do_uong"));
-        foodDao.insert(new Food("Nước cam", 45, 0.7f, 10, 0.2f, "do_uong"));
-        foodDao.insert(new Food("Sinh tố bơ", 250, 3, 20, 18, "do_uong"));
-        foodDao.insert(new Food("Nước dừa", 45, 0.5f, 9, 0.5f, "do_uong"));
-        
+        foodDao.insert(new Food("Trà sữa trân châu", 300, 2, 50, 10, "do_uong", "tra sua, tra sua tran chau, milk tea, bubble tea", 500, "ml"));
+        foodDao.insert(new Food("Cà phê sữa đá", 120, 2, 18, 4, "do_uong", "ca phe sua da, coffee, cafe sua", 200, "ml"));
+        foodDao.insert(new Food("Cà phê đen", 5, 0.3f, 0, 0, "do_uong", "ca phe den, black coffee, cafe den", 150, "ml"));
+        foodDao.insert(new Food("Nước cam", 45, 0.7f, 10, 0.2f, "do_uong", "nuoc cam, orange juice, cam vat", 250, "ml"));
+        foodDao.insert(new Food("Sinh tố bơ", 250, 3, 20, 18, "do_uong", "sinh to bo, avocado smoothie, bo dam", 300, "ml"));
+        foodDao.insert(new Food("Nước dừa", 45, 0.5f, 9, 0.5f, "do_uong", "nuoc dua, coconut water, dua tuoi", 300, "ml"));
+
         // ==================== ĂN VẶT ====================
-        foodDao.insert(new Food("Bánh tráng trộn", 200, 4, 35, 5, "an_vat"));
-        foodDao.insert(new Food("Gỏi cuốn (2 cuốn)", 150, 8, 20, 4, "an_vat"));
-        foodDao.insert(new Food("Chả giò (2 cuốn)", 180, 6, 15, 11, "an_vat"));
-        foodDao.insert(new Food("Khoai tây chiên", 312, 3.4f, 41, 15, "an_vat"));
-        
+        foodDao.insert(new Food("Bánh tráng trộn", 200, 4, 35, 5, "an_vat", "banh trang tron, rice paper salad", 150, "gói"));
+        foodDao.insert(new Food("Gỏi cuốn (2 cuốn)", 150, 8, 20, 4, "an_vat", "goi cuon, fresh spring roll, cuon", 120, "cuốn"));
+        foodDao.insert(new Food("Chả giò (2 cuốn)", 180, 6, 15, 11, "an_vat", "cha gio, nem ran, spring roll, nem", 100, "cuốn"));
+        foodDao.insert(new Food("Khoai tây chiên", 312, 3.4f, 41, 15, "an_vat", "khoai tay chien, french fries, fries", 100, "g"));
+
         // ==================== TRÁI CÂY ====================
-        foodDao.insert(new Food("Chuối", 89, 1.1f, 23, 0.3f, "trai_cay"));
-        foodDao.insert(new Food("Táo", 52, 0.3f, 14, 0.2f, "trai_cay"));
-        foodDao.insert(new Food("Cam", 47, 0.9f, 12, 0.1f, "trai_cay"));
-        foodDao.insert(new Food("Xoài", 60, 0.8f, 15, 0.4f, "trai_cay"));
-        foodDao.insert(new Food("Dưa hấu", 30, 0.6f, 8, 0.2f, "trai_cay"));
-        foodDao.insert(new Food("Nho", 69, 0.7f, 18, 0.2f, "trai_cay"));
+        foodDao.insert(new Food("Chuối", 89, 1.1f, 23, 0.3f, "trai_cay", "chuoi, banana", 120, "quả"));
+        foodDao.insert(new Food("Táo", 52, 0.3f, 14, 0.2f, "trai_cay", "tao, apple", 150, "quả"));
+        foodDao.insert(new Food("Cam", 47, 0.9f, 12, 0.1f, "trai_cay", "cam, orange", 150, "quả"));
+        foodDao.insert(new Food("Xoài", 60, 0.8f, 15, 0.4f, "trai_cay", "xoai, mango", 200, "quả"));
+        foodDao.insert(new Food("Dưa hấu", 30, 0.6f, 8, 0.2f, "trai_cay", "dua hau, watermelon", 200, "g"));
+        foodDao.insert(new Food("Nho", 69, 0.7f, 18, 0.2f, "trai_cay", "nho, grape", 100, "g"));
     }
     
     /**

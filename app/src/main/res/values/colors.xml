@@ -3,67 +3,88 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <!-- Primary Colors - Green (Health/Fitness theme) -->
-    <color name="primary">#4CAF50</color>
-    <color name="primary_dark">#388E3C</color>
-    <color name="primary_light">#C8E6C9</color>
+    <!-- PRIMARY PALETTE - Warm Coral/Terracotta (Bold & Distinctive) -->
+    <color name="primary">#E85D4C</color>
+    <color name="primary_dark">#C94C3D</color>
+    <color name="primary_light">#FFEAE8</color>
+    <color name="primary_gradient_start">#E85D4C</color>
+    <color name="primary_gradient_end">#F4A261</color>
 
-    <!-- Secondary Colors - Orange (Energy/Calories) -->
-    <color name="secondary">#FF9800</color>
-    <color name="secondary_dark">#F57C00</color>
-    <color name="secondary_light">#FFE0B2</color>
+    <!-- SECONDARY - Deep Teal (Contrast & Balance) -->
+    <color name="secondary">#1D3557</color>
+    <color name="secondary_dark">#0D1F33</color>
+    <color name="secondary_light">#457B9D</color>
 
-    <!-- Accent Colors -->
-    <color name="accent">#03A9F4</color>
+    <!-- ACCENT - Warm Gold (Premium Feel) -->
+    <color name="accent">#F4A261</color>
+    <color name="accent_light">#FFE5C4</color>
 
-    <!-- Background Colors -->
-    <color name="background">#FAFAFA</color>
+    <!-- BACKGROUND - Soft Warm Off-White -->
+    <color name="background">#FBF7F4</color>
+    <color name="background_elevated">#FFFFFF</color>
     <color name="surface">#FFFFFF</color>
     <color name="card_background">#FFFFFF</color>
+    <color name="surface_variant">#F5EDE8</color>
 
-    <!-- Text Colors -->
-    <color name="text_primary">#212121</color>
-    <color name="text_secondary">#757575</color>
-    <color name="text_hint">#BDBDBD</color>
+    <!-- TEXT - Rich, Warm Contrast -->
+    <color name="text_primary">#1D3557</color>
+    <color name="text_secondary">#6B7B8A</color>
+    <color name="text_hint">#A8B5C2</color>
     <color name="text_on_primary">#FFFFFF</color>
+    <color name="text_accent">#E85D4C</color>
 
-    <!-- Status Colors -->
-    <color name="success">#4CAF50</color>
-    <color name="warning">#FFC107</color>
-    <color name="error">#F44336</color>
-    <color name="info">#2196F3</color>
+    <!-- STATUS COLORS - Refined -->
+    <color name="success">#2A9D8F</color>
+    <color name="warning">#E9C46A</color>
+    <color name="error">#E76F51</color>
+    <color name="info">#457B9D</color>
 
-    <!-- Calorie Colors -->
-    <color name="calories_consumed">#FF5722</color>
-    <color name="calories_burned">#4CAF50</color>
-    <color name="calories_remaining">#2196F3</color>
+    <!-- CALORIE TRACKING - Vibrant & Clear -->
+    <color name="calories_consumed">#E85D4C</color>
+    <color name="calories_burned">#2A9D8F</color>
+    <color name="calories_remaining">#457B9D</color>
+    <color name="calories_net">#F4A261</color>
 
-    <!-- Meal Type Colors -->
-    <color name="breakfast">#FFB74D</color>
-    <color name="lunch">#4FC3F7</color>
-    <color name="dinner">#7986CB</color>
-    <color name="snack">#AED581</color>
-    <color name="meal_breakfast">#FFB74D</color>
-    <color name="meal_lunch">#4FC3F7</color>
-    <color name="meal_dinner">#7986CB</color>
-    <color name="meal_snack">#AED581</color>
+    <!-- MEAL TYPE COLORS - Warm, Organic Palette -->
+    <color name="breakfast">#F4A261</color>
+    <color name="lunch">#2A9D8F</color>
+    <color name="dinner">#457B9D</color>
+    <color name="snack">#E9C46A</color>
+    <color name="meal_breakfast">#F4A261</color>
+    <color name="meal_lunch">#2A9D8F</color>
+    <color name="meal_dinner">#457B9D</color>
+    <color name="meal_snack">#E9C46A</color>
 
-    <!-- Workout Category Colors -->
-    <color name="cardio">#EF5350</color>
-    <color name="strength">#5C6BC0</color>
-    <color name="flexibility">#26A69A</color>
-    <color name="workout_cardio">#EF5350</color>
-    <color name="workout_strength">#5C6BC0</color>
-    <color name="workout_flexibility">#26A69A</color>
+    <!-- WORKOUT CATEGORY COLORS - Energetic -->
+    <color name="cardio">#E76F51</color>
+    <color name="strength">#264653</color>
+    <color name="flexibility">#2A9D8F</color>
+    <color name="workout_cardio">#E76F51</color>
+    <color name="workout_strength">#264653</color>
+    <color name="workout_flexibility">#2A9D8F</color>
 
-    <!-- Nutrition Colors -->
-    <color name="protein">#E91E63</color>
-    <color name="carbs">#FF9800</color>
-    <color name="fat">#9C27B0</color>
+    <!-- NUTRITION MACROS - Distinct & Memorable -->
+    <color name="protein">#E85D4C</color>
+    <color name="carbs">#F4A261</color>
+    <color name="fat">#457B9D</color>
 
-    <!-- Progress Bar Colors -->
-    <color name="progress_background">#E0E0E0</color>
-    <color name="progress_normal">#4CAF50</color>
-    <color name="progress_warning">#FFC107</color>
-    <color name="progress_over">#F44336</color>
+    <!-- PROGRESS BAR - Subtle Background -->
+    <color name="progress_background">#F0E6E0</color>
+    <color name="progress_normal">#2A9D8F</color>
+    <color name="progress_warning">#E9C46A</color>
+    <color name="progress_over">#E76F51</color>
+
+    <!-- GRADIENT OVERLAY COLORS -->
+    <color name="gradient_warm_start">#E85D4C</color>
+    <color name="gradient_warm_end">#F4A261</color>
+    <color name="gradient_cool_start">#264653</color>
+    <color name="gradient_cool_end">#2A9D8F</color>
+
+    <!-- SHADOW & ELEVATION -->
+    <color name="shadow_light">#1A1D3557</color>
+    <color name="ripple_color">#20E85D4C</color>
+
+    <!-- BOTTOM NAV -->
+    <color name="nav_inactive">#A8B5C2</color>
+    <color name="nav_active">#E85D4C</color>
 </resources>

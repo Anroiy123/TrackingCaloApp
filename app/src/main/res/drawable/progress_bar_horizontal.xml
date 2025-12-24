@@ -1,20 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     
-    <!-- Background -->
+    <!-- Background - Subtle warm tone -->
     <item android:id="@android:id/background">
         <shape android:shape="rectangle">
-            <corners android:radius="6dp" />
+            <corners android:radius="@dimen/progress_corner_radius" />
             <solid android:color="@color/progress_background" />
         </shape>
     </item>
     
-    <!-- Progress -->
+    <!-- Secondary Progress (optional) -->
+    <item android:id="@android:id/secondaryProgress">
+        <clip>
+            <shape android:shape="rectangle">
+                <corners android:radius="@dimen/progress_corner_radius" />
+                <solid android:color="@color/primary_light" />
+            </shape>
+        </clip>
+    </item>
+
+    <!-- Progress - Warm gradient -->
     <item android:id="@android:id/progress">
         <clip>
             <shape android:shape="rectangle">
-                <corners android:radius="6dp" />
-                <solid android:color="@color/primary" />
+                <corners android:radius="@dimen/progress_corner_radius" />
+                <gradient
+                    android:angle="0"
+                    android:startColor="@color/gradient_warm_start"
+                    android:endColor="@color/gradient_warm_end"
+                    android:type="linear" />
             </shape>
         </clip>
     </item>

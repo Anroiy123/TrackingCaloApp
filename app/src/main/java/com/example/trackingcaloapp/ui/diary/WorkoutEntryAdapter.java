@@ -24,6 +24,20 @@ public class WorkoutEntryAdapter extends RecyclerView.Adapter<WorkoutEntryAdapte
         notifyDataSetChanged();
     }
 
+    public WorkoutEntry getEntryAt(int position) {
+        if (position >= 0 && position < entries.size()) {
+            return entries.get(position);
+        }
+        return null;
+    }
+
+    public void removeEntry(int position) {
+        if (position >= 0 && position < entries.size()) {
+            entries.remove(position);
+            notifyItemRemoved(position);
+        }
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -73,4 +87,3 @@ public class WorkoutEntryAdapter extends RecyclerView.Adapter<WorkoutEntryAdapte
         }
     }
 }
-

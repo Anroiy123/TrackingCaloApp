@@ -175,10 +175,44 @@ public class CalorieCalculator {
     
     /**
      * Tính calo còn lại có thể ăn trong ngày
+     * Công thức mới: Remaining = (Goal + Burned) - Consumed
+     * VD: Goal=2000, Consumed=1500, Burned=300 → Remaining=(2000+300)-1500=800
      */
     public static float calculateRemainingCalories(int dailyGoal, float caloriesConsumed, float caloriesBurned) {
-        float netCalories = calculateNetCalories(caloriesConsumed, caloriesBurned);
-        return dailyGoal - netCalories;
+        return (dailyGoal + caloriesBurned) - caloriesConsumed;
+    }
+
+    /**
+     * Tính macro goals từ total calories
+     * Sử dụng tỷ lệ 30% protein / 40% carbs / 30% fat
+     * @param totalCalories Mục tiêu calo/ngày
+     * @return float[3] = {proteinGoal, carbsGoal, fatGoal} (grams)
+     */
+    public static float[] calculateMacroGoals(int totalCalories) {
+        float[] macros = new float[3];
+        // 30% calories từ protein (4 cal/g)
+        macros[0] = (totalCalories * Constants.PROTEIN_RATIO) / Constants.PROTEIN_CAL_PER_GRAM;
+        // 40% calories từ carbs (4 cal/g)
+        macros[1] = (totalCalories * Constants.CARBS_RATIO) / Constants.CARBS_CAL_PER_GRAM;
+        // 30% calories từ fat (9 cal/g)
+        macros[2] = (totalCalories * Constants.FAT_RATIO) / Constants.FAT_CAL_PER_GRAM;
+        return macros;
+    }
+
+    /**
+     * Tính macro goals với custom ratios
+     * @param totalCalories Mục tiêu calo/ngày
+     * @param proteinRatio Tỷ lệ protein (0.0 - 1.0)
+     * @param carbsRatio Tỷ lệ carbs (0.0 - 1.0)
+     * @param fatRatio Tỷ lệ fat (0.0 - 1.0)
+     * @return float[3] = {proteinGoal, carbsGoal, fatGoal} (grams)
+     */
+    public static float[] calculateMacroGoals(int totalCalories, float proteinRatio, float carbsRatio, float fatRatio) {
+        float[] macros = new float[3];
+        macros[0] = (totalCalories * proteinRatio) / Constants.PROTEIN_CAL_PER_GRAM;
+        macros[1] = (totalCalories * carbsRatio) / Constants.CARBS_CAL_PER_GRAM;
+        macros[2] = (totalCalories * fatRatio) / Constants.FAT_CAL_PER_GRAM;
+        return macros;
     }
     
     /**
