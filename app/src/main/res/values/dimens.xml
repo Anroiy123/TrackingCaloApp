@@ -120,6 +120,10 @@
     <dimen name="icon_container_md">44dp</dimen>
     <dimen name="icon_container_lg">56dp</dimen>
     <dimen name="icon_container_xl">72dp</dimen>
+    <dimen name="icon_container_2xl">96dp</dimen>
+
+    <!-- Icon Button Size -->
+    <dimen name="icon_button_size">48dp</dimen>
 
     <!-- Legacy Aliases -->
     <dimen name="icon_size_small">24dp</dimen>

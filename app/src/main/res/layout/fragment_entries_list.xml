@@ -1,25 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvEntries"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
-        android:padding="@dimen/padding_medium" />
+        android:paddingHorizontal="@dimen/spacing_base"
+        android:paddingTop="@dimen/spacing_sm"
+        android:paddingBottom="@dimen/spacing_xl" />
 
-    <TextView
-        android:id="@+id/tvEmpty"
+    <!-- Empty State -->
+    <LinearLayout
+        android:id="@+id/layoutEmpty"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_height="match_parent"
         android:gravity="center"
-        android:padding="@dimen/padding_large"
-        android:text="Chưa có dữ liệu"
-        android:textColor="@color/text_hint"
-        android:visibility="gone" />
+        android:orientation="vertical"
+        android:padding="@dimen/spacing_xl"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="@dimen/icon_container_2xl"
+            android:layout_height="@dimen/icon_container_2xl"
+            android:background="@drawable/bg_stat_net"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="@dimen/icon_2xl"
+                android:layout_height="@dimen/icon_2xl"
+                android:alpha="0.6"
+                android:src="@drawable/ic_diary"
+                app:tint="@color/calories_net" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvEmpty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_lg"
+            android:gravity="center"
+            android:text="Chưa có dữ liệu"
+            android:textAppearance="@style/TextAppearance.App.Title.Medium"
+            android:textColor="@color/text_secondary" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_xs"
+            android:gravity="center"
+            android:text="Thêm bữa ăn hoặc bài tập để bắt đầu"
+            android:textAppearance="@style/TextAppearance.App.Body.Medium"
+            android:textColor="@color/text_hint" />
+
+    </LinearLayout>
 
 </FrameLayout>
-
