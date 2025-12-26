@@ -115,6 +115,12 @@
     <dimen name="icon_xl">40dp</dimen>
     <dimen name="icon_2xl">48dp</dimen>
 
+    <!-- Icon Containers (for circular backgrounds) -->
+    <dimen name="icon_container_sm">32dp</dimen>
+    <dimen name="icon_container_md">44dp</dimen>
+    <dimen name="icon_container_lg">56dp</dimen>
+    <dimen name="icon_container_xl">72dp</dimen>
+
     <!-- Legacy Aliases -->
     <dimen name="icon_size_small">24dp</dimen>
     <dimen name="icon_size_medium">32dp</dimen>
@@ -201,6 +207,11 @@
     <dimen name="progress_indicator_size">48dp</dimen>
     <dimen name="badge_size">16dp</dimen>
     <dimen name="dot_indicator_size">8dp</dimen>
+
+    <!-- Chips -->
+    <dimen name="chip_height">32dp</dimen>
+    <dimen name="chip_height_sm">24dp</dimen>
+    <dimen name="chip_min_height">28dp</dimen>
 
     <!-- Progress Circle (for calorie display) -->
     <dimen name="progress_circle_size">200dp</dimen>

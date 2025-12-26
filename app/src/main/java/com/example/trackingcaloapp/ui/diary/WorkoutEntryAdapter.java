@@ -3,14 +3,18 @@ package com.example.trackingcaloapp.ui.diary;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trackingcaloapp.R;
 import com.example.trackingcaloapp.data.local.entity.WorkoutEntry;
 import com.example.trackingcaloapp.utils.DateUtils;
+import com.google.android.material.chip.Chip;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,19 +48,21 @@ public class WorkoutEntryAdapter extends RecyclerView.Adapter<WorkoutEntryAdapte
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        private final View viewCategoryIndicator;
+        private final LinearLayout layoutCategoryIcon;
+        private final ImageView ivCategoryIcon;
         private final TextView tvWorkoutName;
         private final TextView tvQuantity;
-        private final TextView tvCategory;
+        private final Chip chipCategory;
         private final TextView tvCaloriesBurned;
         private final TextView tvTime;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
-            viewCategoryIndicator = itemView.findViewById(R.id.viewCategoryIndicator);
+            layoutCategoryIcon = itemView.findViewById(R.id.layoutCategoryIcon);
+            ivCategoryIcon = itemView.findViewById(R.id.ivCategoryIcon);
             tvWorkoutName = itemView.findViewById(R.id.tvWorkoutName);
             tvQuantity = itemView.findViewById(R.id.tvQuantity);
-            tvCategory = itemView.findViewById(R.id.tvCategory);
+            chipCategory = itemView.findViewById(R.id.chipCategory);
             tvCaloriesBurned = itemView.findViewById(R.id.tvCaloriesBurned);
             tvTime = itemView.findViewById(R.id.tvTime);
         }
@@ -64,12 +70,20 @@ public class WorkoutEntryAdapter extends RecyclerView.Adapter<WorkoutEntryAdapte
         void bind(WorkoutEntry entry) {
             tvWorkoutName.setText("Bài tập #" + entry.getWorkoutId());
             tvQuantity.setText(String.format("%.0f", entry.getQuantity()));
-            tvCategory.setText(""); // Would need to join with Workout table
             tvCaloriesBurned.setText(String.valueOf((int) entry.getCaloriesBurned()));
             tvTime.setText(DateUtils.formatTime(entry.getDate()));
 
-            viewCategoryIndicator.setBackgroundColor(
-                    itemView.getContext().getColor(R.color.calories_burned));
+            // Set category chip - default to cardio style since we don't have category from entry
+            if (chipCategory != null) {
+                chipCategory.setText("Cardio");
+                chipCategory.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.cardio));
+                chipCategory.setChipBackgroundColorResource(R.color.cardio_container);
+            }
+
+            // Update category icon tint
+            if (ivCategoryIcon != null) {
+                ivCategoryIcon.setColorFilter(ContextCompat.getColor(itemView.getContext(), R.color.cardio));
+            }
         }
     }
 }

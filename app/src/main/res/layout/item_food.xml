@@ -1,23 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/margin_small"
-    app:cardCornerRadius="@dimen/card_corner_radius"
-    app:cardElevation="2dp">
+    android:layout_marginBottom="@dimen/spacing_sm"
+    android:clickable="true"
+    android:focusable="true"
+    app:cardBackgroundColor="@color/surface"
+    app:cardCornerRadius="@dimen/radius_base"
+    app:cardElevation="@dimen/elevation_none"
+    app:rippleColor="@color/primary_container"
+    app:strokeColor="@color/outline"
+    app:strokeWidth="1dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="@dimen/padding_medium">
+        android:padding="@dimen/spacing_base">
+
+        <!-- Food Icon Container -->
+        <LinearLayout
+            android:layout_width="@dimen/icon_container_md"
+            android:layout_height="@dimen/icon_container_md"
+            android:background="@drawable/bg_stat_consumed"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="@dimen/icon_md"
+                android:layout_height="@dimen/icon_md"
+                android:src="@drawable/ic_food"
+                app:tint="@color/calories_consumed" />
+
+        </LinearLayout>
 
         <!-- Food Info -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_md"
             android:layout_weight="1"
             android:orientation="vertical">
 
@@ -25,40 +47,53 @@
                 android:id="@+id/tvFoodName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:text="Phở bò"
-                android:textColor="@color/text_primary"
-                android:textSize="@dimen/text_size_large"
-                android:textStyle="bold" />
+                android:textAppearance="@style/TextAppearance.App.Title.Small"
+                android:textColor="@color/text_primary" />
 
             <TextView
                 android:id="@+id/tvFoodInfo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_xxs"
                 android:text="350 cal / 100g"
-                android:textColor="@color/text_secondary"
-                android:textSize="@dimen/text_size_small" />
+                android:textAppearance="@style/TextAppearance.App.Body.Small"
+                android:textColor="@color/text_secondary" />
 
         </LinearLayout>
 
-        <!-- Calories -->
-        <TextView
-            android:id="@+id/tvCalories"
+        <!-- Calories Badge -->
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="350"
-            android:textColor="@color/calories_consumed"
-            android:textSize="@dimen/text_size_xlarge"
-            android:textStyle="bold" />
+            android:background="@drawable/bg_calorie_badge_consumed"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/spacing_md"
+            android:paddingVertical="@dimen/spacing_xs">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:text="cal"
-            android:textColor="@color/text_secondary"
-            android:textSize="@dimen/text_size_small" />
+            <TextView
+                android:id="@+id/tvCalories"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:text="350"
+                android:textColor="@color/calories_consumed"
+                android:textSize="@dimen/text_size_large"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_xxs"
+                android:text="cal"
+                android:textAppearance="@style/TextAppearance.App.Label.Small"
+                android:textColor="@color/text_secondary" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
-</androidx.cardview.widget.CardView>
-
+</com.google.android.material.card.MaterialCardView>

@@ -1,31 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/margin_small"
-    app:cardCornerRadius="@dimen/card_corner_radius"
-    app:cardElevation="2dp">
+    android:layout_marginBottom="@dimen/spacing_sm"
+    android:clickable="true"
+    android:focusable="true"
+    app:cardBackgroundColor="@color/surface"
+    app:cardCornerRadius="@dimen/radius_base"
+    app:cardElevation="@dimen/elevation_none"
+    app:rippleColor="@color/secondary_container"
+    app:strokeColor="@color/outline"
+    app:strokeWidth="1dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="@dimen/padding_medium">
+        android:padding="@dimen/spacing_base">
 
-        <!-- Category Indicator -->
-        <View
-            android:id="@+id/viewCategoryIndicator"
-            android:layout_width="4dp"
-            android:layout_height="48dp"
-            android:background="@color/workout_cardio" />
+        <!-- Category Indicator Circle -->
+        <LinearLayout
+            android:id="@+id/layoutCategoryIcon"
+            android:layout_width="@dimen/icon_container_md"
+            android:layout_height="@dimen/icon_container_md"
+            android:background="@drawable/bg_workout_indicator"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/ivCategoryIcon"
+                android:layout_width="@dimen/icon_md"
+                android:layout_height="@dimen/icon_md"
+                android:src="@drawable/ic_workout"
+                app:tint="@color/cardio" />
+
+        </LinearLayout>
 
         <!-- Workout Info -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_medium"
+            android:layout_marginStart="@dimen/spacing_md"
             android:layout_weight="1"
             android:orientation="vertical">
 
@@ -33,14 +49,17 @@
                 android:id="@+id/tvWorkoutName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:text="Chạy bộ"
-                android:textColor="@color/text_primary"
-                android:textSize="@dimen/text_size_medium"
-                android:textStyle="bold" />
+                android:textAppearance="@style/TextAppearance.App.Title.Small"
+                android:textColor="@color/text_primary" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_xxs"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <TextView
@@ -48,29 +67,34 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="30 phút"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="@dimen/text_size_small" />
+                    android:textAppearance="@style/TextAppearance.App.Body.Small"
+                    android:textColor="@color/text_secondary" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="4dp"
+                    android:layout_marginHorizontal="@dimen/spacing_sm"
                     android:text="•"
                     android:textColor="@color/text_hint" />
 
-                <TextView
-                    android:id="@+id/tvCategory"
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipCategory"
+                    style="@style/Widget.Material3.Chip.Assist"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/chip_height_sm"
                     android:text="Cardio"
-                    android:textColor="@color/workout_cardio"
-                    android:textSize="@dimen/text_size_small" />
+                    android:textAppearance="@style/TextAppearance.App.Label.Small"
+                    android:textColor="@color/cardio"
+                    app:chipBackgroundColor="@color/cardio_container"
+                    app:chipMinHeight="@dimen/chip_height_sm"
+                    app:chipMinTouchTargetSize="0dp"
+                    app:chipStrokeWidth="0dp" />
 
             </LinearLayout>
 
         </LinearLayout>
 
-        <!-- Calories Burned -->
+        <!-- Calories Burned & Time -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -80,20 +104,25 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:background="@drawable/bg_calorie_badge_burned"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingHorizontal="@dimen/spacing_md"
+                android:paddingVertical="@dimen/spacing_xs">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="-"
                     android:textColor="@color/calories_burned"
-                    android:textSize="@dimen/text_size_large"
+                    android:textSize="@dimen/text_size_medium"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tvCaloriesBurned"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
                     android:text="300"
                     android:textColor="@color/calories_burned"
                     android:textSize="@dimen/text_size_large"
@@ -102,10 +131,10 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="2dp"
+                    android:layout_marginStart="@dimen/spacing_xxs"
                     android:text="cal"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="@dimen/text_size_small" />
+                    android:textAppearance="@style/TextAppearance.App.Label.Small"
+                    android:textColor="@color/text_secondary" />
 
             </LinearLayout>
 
@@ -113,13 +142,14 @@
                 android:id="@+id/tvTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="@dimen/spacing_xs"
                 android:text="18:00"
-                android:textColor="@color/text_hint"
-                android:textSize="@dimen/text_size_small" />
+                android:textAppearance="@style/TextAppearance.App.Label.Small"
+                android:textColor="@color/text_tertiary" />
 
         </LinearLayout>
 
     </LinearLayout>
 
-</androidx.cardview.widget.CardView>
-
+</com.google.android.material.card.MaterialCardView>

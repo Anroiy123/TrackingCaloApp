@@ -3,15 +3,19 @@ package com.example.trackingcaloapp.ui.diary;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trackingcaloapp.R;
 import com.example.trackingcaloapp.data.local.entity.FoodEntry;
 import com.example.trackingcaloapp.utils.Constants;
 import com.example.trackingcaloapp.utils.DateUtils;
+import com.google.android.material.chip.Chip;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,18 +49,20 @@ public class FoodEntryAdapter extends RecyclerView.Adapter<FoodEntryAdapter.View
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        private final View viewMealIndicator;
+        private final LinearLayout layoutMealIcon;
+        private final ImageView ivMealIcon;
         private final TextView tvFoodName;
-        private final TextView tvMealType;
+        private final Chip chipMealType;
         private final TextView tvQuantity;
         private final TextView tvCalories;
         private final TextView tvTime;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
-            viewMealIndicator = itemView.findViewById(R.id.viewMealIndicator);
+            layoutMealIcon = itemView.findViewById(R.id.layoutMealIcon);
+            ivMealIcon = itemView.findViewById(R.id.ivMealIcon);
             tvFoodName = itemView.findViewById(R.id.tvFoodName);
-            tvMealType = itemView.findViewById(R.id.tvMealType);
+            chipMealType = itemView.findViewById(R.id.chipMealType);
             tvQuantity = itemView.findViewById(R.id.tvQuantity);
             tvCalories = itemView.findViewById(R.id.tvCalories);
             tvTime = itemView.findViewById(R.id.tvTime);
@@ -64,32 +70,47 @@ public class FoodEntryAdapter extends RecyclerView.Adapter<FoodEntryAdapter.View
 
         void bind(FoodEntry entry) {
             tvFoodName.setText("Thực phẩm #" + entry.getFoodId());
-            tvMealType.setText(Constants.getMealTypeName(entry.getMealType()));
             tvQuantity.setText(String.format("%.0fg", entry.getQuantity()));
             tvCalories.setText(String.valueOf((int) entry.getTotalCalories()));
             tvTime.setText(DateUtils.formatTime(entry.getDate()));
 
-            // Set meal indicator color
-            int colorRes;
-            switch (entry.getMealType()) {
-                case Constants.MEAL_BREAKFAST:
-                    colorRes = R.color.meal_breakfast;
-                    break;
-                case Constants.MEAL_LUNCH:
-                    colorRes = R.color.meal_lunch;
-                    break;
-                case Constants.MEAL_DINNER:
-                    colorRes = R.color.meal_dinner;
-                    break;
-                case Constants.MEAL_SNACK:
-                    colorRes = R.color.meal_snack;
-                    break;
-                default:
-                    colorRes = R.color.primary;
+            // Set meal type chip text and colors
+            String mealName = Constants.getMealTypeName(entry.getMealType());
+            if (chipMealType != null) {
+                chipMealType.setText(mealName);
+
+                int colorRes;
+                int containerColorRes;
+                switch (entry.getMealType()) {
+                    case Constants.MEAL_BREAKFAST:
+                        colorRes = R.color.breakfast;
+                        containerColorRes = R.color.breakfast_container;
+                        break;
+                    case Constants.MEAL_LUNCH:
+                        colorRes = R.color.lunch;
+                        containerColorRes = R.color.lunch_container;
+                        break;
+                    case Constants.MEAL_DINNER:
+                        colorRes = R.color.dinner;
+                        containerColorRes = R.color.dinner_container;
+                        break;
+                    case Constants.MEAL_SNACK:
+                        colorRes = R.color.snack;
+                        containerColorRes = R.color.snack_container;
+                        break;
+                    default:
+                        colorRes = R.color.primary;
+                        containerColorRes = R.color.primary_container;
+                }
+
+                chipMealType.setTextColor(ContextCompat.getColor(itemView.getContext(), colorRes));
+                chipMealType.setChipBackgroundColorResource(containerColorRes);
+
+                // Update meal icon tint
+                if (ivMealIcon != null) {
+                    ivMealIcon.setColorFilter(ContextCompat.getColor(itemView.getContext(), colorRes));
+                }
             }
-            viewMealIndicator.setBackgroundColor(
-                    itemView.getContext().getColor(colorRes));
-            tvMealType.setTextColor(itemView.getContext().getColor(colorRes));
         }
     }
 }

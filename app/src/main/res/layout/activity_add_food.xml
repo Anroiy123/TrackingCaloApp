@@ -7,20 +7,23 @@
     android:background="@color/background"
     tools:context=".ui.addfood.AddFoodActivity">
 
-    <!-- Toolbar -->
+    <!-- Modern AppBar -->
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/surface"
+        app:elevation="@dimen/elevation_none">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
+            style="@style/Widget.App.Toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/primary"
-            app:navigationIcon="@android:drawable/ic_menu_close_clear_cancel"
-            app:navigationIconTint="@color/white"
+            app:navigationIcon="@drawable/ic_close"
+            app:navigationIconTint="@color/text_primary"
             app:title="@string/add_food"
-            app:titleTextColor="@color/white" />
+            app:titleTextAppearance="@style/TextAppearance.App.Title.Large"
+            app:titleTextColor="@color/text_primary" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -30,69 +33,161 @@
         android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <!-- Search Bar -->
-        <com.google.android.material.textfield.TextInputLayout
+        <!-- Search Bar - Modern Style -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_medium"
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+            android:layout_marginHorizontal="@dimen/spacing_base"
+            android:layout_marginTop="@dimen/spacing_sm"
+            app:cardBackgroundColor="@color/surface_container"
+            app:cardCornerRadius="@dimen/radius_md"
+            app:cardElevation="@dimen/elevation_none"
+            app:strokeWidth="0dp">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etSearch"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/search_food"
-                android:inputType="text"
-                android:drawableStart="@android:drawable/ic_menu_search"
-                android:drawablePadding="@dimen/padding_small" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="@dimen/spacing_base"
+                android:paddingVertical="@dimen/spacing_md">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <ImageView
+                    android:layout_width="@dimen/icon_md"
+                    android:layout_height="@dimen/icon_md"
+                    android:src="@drawable/ic_search"
+                    app:tint="@color/text_tertiary" />
 
-        <!-- Meal Type Chips -->
+                <EditText
+                    android:id="@+id/etSearch"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/spacing_sm"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:hint="@string/search_food"
+                    android:inputType="text"
+                    android:textAppearance="@style/TextAppearance.App.Body.Large"
+                    android:textColor="@color/text_primary"
+                    android:textColorHint="@color/text_tertiary" />
+
+                <ImageView
+                    android:id="@+id/ivClearSearch"
+                    android:layout_width="@dimen/icon_md"
+                    android:layout_height="@dimen/icon_md"
+                    android:padding="@dimen/spacing_xs"
+                    android:src="@drawable/ic_close"
+                    android:visibility="gone"
+                    app:tint="@color/text_tertiary" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Meal Type Selection Label -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_base"
+            android:layout_marginTop="@dimen/spacing_base"
+            android:text="Chọn bữa ăn"
+            android:textAppearance="@style/TextAppearance.App.Label.Large"
+            android:textColor="@color/text_secondary" />
+
+        <!-- Meal Type Chips - Modern Style -->
         <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_sm"
+            android:clipToPadding="false"
+            android:paddingHorizontal="@dimen/spacing_base"
             android:scrollbars="none">
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/chipGroupMealType"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="@dimen/padding_medium"
                 app:singleSelection="true">
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipBreakfast"
-                    style="@style/Widget.Material3.Chip.Filter"
+                    style="@style/Widget.App.Chip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
-                    android:text="@string/breakfast" />
+                    android:text="@string/breakfast"
+                    app:chipBackgroundColor="@color/chip_background_color"
+                    app:chipIconTint="@color/breakfast"
+                    app:chipIcon="@drawable/ic_food" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipLunch"
-                    style="@style/Widget.Material3.Chip.Filter"
+                    style="@style/Widget.App.Chip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/lunch" />
+                    android:text="@string/lunch"
+                    app:chipBackgroundColor="@color/chip_background_color"
+                    app:chipIconTint="@color/lunch"
+                    app:chipIcon="@drawable/ic_food" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipDinner"
-                    style="@style/Widget.Material3.Chip.Filter"
+                    style="@style/Widget.App.Chip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/dinner" />
+                    android:text="@string/dinner"
+                    app:chipBackgroundColor="@color/chip_background_color"
+                    app:chipIconTint="@color/dinner"
+                    app:chipIcon="@drawable/ic_food" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipSnack"
-                    style="@style/Widget.Material3.Chip.Filter"
+                    style="@style/Widget.App.Chip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/snack" />
+                    android:text="@string/snack"
+                    app:chipBackgroundColor="@color/chip_background_color"
+                    app:chipIconTint="@color/snack"
+                    app:chipIcon="@drawable/ic_food" />
 
             </com.google.android.material.chip.ChipGroup>
 
         </HorizontalScrollView>
+
+        <!-- Divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="@dimen/spacing_base"
+            android:layout_marginTop="@dimen/spacing_base"
+            android:background="@color/outline" />
+
+        <!-- Section Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/spacing_base"
+            android:paddingVertical="@dimen/spacing_md">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Danh sách thực phẩm"
+                android:textAppearance="@style/TextAppearance.App.Title.Medium"
+                android:textColor="@color/text_primary" />
+
+            <TextView
+                android:id="@+id/tvFoodCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0 món"
+                android:textAppearance="@style/TextAppearance.App.Label.Medium"
+                android:textColor="@color/text_tertiary" />
+
+        </LinearLayout>
 
         <!-- Food List -->
         <androidx.recyclerview.widget.RecyclerView
@@ -101,31 +196,59 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:clipToPadding="false"
-            android:padding="@dimen/padding_medium" />
+            android:paddingHorizontal="@dimen/spacing_base"
+            android:paddingBottom="@dimen/spacing_4xl" />
 
         <!-- Empty State -->
-        <TextView
-            android:id="@+id/tvEmpty"
+        <LinearLayout
+            android:id="@+id/layoutEmpty"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:gravity="center"
-            android:padding="@dimen/padding_large"
-            android:text="Không tìm thấy thực phẩm"
-            android:textColor="@color/text_hint"
-            android:visibility="gone" />
+            android:orientation="vertical"
+            android:padding="@dimen/spacing_xl"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="@dimen/icon_2xl"
+                android:layout_height="@dimen/icon_2xl"
+                android:alpha="0.5"
+                android:src="@drawable/ic_search"
+                app:tint="@color/text_hint" />
+
+            <TextView
+                android:id="@+id/tvEmpty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_md"
+                android:gravity="center"
+                android:text="Không tìm thấy thực phẩm"
+                android:textAppearance="@style/TextAppearance.App.Body.Large"
+                android:textColor="@color/text_secondary" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_xs"
+                android:gravity="center"
+                android:text="Thử tìm kiếm với từ khóa khác"
+                android:textAppearance="@style/TextAppearance.App.Body.Small"
+                android:textColor="@color/text_tertiary" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
     <!-- FAB để thêm thực phẩm tùy chỉnh -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAddCustomFood"
+        style="@style/Widget.App.FloatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/margin_medium"
+        android:layout_margin="@dimen/spacing_base"
         android:contentDescription="Thêm thực phẩm mới"
-        android:src="@android:drawable/ic_input_add"
-        app:tint="@color/white" />
+        app:srcCompat="@drawable/ic_add" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
-

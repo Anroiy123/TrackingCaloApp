@@ -10,67 +10,33 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/bottom_nav_height"
         android:orientation="vertical">
 
-        <!-- Date Selector -->
-        <androidx.cardview.widget.CardView
+        <!-- Date Selector - Modern Design -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/surface"
             app:cardCornerRadius="0dp"
-            app:cardElevation="4dp">
+            app:cardElevation="@dimen/elevation_sm">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="@dimen/padding_medium">
+                android:paddingHorizontal="@dimen/spacing_sm"
+                android:paddingVertical="@dimen/spacing_md">
 
-                <ImageButton
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnPrevDay"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
+                    style="@style/Widget.Material3.Button.IconButton"
+                    android:layout_width="@dimen/touch_target_min"
+                    android:layout_height="@dimen/touch_target_min"
                     android:contentDescription="Ngày trước"
-                    android:src="@android:drawable/ic_media_previous" />
-
-                <TextView
-                    android:id="@+id/tvSelectedDate"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="Hôm nay"
-                    android:textColor="@color/text_primary"
-                    android:textSize="@dimen/text_size_large"
-                    android:textStyle="bold" />
-
-                <ImageButton
-                    android:id="@+id/btnNextDay"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="Ngày sau"
-                    android:src="@android:drawable/ic_media_next" />
-
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
-
-        <!-- Summary Card -->
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_medium"
-            app:cardCornerRadius="@dimen/card_corner_radius"
-            app:cardElevation="@dimen/card_elevation">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="@dimen/card_padding"
-                android:weightSum="3">
+                    app:icon="@drawable/ic_chevron_left"
+                    app:iconTint="@color/text_secondary" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -80,9 +46,77 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/tvSelectedDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Hôm nay"
+                        android:textAppearance="@style/TextAppearance.App.Title.Medium"
+                        android:textColor="@color/text_primary" />
+
+                    <TextView
+                        android:id="@+id/tvFullDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_xxs"
+                        android:text="26 tháng 12, 2024"
+                        android:textAppearance="@style/TextAppearance.App.Body.Small"
+                        android:textColor="@color/text_tertiary" />
+
+                </LinearLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnNextDay"
+                    style="@style/Widget.Material3.Button.IconButton"
+                    android:layout_width="@dimen/touch_target_min"
+                    android:layout_height="@dimen/touch_target_min"
+                    android:contentDescription="Ngày sau"
+                    app:icon="@drawable/ic_chevron_right"
+                    app:iconTint="@color/text_secondary" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Summary Card - Compact Stats -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/spacing_base"
+            android:layout_marginTop="@dimen/spacing_base"
+            app:cardBackgroundColor="@color/surface"
+            app:cardCornerRadius="@dimen/radius_base"
+            app:cardElevation="@dimen/elevation_none"
+            app:strokeColor="@color/outline"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="@dimen/spacing_md">
+
+                <!-- Ăn vào -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_stat_consumed"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_md">
+
+                    <ImageView
+                        android:layout_width="@dimen/icon_sm"
+                        android:layout_height="@dimen/icon_sm"
+                        android:src="@drawable/ic_food"
+                        app:tint="@color/calories_consumed" />
+
+                    <TextView
                         android:id="@+id/tvTotalConsumed"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_xs"
+                        android:fontFamily="sans-serif-medium"
                         android:text="0"
                         android:textColor="@color/calories_consumed"
                         android:textSize="@dimen/text_size_xlarge"
@@ -91,23 +125,35 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Ăn vào"
-                        android:textColor="@color/text_secondary"
-                        android:textSize="@dimen/text_size_small" />
+                        android:text="@string/calories_consumed"
+                        android:textAppearance="@style/TextAppearance.App.Label.Small"
+                        android:textColor="@color/text_secondary" />
 
                 </LinearLayout>
 
+                <!-- Đốt cháy -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/spacing_sm"
                     android:layout_weight="1"
+                    android:background="@drawable/bg_stat_burned"
                     android:gravity="center"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_md">
+
+                    <ImageView
+                        android:layout_width="@dimen/icon_sm"
+                        android:layout_height="@dimen/icon_sm"
+                        android:src="@drawable/ic_workout"
+                        app:tint="@color/calories_burned" />
 
                     <TextView
                         android:id="@+id/tvTotalBurned"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_xs"
+                        android:fontFamily="sans-serif-medium"
                         android:text="0"
                         android:textColor="@color/calories_burned"
                         android:textSize="@dimen/text_size_xlarge"
@@ -116,57 +162,76 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Đốt cháy"
-                        android:textColor="@color/text_secondary"
-                        android:textSize="@dimen/text_size_small" />
+                        android:text="@string/calories_burned"
+                        android:textAppearance="@style/TextAppearance.App.Label.Small"
+                        android:textColor="@color/text_secondary" />
 
                 </LinearLayout>
 
+                <!-- NET -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:background="@drawable/bg_stat_net"
                     android:gravity="center"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_md">
+
+                    <ImageView
+                        android:layout_width="@dimen/icon_sm"
+                        android:layout_height="@dimen/icon_sm"
+                        android:src="@drawable/ic_diary"
+                        app:tint="@color/calories_net" />
 
                     <TextView
                         android:id="@+id/tvNetCalories"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_xs"
+                        android:fontFamily="sans-serif-medium"
                         android:text="0"
-                        android:textColor="@color/primary"
+                        android:textColor="@color/calories_net"
                         android:textSize="@dimen/text_size_xlarge"
                         android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="NET"
-                        android:textColor="@color/text_secondary"
-                        android:textSize="@dimen/text_size_small" />
+                        android:text="@string/calories_net"
+                        android:textAppearance="@style/TextAppearance.App.Label.Small"
+                        android:textColor="@color/text_secondary" />
 
                 </LinearLayout>
 
             </LinearLayout>
 
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
-        <!-- Tab Layout -->
+        <!-- Tab Layout - Modern Style -->
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout"
+            style="@style/Widget.App.TabLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/tab_height"
+            android:layout_marginHorizontal="@dimen/spacing_base"
+            android:layout_marginTop="@dimen/spacing_base"
+            android:background="@drawable/bg_card_outlined"
             app:tabGravity="fill"
-            app:tabMode="fixed">
+            app:tabMode="fixed"
+            app:tabPaddingStart="@dimen/spacing_base"
+            app:tabPaddingEnd="@dimen/spacing_base">
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:icon="@drawable/ic_food"
                 android:text="Thực phẩm" />
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:icon="@drawable/ic_workout"
                 android:text="Bài tập" />
 
         </com.google.android.material.tabs.TabLayout>
@@ -183,11 +248,11 @@
     <!-- Bottom Navigation -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"
+        style="@style/Widget.App.BottomNavigation"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/bottom_nav_height"
         android:layout_gravity="bottom"
-        android:background="@color/surface"
+        app:elevation="@dimen/elevation_lg"
         app:menu="@menu/bottom_navigation" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
-

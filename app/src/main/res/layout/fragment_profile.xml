@@ -10,240 +10,338 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="@dimen/padding_medium">
+        android:paddingHorizontal="@dimen/spacing_base"
+        android:paddingTop="@dimen/spacing_base"
+        android:paddingBottom="@dimen/spacing_xl">
 
         <!-- Header -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/profile"
-            android:textColor="@color/text_primary"
-            android:textSize="@dimen/text_size_title"
-            android:textStyle="bold" />
+            android:textAppearance="@style/TextAppearance.App.Headline.Small"
+            android:textColor="@color/text_primary" />
 
         <!-- User Info Card -->
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_medium"
-            app:cardCornerRadius="@dimen/card_corner_radius"
-            app:cardElevation="@dimen/card_elevation">
+            android:layout_marginTop="@dimen/spacing_base"
+            app:cardBackgroundColor="@color/surface"
+            app:cardCornerRadius="@dimen/radius_base"
+            app:cardElevation="@dimen/elevation_none"
+            app:strokeColor="@color/outline"
+            app:strokeWidth="1dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="@dimen/card_padding">
+                android:padding="@dimen/spacing_base">
+
+                <!-- Section Title -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="@dimen/icon_md"
+                        android:layout_height="@dimen/icon_md"
+                        android:src="@drawable/ic_profile"
+                        app:tint="@color/primary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/spacing_sm"
+                        android:text="Thông tin cá nhân"
+                        android:textAppearance="@style/TextAppearance.App.Title.Medium"
+                        android:textColor="@color/text_primary" />
+
+                </LinearLayout>
 
                 <!-- Tên -->
                 <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.App.TextInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/name"
-                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+                    android:layout_marginTop="@dimen/spacing_base"
+                    android:hint="@string/name">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textPersonName" />
+
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- Row: Tuổi & Giới tính -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_medium"
-                    android:orientation="horizontal"
-                    android:weightSum="2">
+                    android:layout_marginTop="@dimen/spacing_md"
+                    android:orientation="horizontal">
 
                     <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.App.TextInputLayout"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/margin_small"
+                        android:layout_marginEnd="@dimen/spacing_sm"
                         android:layout_weight="1"
-                        android:hint="@string/age"
-                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+                        android:hint="@string/age">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etAge"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="number" />
+
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <Spinner
-                        android:id="@+id/spinnerGender"
+                    <LinearLayout
                         android:layout_width="0dp"
-                        android:layout_height="@dimen/input_height"
-                        android:layout_marginStart="@dimen/margin_small"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/spacing_sm"
                         android:layout_weight="1"
-                        android:background="@drawable/spinner_background" />
-                </LinearLayout>
+                        android:orientation="vertical">
 
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/spacing_xs"
+                            android:text="Giới tính"
+                            android:textAppearance="@style/TextAppearance.App.Label.Small"
+                            android:textColor="@color/text_secondary" />
+
+                        <Spinner
+                            android:id="@+id/spinnerGender"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/input_height"
+                            android:background="@drawable/spinner_background" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
 
                 <!-- Row: Chiều cao & Cân nặng -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_medium"
-                    android:orientation="horizontal"
-                    android:weightSum="2">
+                    android:layout_marginTop="@dimen/spacing_md"
+                    android:orientation="horizontal">
 
                     <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.App.TextInputLayout"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/margin_small"
+                        android:layout_marginEnd="@dimen/spacing_sm"
                         android:layout_weight="1"
                         android:hint="@string/height"
-                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+                        app:suffixText="cm">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etHeight"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="numberDecimal" />
+
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.App.TextInputLayout"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/margin_small"
+                        android:layout_marginStart="@dimen/spacing_sm"
                         android:layout_weight="1"
                         android:hint="@string/weight"
-                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+                        app:suffixText="kg">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etWeight"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="numberDecimal" />
+
                     </com.google.android.material.textfield.TextInputLayout>
+
                 </LinearLayout>
+
             </LinearLayout>
-        </androidx.cardview.widget.CardView>
+
+        </com.google.android.material.card.MaterialCardView>
 
         <!-- Goals Card -->
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_medium"
-            app:cardCornerRadius="@dimen/card_corner_radius"
-            app:cardElevation="@dimen/card_elevation">
+            android:layout_marginTop="@dimen/spacing_base"
+            app:cardBackgroundColor="@color/surface"
+            app:cardCornerRadius="@dimen/radius_base"
+            app:cardElevation="@dimen/elevation_none"
+            app:strokeColor="@color/outline"
+            app:strokeWidth="1dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="@dimen/card_padding">
+                android:padding="@dimen/spacing_base">
 
+                <!-- Section Title -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="@dimen/icon_md"
+                        android:layout_height="@dimen/icon_md"
+                        android:src="@drawable/ic_diary"
+                        app:tint="@color/secondary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/spacing_sm"
+                        android:text="Mục tiêu"
+                        android:textAppearance="@style/TextAppearance.App.Title.Medium"
+                        android:textColor="@color/text_primary" />
+
+                </LinearLayout>
+
+                <!-- Activity Level -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Mục tiêu"
-                    android:textColor="@color/text_primary"
-                    android:textSize="@dimen/text_size_large"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_medium"
+                    android:layout_marginTop="@dimen/spacing_base"
                     android:text="@string/activity_level"
+                    android:textAppearance="@style/TextAppearance.App.Label.Medium"
                     android:textColor="@color/text_secondary" />
 
                 <Spinner
                     android:id="@+id/spinnerActivityLevel"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/input_height"
-                    android:layout_marginTop="@dimen/margin_small"
+                    android:layout_marginTop="@dimen/spacing_xs"
                     android:background="@drawable/spinner_background" />
 
+                <!-- Weight Goal -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_medium"
+                    android:layout_marginTop="@dimen/spacing_md"
                     android:text="@string/weight_goal"
+                    android:textAppearance="@style/TextAppearance.App.Label.Medium"
                     android:textColor="@color/text_secondary" />
 
                 <Spinner
                     android:id="@+id/spinnerWeightGoal"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/input_height"
-                    android:layout_marginTop="@dimen/margin_small"
+                    android:layout_marginTop="@dimen/spacing_xs"
                     android:background="@drawable/spinner_background" />
 
-
+                <!-- Calorie Goal -->
                 <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.App.TextInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_medium"
+                    android:layout_marginTop="@dimen/spacing_md"
                     android:hint="@string/daily_calorie_goal"
-                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+                    app:suffixText="kcal">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etCalorieGoal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="number" />
+
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnCalculateGoal"
-                    style="@style/Widget.Material3.Button.TextButton"
+                    style="@style/Widget.App.Button.Text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
-                    android:text="Tính tự động" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
+                    android:text="Tính tự động"
+                    app:icon="@drawable/ic_time" />
 
-        <!-- BMI Card -->
-        <androidx.cardview.widget.CardView
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- BMI Card - Hero Style -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_medium"
-            app:cardCornerRadius="@dimen/card_corner_radius"
-            app:cardElevation="@dimen/card_elevation">
+            android:layout_marginTop="@dimen/spacing_base"
+            app:cardBackgroundColor="@color/primary_container"
+            app:cardCornerRadius="@dimen/radius_base"
+            app:cardElevation="@dimen/elevation_none">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:padding="@dimen/card_padding">
+                android:padding="@dimen/spacing_xl">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Chỉ số BMI"
-                    android:textColor="@color/text_secondary" />
+                    android:textAppearance="@style/TextAppearance.App.Label.Large"
+                    android:textColor="@color/on_primary_container" />
 
                 <TextView
                     android:id="@+id/tvBMI"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_xs"
+                    android:fontFamily="sans-serif-medium"
                     android:text="22.5"
-                    android:textColor="@color/primary"
-                    android:textSize="@dimen/text_size_headline"
+                    android:textColor="@color/on_primary_container"
+                    android:textSize="@dimen/text_size_calorie"
                     android:textStyle="bold" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipBMICategory"
+                    style="@style/Widget.Material3.Chip.Suggestion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_sm"
+                    android:text="Bình thường"
+                    android:textColor="@color/success"
+                    app:chipBackgroundColor="@color/success_container"
+                    app:chipStrokeWidth="0dp" />
 
                 <TextView
                     android:id="@+id/tvBMICategory"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     android:text="Bình thường"
                     android:textColor="@color/success" />
+
             </LinearLayout>
-        </androidx.cardview.widget.CardView>
+
+        </com.google.android.material.card.MaterialCardView>
 
         <!-- Save Button -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSave"
+            style="@style/Widget.App.Button"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/button_height"
-            android:layout_marginTop="@dimen/margin_large"
-            android:text="@string/save" />
+            android:layout_height="@dimen/button_height_lg"
+            android:layout_marginTop="@dimen/spacing_xl"
+            android:text="@string/save"
+            app:icon="@drawable/ic_profile" />
 
     </LinearLayout>
+
 </ScrollView>

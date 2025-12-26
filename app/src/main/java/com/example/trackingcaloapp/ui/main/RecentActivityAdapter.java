@@ -3,9 +3,12 @@ package com.example.trackingcaloapp.ui.main;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trackingcaloapp.R;
@@ -25,27 +28,27 @@ public class RecentActivityAdapter extends RecyclerView.Adapter<RecentActivityAd
 
     public void setData(List<FoodEntry> foodEntries, List<WorkoutEntry> workoutEntries) {
         items.clear();
-        
+
         if (foodEntries != null) {
             for (FoodEntry entry : foodEntries) {
                 items.add(new ActivityItem(entry));
             }
         }
-        
+
         if (workoutEntries != null) {
             for (WorkoutEntry entry : workoutEntries) {
                 items.add(new ActivityItem(entry));
             }
         }
-        
+
         // Sort by date descending (most recent first)
         Collections.sort(items, (a, b) -> Long.compare(b.getDate(), a.getDate()));
-        
+
         // Limit to 5 most recent
         if (items.size() > 5) {
             items = new ArrayList<>(items.subList(0, 5));
         }
-        
+
         notifyDataSetChanged();
     }
 
@@ -69,14 +72,16 @@ public class RecentActivityAdapter extends RecyclerView.Adapter<RecentActivityAd
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        private final View viewTypeIndicator;
+        private final LinearLayout layoutTypeIcon;
+        private final ImageView ivTypeIcon;
         private final TextView tvActivityName;
         private final TextView tvActivityInfo;
         private final TextView tvCalories;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
-            viewTypeIndicator = itemView.findViewById(R.id.viewTypeIndicator);
+            layoutTypeIcon = itemView.findViewById(R.id.layoutTypeIcon);
+            ivTypeIcon = itemView.findViewById(R.id.ivTypeIcon);
             tvActivityName = itemView.findViewById(R.id.tvActivityName);
             tvActivityInfo = itemView.findViewById(R.id.tvActivityInfo);
             tvCalories = itemView.findViewById(R.id.tvCalories);
@@ -90,16 +95,34 @@ public class RecentActivityAdapter extends RecyclerView.Adapter<RecentActivityAd
                 String time = DateUtils.formatTime(entry.getDate());
                 tvActivityInfo.setText(mealName + " • " + time);
                 tvCalories.setText("+" + (int) entry.getTotalCalories() + " cal");
-                tvCalories.setTextColor(itemView.getContext().getColor(R.color.calories_consumed));
-                viewTypeIndicator.setBackgroundColor(itemView.getContext().getColor(R.color.calories_consumed));
+                tvCalories.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.calories_consumed));
+                tvCalories.setBackgroundResource(R.drawable.bg_calorie_badge_consumed);
+
+                // Update icon and background for food
+                if (ivTypeIcon != null) {
+                    ivTypeIcon.setImageResource(R.drawable.ic_food);
+                    ivTypeIcon.setColorFilter(ContextCompat.getColor(itemView.getContext(), R.color.calories_consumed));
+                }
+                if (layoutTypeIcon != null) {
+                    layoutTypeIcon.setBackgroundResource(R.drawable.bg_stat_consumed);
+                }
             } else {
                 WorkoutEntry entry = item.getWorkoutEntry();
                 tvActivityName.setText("Bài tập #" + entry.getWorkoutId());
                 String time = DateUtils.formatTime(entry.getDate());
                 tvActivityInfo.setText(time);
                 tvCalories.setText("-" + (int) entry.getCaloriesBurned() + " cal");
-                tvCalories.setTextColor(itemView.getContext().getColor(R.color.calories_burned));
-                viewTypeIndicator.setBackgroundColor(itemView.getContext().getColor(R.color.calories_burned));
+                tvCalories.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.calories_burned));
+                tvCalories.setBackgroundResource(R.drawable.bg_calorie_badge_burned);
+
+                // Update icon and background for workout
+                if (ivTypeIcon != null) {
+                    ivTypeIcon.setImageResource(R.drawable.ic_workout);
+                    ivTypeIcon.setColorFilter(ContextCompat.getColor(itemView.getContext(), R.color.calories_burned));
+                }
+                if (layoutTypeIcon != null) {
+                    layoutTypeIcon.setBackgroundResource(R.drawable.bg_stat_burned);
+                }
             }
         }
     }
