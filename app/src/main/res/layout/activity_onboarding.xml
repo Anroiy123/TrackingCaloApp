@@ -12,49 +12,98 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="@dimen/padding_large">
+        android:paddingHorizontal="@dimen/spacing_xl"
+        android:paddingTop="@dimen/spacing_3xl"
+        android:paddingBottom="@dimen/spacing_xl">
 
-        <!-- Welcome Header -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/margin_xlarge"
-            android:text="@string/welcome"
-            android:textColor="@color/primary"
-            android:textSize="@dimen/text_size_headline"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/margin_small"
-            android:gravity="center"
-            android:text="@string/onboarding_intro"
-            android:textColor="@color/text_secondary"
-            android:textSize="@dimen/text_size_medium" />
-
-        <!-- Form Card -->
-        <androidx.cardview.widget.CardView
+        <!-- Welcome Header with Icon -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_large"
-            app:cardCornerRadius="@dimen/card_corner_radius"
-            app:cardElevation="@dimen/card_elevation">
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <!-- App Icon Container -->
+            <LinearLayout
+                android:layout_width="@dimen/icon_container_xl"
+                android:layout_height="@dimen/icon_container_xl"
+                android:background="@drawable/bg_gradient_primary_circle"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="@dimen/icon_xl"
+                    android:layout_height="@dimen/icon_xl"
+                    android:src="@drawable/ic_food"
+                    app:tint="@color/white" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_lg"
+                android:text="@string/welcome"
+                android:textAppearance="@style/TextAppearance.App.Headline.Medium"
+                android:textColor="@color/primary" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_sm"
+                android:gravity="center"
+                android:text="@string/onboarding_intro"
+                android:textAppearance="@style/TextAppearance.App.Body.Medium"
+                android:textColor="@color/text_secondary" />
+
+        </LinearLayout>
+
+        <!-- Personal Info Card -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_xl"
+            app:cardBackgroundColor="@color/surface"
+            app:cardCornerRadius="@dimen/radius_lg"
+            app:cardElevation="@dimen/elevation_sm"
+            app:strokeColor="@color/outline"
+            app:strokeWidth="1dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="@dimen/card_padding">
+                android:padding="@dimen/spacing_lg">
 
-                <!-- Tên -->
-                <com.google.android.material.textfield.TextInputLayout
+                <!-- Section Header -->
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/name"
-                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="@dimen/icon_md"
+                        android:layout_height="@dimen/icon_md"
+                        android:src="@drawable/ic_profile"
+                        app:tint="@color/primary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/spacing_sm"
+                        android:text="Thông tin cá nhân"
+                        android:textAppearance="@style/TextAppearance.App.Title.Medium"
+                        android:textColor="@color/text_primary" />
+
+                </LinearLayout>
+
+                <!-- Name Input -->
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.App.TextInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_base"
+                    android:hint="@string/name">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etName"
@@ -64,13 +113,14 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Tuổi -->
+                <!-- Age Input -->
                 <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.App.TextInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_medium"
+                    android:layout_marginTop="@dimen/spacing_md"
                     android:hint="@string/age"
-                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+                    app:suffixText="tuổi">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etAge"
@@ -80,127 +130,220 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Giới tính -->
+                <!-- Gender Selection with Chips -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_medium"
+                    android:layout_marginTop="@dimen/spacing_md"
                     android:text="@string/gender"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="@dimen/text_size_medium" />
+                    android:textAppearance="@style/TextAppearance.App.Label.Medium"
+                    android:textColor="@color/text_secondary" />
 
                 <RadioGroup
                     android:id="@+id/rgGender"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_sm"
                     android:orientation="horizontal">
 
-                    <RadioButton
+                    <com.google.android.material.radiobutton.MaterialRadioButton
                         android:id="@+id/rbMale"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:checked="true"
-                        android:text="@string/male" />
+                        android:text="@string/male"
+                        android:textAppearance="@style/TextAppearance.App.Body.Medium" />
 
-                    <RadioButton
+                    <com.google.android.material.radiobutton.MaterialRadioButton
                         android:id="@+id/rbFemale"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/female" />
+                        android:text="@string/female"
+                        android:textAppearance="@style/TextAppearance.App.Body.Medium" />
 
                 </RadioGroup>
 
-                <!-- Chiều cao -->
-                <com.google.android.material.textfield.TextInputLayout
+                <!-- Height & Weight Row -->
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_medium"
-                    android:hint="@string/height"
-                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+                    android:layout_marginTop="@dimen/spacing_md"
+                    android:orientation="horizontal">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etHeight"
-                        android:layout_width="match_parent"
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.App.TextInputLayout"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:inputType="numberDecimal" />
+                        android:layout_marginEnd="@dimen/spacing_sm"
+                        android:layout_weight="1"
+                        android:hint="@string/height"
+                        app:suffixText="cm">
 
-                </com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etHeight"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberDecimal" />
 
-                <!-- Cân nặng -->
-                <com.google.android.material.textfield.TextInputLayout
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.App.TextInputLayout"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/spacing_sm"
+                        android:layout_weight="1"
+                        android:hint="@string/weight"
+                        app:suffixText="kg">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etWeight"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberDecimal" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Goals Card -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_base"
+            app:cardBackgroundColor="@color/surface"
+            app:cardCornerRadius="@dimen/radius_lg"
+            app:cardElevation="@dimen/elevation_sm"
+            app:strokeColor="@color/outline"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/spacing_lg">
+
+                <!-- Section Header -->
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_medium"
-                    android:hint="@string/weight"
-                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etWeight"
-                        android:layout_width="match_parent"
+                    <ImageView
+                        android:layout_width="@dimen/icon_md"
+                        android:layout_height="@dimen/icon_md"
+                        android:src="@drawable/ic_diary"
+                        app:tint="@color/secondary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:inputType="numberDecimal" />
+                        android:layout_marginStart="@dimen/spacing_sm"
+                        android:text="Mục tiêu"
+                        android:textAppearance="@style/TextAppearance.App.Title.Medium"
+                        android:textColor="@color/text_primary" />
 
-                </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
 
-                <!-- Mức độ hoạt động -->
+                <!-- Activity Level -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_medium"
+                    android:layout_marginTop="@dimen/spacing_base"
                     android:text="@string/activity_level"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="@dimen/text_size_medium" />
+                    android:textAppearance="@style/TextAppearance.App.Label.Medium"
+                    android:textColor="@color/text_secondary" />
 
                 <Spinner
                     android:id="@+id/spinnerActivityLevel"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/input_height"
-                    android:layout_marginTop="@dimen/margin_small"
+                    android:layout_marginTop="@dimen/spacing_xs"
                     android:background="@drawable/spinner_background" />
 
-                <!-- Mục tiêu -->
+                <!-- Weight Goal -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_medium"
+                    android:layout_marginTop="@dimen/spacing_md"
                     android:text="@string/weight_goal"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="@dimen/text_size_medium" />
+                    android:textAppearance="@style/TextAppearance.App.Label.Medium"
+                    android:textColor="@color/text_secondary" />
 
                 <Spinner
                     android:id="@+id/spinnerWeightGoal"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/input_height"
-                    android:layout_marginTop="@dimen/margin_small"
+                    android:layout_marginTop="@dimen/spacing_xs"
                     android:background="@drawable/spinner_background" />
-
-                <!-- Mục tiêu calo (tự động tính) -->
-                <TextView
-                    android:id="@+id/tvCalculatedGoal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_medium"
-                    android:gravity="center"
-                    android:text="Mục tiêu calo: 2000 cal/ngày"
-                    android:textColor="@color/primary"
-                    android:textSize="@dimen/text_size_large"
-                    android:textStyle="bold" />
 
             </LinearLayout>
 
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
-        <!-- Button Hoàn thành -->
+        <!-- Calculated Goal Display -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_base"
+            app:cardBackgroundColor="@color/primary_container"
+            app:cardCornerRadius="@dimen/radius_lg"
+            app:cardElevation="@dimen/elevation_none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="@dimen/spacing_xl">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mục tiêu calo hàng ngày"
+                    android:textAppearance="@style/TextAppearance.App.Label.Large"
+                    android:textColor="@color/on_primary_container" />
+
+                <TextView
+                    android:id="@+id/tvCalculatedGoal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_xs"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="2000"
+                    android:textColor="@color/on_primary_container"
+                    android:textSize="@dimen/text_size_calorie"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="cal/ngày"
+                    android:textAppearance="@style/TextAppearance.App.Body.Medium"
+                    android:textColor="@color/on_primary_container" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Finish Button -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnFinish"
+            style="@style/Widget.App.Button"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/button_height"
-            android:layout_marginTop="@dimen/margin_large"
-            android:text="@string/finish" />
+            android:layout_height="@dimen/button_height_lg"
+            android:layout_marginTop="@dimen/spacing_xl"
+            android:text="@string/finish"
+            app:icon="@drawable/ic_chevron_right"
+            app:iconGravity="end" />
 
     </LinearLayout>
 
 </ScrollView>
-

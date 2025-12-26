@@ -4,34 +4,75 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="@dimen/padding_large">
+    android:padding="@dimen/spacing_xl">
 
-    <!-- Food Name -->
-    <TextView
-        android:id="@+id/tvFoodName"
-        android:layout_width="wrap_content"
+    <!-- Header with Food Icon -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Phở bò"
-        android:textColor="@color/text_primary"
-        android:textSize="@dimen/text_size_title"
-        android:textStyle="bold" />
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
-    <!-- Food Info -->
-    <TextView
-        android:id="@+id/tvFoodInfo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_small"
-        android:text="350 cal / 100g"
-        android:textColor="@color/text_secondary" />
+        <!-- Food Icon Container -->
+        <LinearLayout
+            android:layout_width="@dimen/icon_container_lg"
+            android:layout_height="@dimen/icon_container_lg"
+            android:background="@drawable/bg_stat_consumed"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="@dimen/icon_lg"
+                android:layout_height="@dimen/icon_lg"
+                android:src="@drawable/ic_food"
+                app:tint="@color/calories_consumed" />
+
+        </LinearLayout>
+
+        <!-- Food Name & Info -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_base"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvFoodName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text="Phở bò"
+                android:textAppearance="@style/TextAppearance.App.Title.Medium"
+                android:textColor="@color/text_primary" />
+
+            <TextView
+                android:id="@+id/tvFoodInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_xxs"
+                android:text="350 cal / 100g"
+                android:textAppearance="@style/TextAppearance.App.Body.Small"
+                android:textColor="@color/text_secondary" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Divider -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginVertical="@dimen/spacing_base"
+        android:background="@color/outline" />
 
     <!-- Quantity Input -->
     <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.App.TextInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_medium"
-        android:hint="Khối lượng (gram)"
-        style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+        android:hint="Khối lượng"
+        app:suffixText="gram">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etQuantity"
@@ -42,112 +83,188 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Calculated Calories -->
+    <!-- Calculated Calories Card -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_base"
+        app:cardBackgroundColor="@color/calories_consumed_container"
+        app:cardCornerRadius="@dimen/radius_base"
+        app:cardElevation="@dimen/elevation_none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/spacing_lg">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tổng calo"
+                android:textAppearance="@style/TextAppearance.App.Label.Medium"
+                android:textColor="@color/calories_consumed" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="+"
+                    android:textColor="@color/calories_consumed"
+                    android:textSize="@dimen/text_size_calorie"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvTotalCalories"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="350"
+                    android:textColor="@color/calories_consumed"
+                    android:textSize="@dimen/text_size_calorie"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/spacing_xs"
+                    android:text="cal"
+                    android:textAppearance="@style/TextAppearance.App.Body.Large"
+                    android:textColor="@color/calories_consumed" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Nutrition Info Cards -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_medium"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:layout_marginTop="@dimen/spacing_base"
+        android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Tổng calo"
-            android:textColor="@color/text_secondary" />
-
-        <TextView
-            android:id="@+id/tvTotalCalories"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="350"
-            android:textColor="@color/calories_consumed"
-            android:textSize="@dimen/text_size_headline"
-            android:textStyle="bold" />
-
-    </LinearLayout>
-
-    <!-- Nutrition Info -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_medium"
-        android:orientation="horizontal"
-        android:weightSum="3">
-
-        <LinearLayout
+        <!-- Protein -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/spacing_xs"
             android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
+            app:cardBackgroundColor="@color/protein_container"
+            app:cardCornerRadius="@dimen/radius_md"
+            app:cardElevation="@dimen/elevation_none">
 
-            <TextView
-                android:id="@+id/tvProtein"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="25g"
-                android:textColor="@color/protein"
-                android:textStyle="bold" />
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="@dimen/spacing_md">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Protein"
-                android:textColor="@color/text_secondary"
-                android:textSize="@dimen/text_size_small" />
+                <TextView
+                    android:id="@+id/tvProtein"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="25g"
+                    android:textColor="@color/protein"
+                    android:textSize="@dimen/text_size_large"
+                    android:textStyle="bold" />
 
-        </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Protein"
+                    android:textAppearance="@style/TextAppearance.App.Label.Small"
+                    android:textColor="@color/text_secondary" />
 
-        <LinearLayout
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Carbs -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/spacing_xs"
             android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
+            app:cardBackgroundColor="@color/carbs_container"
+            app:cardCornerRadius="@dimen/radius_md"
+            app:cardElevation="@dimen/elevation_none">
 
-            <TextView
-                android:id="@+id/tvCarbs"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="45g"
-                android:textColor="@color/carbs"
-                android:textStyle="bold" />
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="@dimen/spacing_md">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Carbs"
-                android:textColor="@color/text_secondary"
-                android:textSize="@dimen/text_size_small" />
+                <TextView
+                    android:id="@+id/tvCarbs"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="45g"
+                    android:textColor="@color/carbs"
+                    android:textSize="@dimen/text_size_large"
+                    android:textStyle="bold" />
 
-        </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Carbs"
+                    android:textAppearance="@style/TextAppearance.App.Label.Small"
+                    android:textColor="@color/text_secondary" />
 
-        <LinearLayout
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Fat -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_xs"
             android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
+            app:cardBackgroundColor="@color/fat_container"
+            app:cardCornerRadius="@dimen/radius_md"
+            app:cardElevation="@dimen/elevation_none">
 
-            <TextView
-                android:id="@+id/tvFat"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="12g"
-                android:textColor="@color/fat"
-                android:textStyle="bold" />
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="@dimen/spacing_md">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Fat"
-                android:textColor="@color/text_secondary"
-                android:textSize="@dimen/text_size_small" />
+                <TextView
+                    android:id="@+id/tvFat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="12g"
+                    android:textColor="@color/fat"
+                    android:textSize="@dimen/text_size_large"
+                    android:textStyle="bold" />
 
-        </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Chất béo"
+                    android:textAppearance="@style/TextAppearance.App.Label.Small"
+                    android:textColor="@color/text_secondary" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
 
     </LinearLayout>
 
 </LinearLayout>
-
