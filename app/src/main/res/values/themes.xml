@@ -1,9 +1,357 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+
+    <!-- ============================================== -->
+    <!-- BASE THEME - Material 3 Design System         -->
+    <!-- ============================================== -->
     <style name="Base.Theme.TrackingCaloApp" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- Primary Colors -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorPrimaryContainer">@color/primary_container</item>
+        <item name="colorOnPrimary">@color/on_primary</item>
+        <item name="colorOnPrimaryContainer">@color/on_primary_container</item>
+
+        <!-- Secondary Colors -->
+        <item name="colorSecondary">@color/secondary</item>
+        <item name="colorSecondaryContainer">@color/secondary_container</item>
+        <item name="colorOnSecondary">@color/on_secondary</item>
+        <item name="colorOnSecondaryContainer">@color/on_secondary_container</item>
+
+        <!-- Tertiary Colors -->
+        <item name="colorTertiary">@color/tertiary</item>
+        <item name="colorTertiaryContainer">@color/tertiary_container</item>
+        <item name="colorOnTertiary">@color/on_tertiary</item>
+        <item name="colorOnTertiaryContainer">@color/on_tertiary_container</item>
+
+        <!-- Surface Colors -->
+        <item name="colorSurface">@color/surface</item>
+        <item name="colorSurfaceVariant">@color/surface_variant</item>
+        <item name="colorOnSurface">@color/text_on_surface</item>
+        <item name="colorOnSurfaceVariant">@color/text_on_surface_variant</item>
+
+        <!-- Background -->
+        <item name="android:colorBackground">@color/background</item>
+        <item name="colorOnBackground">@color/text_primary</item>
+
+        <!-- Error Colors -->
+        <item name="colorError">@color/error</item>
+        <item name="colorErrorContainer">@color/error_container</item>
+        <item name="colorOnError">@color/white</item>
+
+        <!-- Outline -->
+        <item name="colorOutline">@color/outline</item>
+        <item name="colorOutlineVariant">@color/outline_variant</item>
+
+        <!-- Status Bar & Navigation Bar -->
+        <item name="android:statusBarColor">@color/background</item>
+        <item name="android:navigationBarColor">@color/surface</item>
+        <item name="android:windowLightStatusBar">true</item>
+
+        <!-- Elevation Overlay -->
+        <item name="elevationOverlayEnabled">false</item>
+
+        <!-- Shape -->
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.App.SmallComponent</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.App.MediumComponent</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.App.LargeComponent</item>
+
+        <!-- Default Widget Styles -->
+        <item name="materialButtonStyle">@style/Widget.App.Button</item>
+        <item name="materialButtonOutlinedStyle">@style/Widget.App.Button.Outlined</item>
+        <item name="textInputStyle">@style/Widget.App.TextInputLayout</item>
+        <item name="chipStyle">@style/Widget.App.Chip</item>
+        <item name="materialCardViewStyle">@style/Widget.App.CardView</item>
+        <item name="bottomNavigationStyle">@style/Widget.App.BottomNavigation</item>
+        <item name="tabStyle">@style/Widget.App.TabLayout</item>
     </style>
 
     <style name="Theme.TrackingCaloApp" parent="Base.Theme.TrackingCaloApp" />
+
+    <!-- ============================================== -->
+    <!-- SHAPE APPEARANCES                             -->
+    <!-- ============================================== -->
+    <style name="ShapeAppearance.App.SmallComponent" parent="ShapeAppearance.Material3.SmallComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">8dp</item>
+    </style>
+
+    <style name="ShapeAppearance.App.MediumComponent" parent="ShapeAppearance.Material3.MediumComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">16dp</item>
+    </style>
+
+    <style name="ShapeAppearance.App.LargeComponent" parent="ShapeAppearance.Material3.LargeComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">24dp</item>
+    </style>
+
+    <!-- ============================================== -->
+    <!-- BUTTON STYLES                                 -->
+    <!-- ============================================== -->
+    <style name="Widget.App.Button" parent="Widget.Material3.Button">
+        <item name="android:textAllCaps">false</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
+        <item name="android:textSize">15sp</item>
+        <item name="fontFamily">sans-serif-medium</item>
+        <item name="backgroundTint">@color/primary</item>
+        <item name="rippleColor">@color/ripple_primary</item>
+    </style>
+
+    <style name="Widget.App.Button.Outlined" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:textAllCaps">false</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
+        <item name="android:textSize">15sp</item>
+        <item name="fontFamily">sans-serif-medium</item>
+        <item name="strokeColor">@color/primary</item>
+        <item name="android:textColor">@color/primary</item>
+        <item name="rippleColor">@color/ripple_primary</item>
+    </style>
+
+    <style name="Widget.App.Button.Text" parent="Widget.Material3.Button.TextButton">
+        <item name="android:textAllCaps">false</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:textSize">15sp</item>
+        <item name="fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">@color/primary</item>
+        <item name="rippleColor">@color/ripple_primary</item>
+    </style>
+
+    <style name="Widget.App.Button.Secondary" parent="Widget.App.Button">
+        <item name="backgroundTint">@color/secondary</item>
+        <item name="rippleColor">@color/ripple_secondary</item>
+    </style>
+
+    <!-- ============================================== -->
+    <!-- TEXT INPUT STYLES                             -->
+    <!-- ============================================== -->
+    <style name="Widget.App.TextInputLayout" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="boxCornerRadiusTopStart">12dp</item>
+        <item name="boxCornerRadiusTopEnd">12dp</item>
+        <item name="boxCornerRadiusBottomStart">12dp</item>
+        <item name="boxCornerRadiusBottomEnd">12dp</item>
+        <item name="boxStrokeColor">@color/text_input_box_stroke</item>
+        <item name="hintTextColor">@color/primary</item>
+        <item name="boxBackgroundColor">@color/surface</item>
+    </style>
+
+    <style name="Widget.App.TextInputLayout.Filled" parent="Widget.Material3.TextInputLayout.FilledBox">
+        <item name="boxCornerRadiusTopStart">12dp</item>
+        <item name="boxCornerRadiusTopEnd">12dp</item>
+        <item name="boxBackgroundColor">@color/surface_container</item>
+        <item name="hintTextColor">@color/primary</item>
+    </style>
+
+    <!-- ============================================== -->
+    <!-- CHIP STYLES                                   -->
+    <!-- ============================================== -->
+    <style name="Widget.App.Chip" parent="Widget.Material3.Chip.Filter">
+        <item name="chipCornerRadius">20dp</item>
+        <item name="chipBackgroundColor">@color/chip_background_color</item>
+        <item name="android:textColor">@color/chip_text_color</item>
+        <item name="chipStrokeWidth">0dp</item>
+        <item name="chipMinHeight">36dp</item>
+        <item name="android:textSize">14sp</item>
+        <item name="checkedIconVisible">false</item>
+    </style>
+
+    <style name="Widget.App.Chip.Choice" parent="Widget.Material3.Chip.Suggestion">
+        <item name="chipCornerRadius">20dp</item>
+        <item name="chipBackgroundColor">@color/chip_background_color</item>
+        <item name="android:textColor">@color/chip_text_color</item>
+        <item name="chipStrokeWidth">0dp</item>
+        <item name="chipMinHeight">36dp</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <!-- ============================================== -->
+    <!-- CARD VIEW STYLES                              -->
+    <!-- ============================================== -->
+    <style name="Widget.App.CardView" parent="Widget.Material3.CardView.Filled">
+        <item name="cardCornerRadius">16dp</item>
+        <item name="cardElevation">0dp</item>
+        <item name="cardBackgroundColor">@color/surface</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="strokeColor">@color/outline</item>
+    </style>
+
+    <style name="Widget.App.CardView.Elevated" parent="Widget.Material3.CardView.Elevated">
+        <item name="cardCornerRadius">16dp</item>
+        <item name="cardElevation">2dp</item>
+        <item name="cardBackgroundColor">@color/surface</item>
+    </style>
+
+    <style name="Widget.App.CardView.Outlined" parent="Widget.Material3.CardView.Outlined">
+        <item name="cardCornerRadius">16dp</item>
+        <item name="cardBackgroundColor">@color/surface</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="strokeColor">@color/outline</item>
+    </style>
+
+    <!-- ============================================== -->
+    <!-- BOTTOM NAVIGATION STYLES                      -->
+    <!-- ============================================== -->
+    <style name="Widget.App.BottomNavigation" parent="Widget.Material3.BottomNavigationView">
+        <item name="backgroundTint">@color/surface</item>
+        <item name="itemActiveIndicatorStyle">@style/Widget.App.BottomNavigation.ActiveIndicator</item>
+        <item name="itemIconTint">@color/bottom_nav_item_color</item>
+        <item name="itemTextColor">@color/bottom_nav_item_color</item>
+        <item name="labelVisibilityMode">labeled</item>
+        <item name="android:minHeight">64dp</item>
+        <item name="elevation">8dp</item>
+    </style>
+
+    <style name="Widget.App.BottomNavigation.ActiveIndicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">@color/primary_container</item>
+    </style>
+
+    <!-- ============================================== -->
+    <!-- TAB LAYOUT STYLES                             -->
+    <!-- ============================================== -->
+    <style name="Widget.App.TabLayout" parent="Widget.Material3.TabLayout">
+        <item name="tabIndicatorColor">@color/primary</item>
+        <item name="tabSelectedTextColor">@color/primary</item>
+        <item name="tabTextColor">@color/text_secondary</item>
+        <item name="tabIndicatorHeight">3dp</item>
+        <item name="tabIndicatorFullWidth">false</item>
+        <item name="tabRippleColor">@color/ripple_primary</item>
+        <item name="tabTextAppearance">@style/TextAppearance.App.Tab</item>
+    </style>
+
+    <!-- ============================================== -->
+    <!-- TOOLBAR STYLES                                -->
+    <!-- ============================================== -->
+    <style name="Widget.App.Toolbar" parent="Widget.Material3.Toolbar">
+        <item name="android:background">@color/surface</item>
+        <item name="titleTextColor">@color/text_primary</item>
+        <item name="subtitleTextColor">@color/text_secondary</item>
+        <item name="navigationIconTint">@color/text_primary</item>
+    </style>
+
+    <style name="Widget.App.Toolbar.Primary" parent="Widget.App.Toolbar">
+        <item name="android:background">@color/primary</item>
+        <item name="titleTextColor">@color/white</item>
+        <item name="subtitleTextColor">@color/primary_light</item>
+        <item name="navigationIconTint">@color/white</item>
+    </style>
+
+    <!-- ============================================== -->
+    <!-- FAB STYLES                                    -->
+    <!-- ============================================== -->
+    <style name="Widget.App.FloatingActionButton" parent="Widget.Material3.FloatingActionButton.Primary">
+        <item name="backgroundTint">@color/primary</item>
+        <item name="tint">@color/white</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.App.FAB</item>
+    </style>
+
+    <style name="ShapeAppearance.App.FAB" parent="ShapeAppearance.Material3.Corner.Full">
+        <item name="cornerSize">16dp</item>
+    </style>
+
+    <!-- ============================================== -->
+    <!-- TEXT APPEARANCES                              -->
+    <!-- ============================================== -->
+    <style name="TextAppearance.App.Headline.Large" parent="TextAppearance.Material3.HeadlineLarge">
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="TextAppearance.App.Headline.Medium" parent="TextAppearance.Material3.HeadlineMedium">
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="TextAppearance.App.Headline.Small" parent="TextAppearance.Material3.HeadlineSmall">
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="TextAppearance.App.Title.Large" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="TextAppearance.App.Title.Medium" parent="TextAppearance.Material3.TitleMedium">
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="TextAppearance.App.Title.Small" parent="TextAppearance.Material3.TitleSmall">
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="TextAppearance.App.Body.Large" parent="TextAppearance.Material3.BodyLarge">
+        <item name="android:textColor">@color/text_primary</item>
+    </style>
+
+    <style name="TextAppearance.App.Body.Medium" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textColor">@color/text_secondary</item>
+    </style>
+
+    <style name="TextAppearance.App.Body.Small" parent="TextAppearance.Material3.BodySmall">
+        <item name="android:textColor">@color/text_tertiary</item>
+    </style>
+
+    <style name="TextAppearance.App.Label.Large" parent="TextAppearance.Material3.LabelLarge">
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="TextAppearance.App.Label.Medium" parent="TextAppearance.Material3.LabelMedium">
+        <item name="android:textColor">@color/text_secondary</item>
+    </style>
+
+    <style name="TextAppearance.App.Label.Small" parent="TextAppearance.Material3.LabelSmall">
+        <item name="android:textColor">@color/text_tertiary</item>
+    </style>
+
+    <style name="TextAppearance.App.Tab" parent="TextAppearance.Material3.LabelLarge">
+        <item name="android:textAllCaps">false</item>
+        <item name="fontFamily">sans-serif-medium</item>
+    </style>
+
+    <!-- ============================================== -->
+    <!-- CALORIE DISPLAY STYLES                        -->
+    <!-- ============================================== -->
+    <style name="TextAppearance.App.Calorie" parent="TextAppearance.Material3.BodyLarge">
+        <item name="android:textStyle">bold</item>
+        <item name="fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="TextAppearance.App.Calorie.Large" parent="TextAppearance.App.Calorie">
+        <item name="android:textSize">48sp</item>
+    </style>
+
+    <style name="TextAppearance.App.Calorie.Medium" parent="TextAppearance.App.Calorie">
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="TextAppearance.App.Calorie.Small" parent="TextAppearance.App.Calorie">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <!-- ============================================== -->
+    <!-- DIALOG STYLES                                 -->
+    <!-- ============================================== -->
+    <style name="Theme.App.Dialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="dialogCornerRadius">20dp</item>
+        <item name="colorSurface">@color/surface</item>
+        <item name="buttonBarPositiveButtonStyle">@style/Widget.App.Button.Dialog</item>
+        <item name="buttonBarNegativeButtonStyle">@style/Widget.App.Button.Dialog.Negative</item>
+    </style>
+
+    <style name="Widget.App.Button.Dialog" parent="Widget.Material3.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/primary</item>
+    </style>
+
+    <style name="Widget.App.Button.Dialog.Negative" parent="Widget.Material3.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/text_secondary</item>
+    </style>
+
 </resources>

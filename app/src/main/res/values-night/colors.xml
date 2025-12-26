@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- ============================================== -->
+    <!-- DARK THEME COLORS                             -->
+    <!-- ============================================== -->
+
+    <!-- Primary Colors - Green -->
+    <color name="primary_dark_theme">#34D399</color>
+    <color name="primary_dark_theme_dark">#10B981</color>
+    <color name="primary_container_dark_theme">#065F46</color>
+    <color name="on_primary_dark_theme">#003822</color>
+    <color name="on_primary_container_dark_theme">#A7F3D0</color>
+
+    <!-- Secondary Colors - Orange -->
+    <color name="secondary_dark_theme">#FBBF24</color>
+    <color name="secondary_container_dark_theme">#78350F</color>
+    <color name="on_secondary_dark_theme">#422006</color>
+    <color name="on_secondary_container_dark_theme">#FDE68A</color>
+
+    <!-- Tertiary Colors - Blue -->
+    <color name="tertiary_dark_theme">#60A5FA</color>
+    <color name="tertiary_container_dark_theme">#1E3A8A</color>
+    <color name="on_tertiary_dark_theme">#1E3A5F</color>
+    <color name="on_tertiary_container_dark_theme">#BFDBFE</color>
+
+    <!-- Surface & Background -->
+    <color name="surface_dark_theme">#1F2937</color>
+    <color name="surface_variant_dark_theme">#374151</color>
+    <color name="background_dark_theme">#111827</color>
+    <color name="on_surface_dark_theme">#F9FAFB</color>
+    <color name="on_surface_variant_dark_theme">#D1D5DB</color>
+    <color name="on_background_dark_theme">#F9FAFB</color>
+
+    <!-- Error -->
+    <color name="error_dark_theme">#F87171</color>
+    <color name="error_container_dark_theme">#7F1D1D</color>
+    <color name="on_error_dark_theme">#450A0A</color>
+
+    <!-- Outline -->
+    <color name="outline_dark_theme">#4B5563</color>
+    <color name="outline_variant_dark_theme">#374151</color>
+</resources>
