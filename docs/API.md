@@ -416,3 +416,60 @@ public class UserPreferences {
 | `GOAL_MAINTAIN` | "maintain" | 0 |
 | `GOAL_GAIN` | "gain" | +500 cal |
 
+---
+
+## UI Components
+
+### MainActivity (Single Activity Container)
+
+```java
+public class MainActivity extends AppCompatActivity {
+    // Fragment container và Bottom Navigation
+    private FrameLayout fragmentContainer;
+    private BottomNavigationView bottomNav;
+    
+    // Load fragment theo tab được chọn
+    private void loadFragment(Fragment fragment);
+    
+    // Bottom Navigation listener
+    // - R.id.nav_home → HomeFragment
+    // - R.id.nav_diary → DiaryFragment
+    // - R.id.nav_add → AddFragment
+    // - R.id.nav_profile → ProfileFragment
+}
+```
+
+### Main Fragments
+
+| Fragment | Chức năng |
+|----------|-----------|
+| `HomeFragment` | Dashboard - hiển thị tổng quan calo, progress bars, hoạt động gần đây |
+| `DiaryFragment` | Nhật ký - ViewPager2 với tabs FoodEntries/WorkoutEntries |
+| `AddFragment` | Container - ViewPager2 với tabs AddFood/AddWorkout |
+| `ProfileFragment` | Hồ sơ - quản lý thông tin cá nhân, mục tiêu, cài đặt |
+
+### Child Fragments
+
+| Fragment | Parent | Chức năng |
+|----------|--------|-----------|
+| `AddFoodFragment` | AddFragment | Tìm kiếm và thêm thực phẩm vào nhật ký |
+| `AddWorkoutFragment` | AddFragment | Tìm kiếm và thêm bài tập vào nhật ký |
+| `FoodEntriesFragment` | DiaryFragment | Hiển thị danh sách food entries theo ngày |
+| `WorkoutEntriesFragment` | DiaryFragment | Hiển thị danh sách workout entries theo ngày |
+
+### ViewPager Adapters
+
+```java
+// DiaryFragment ViewPager2
+public class DiaryFragmentPagerAdapter extends FragmentStateAdapter {
+    // Tab 0: FoodEntriesFragment
+    // Tab 1: WorkoutEntriesFragment
+}
+
+// AddFragment ViewPager2
+public class AddPagerAdapter extends FragmentStateAdapter {
+    // Tab 0: AddFoodFragment
+    // Tab 1: AddWorkoutFragment
+}
+```
+

@@ -1,69 +1,202 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Base Colors -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <!-- Primary Colors - Green (Health/Fitness theme) -->
-    <color name="primary">#4CAF50</color>
-    <color name="primary_dark">#388E3C</color>
-    <color name="primary_light">#C8E6C9</color>
+    <!-- ============================================== -->
+    <!-- MODERN COLOR PALETTE - Material 3 Inspired    -->
+    <!-- ============================================== -->
 
-    <!-- Secondary Colors - Orange (Energy/Calories) -->
-    <color name="secondary">#FF9800</color>
-    <color name="secondary_dark">#F57C00</color>
-    <color name="secondary_light">#FFE0B2</color>
+    <!-- Primary Colors - Fresh Green (Health/Wellness) -->
+    <color name="primary">#10B981</color>
+    <color name="primary_dark">#059669</color>
+    <color name="primary_light">#D1FAE5</color>
+    <color name="primary_container">#ECFDF5</color>
+    <color name="on_primary">#FFFFFF</color>
+    <color name="on_primary_container">#065F46</color>
 
-    <!-- Accent Colors -->
-    <color name="accent">#03A9F4</color>
+    <!-- Secondary Colors - Warm Orange (Energy/Activity) -->
+    <color name="secondary">#F59E0B</color>
+    <color name="secondary_dark">#D97706</color>
+    <color name="secondary_light">#FEF3C7</color>
+    <color name="secondary_container">#FFFBEB</color>
+    <color name="on_secondary">#FFFFFF</color>
+    <color name="on_secondary_container">#92400E</color>
 
-    <!-- Background Colors -->
+    <!-- Tertiary Colors - Cool Blue (Information) -->
+    <color name="tertiary">#3B82F6</color>
+    <color name="tertiary_dark">#2563EB</color>
+    <color name="tertiary_light">#DBEAFE</color>
+    <color name="tertiary_container">#EFF6FF</color>
+    <color name="on_tertiary">#FFFFFF</color>
+    <color name="on_tertiary_container">#1E40AF</color>
+
+    <!-- Accent Color -->
+    <color name="accent">#8B5CF6</color>
+
+    <!-- ============================================== -->
+    <!-- SURFACE & BACKGROUND                          -->
+    <!-- ============================================== -->
     <color name="background">#FAFAFA</color>
+    <color name="background_elevated">#FFFFFF</color>
     <color name="surface">#FFFFFF</color>
+    <color name="surface_variant">#F5F5F5</color>
+    <color name="surface_container">#F3F4F6</color>
+    <color name="surface_container_high">#E5E7EB</color>
     <color name="card_background">#FFFFFF</color>
+    <color name="outline">#E5E7EB</color>
+    <color name="outline_variant">#D1D5DB</color>
 
-    <!-- Text Colors -->
-    <color name="text_primary">#212121</color>
-    <color name="text_secondary">#757575</color>
-    <color name="text_hint">#BDBDBD</color>
+    <!-- ============================================== -->
+    <!-- TEXT COLORS                                   -->
+    <!-- ============================================== -->
+    <color name="text_primary">#111827</color>
+    <color name="text_secondary">#6B7280</color>
+    <color name="text_tertiary">#9CA3AF</color>
+    <color name="text_hint">#D1D5DB</color>
     <color name="text_on_primary">#FFFFFF</color>
+    <color name="text_on_surface">#111827</color>
+    <color name="text_on_surface_variant">#4B5563</color>
 
-    <!-- Status Colors -->
-    <color name="success">#4CAF50</color>
-    <color name="warning">#FFC107</color>
-    <color name="error">#F44336</color>
-    <color name="info">#2196F3</color>
+    <!-- ============================================== -->
+    <!-- STATUS COLORS                                 -->
+    <!-- ============================================== -->
+    <color name="success">#10B981</color>
+    <color name="success_light">#D1FAE5</color>
+    <color name="success_container">#ECFDF5</color>
 
-    <!-- Calorie Colors -->
-    <color name="calories_consumed">#FF5722</color>
-    <color name="calories_burned">#4CAF50</color>
-    <color name="calories_remaining">#2196F3</color>
+    <color name="warning">#F59E0B</color>
+    <color name="warning_light">#FEF3C7</color>
+    <color name="warning_container">#FFFBEB</color>
 
-    <!-- Meal Type Colors -->
-    <color name="breakfast">#FFB74D</color>
-    <color name="lunch">#4FC3F7</color>
-    <color name="dinner">#7986CB</color>
-    <color name="snack">#AED581</color>
-    <color name="meal_breakfast">#FFB74D</color>
-    <color name="meal_lunch">#4FC3F7</color>
-    <color name="meal_dinner">#7986CB</color>
-    <color name="meal_snack">#AED581</color>
+    <color name="error">#EF4444</color>
+    <color name="error_light">#FEE2E2</color>
+    <color name="error_container">#FEF2F2</color>
 
-    <!-- Workout Category Colors -->
-    <color name="cardio">#EF5350</color>
-    <color name="strength">#5C6BC0</color>
-    <color name="flexibility">#26A69A</color>
-    <color name="workout_cardio">#EF5350</color>
-    <color name="workout_strength">#5C6BC0</color>
-    <color name="workout_flexibility">#26A69A</color>
+    <color name="info">#3B82F6</color>
+    <color name="info_light">#DBEAFE</color>
+    <color name="info_container">#EFF6FF</color>
 
-    <!-- Nutrition Colors -->
-    <color name="protein">#E91E63</color>
-    <color name="carbs">#FF9800</color>
-    <color name="fat">#9C27B0</color>
+    <!-- ============================================== -->
+    <!-- CALORIE COLORS - Semantic                     -->
+    <!-- ============================================== -->
+    <color name="calories_consumed">#EF4444</color>
+    <color name="calories_consumed_light">#FEE2E2</color>
+    <color name="calories_consumed_container">#FEF2F2</color>
 
-    <!-- Progress Bar Colors -->
-    <color name="progress_background">#E0E0E0</color>
-    <color name="progress_normal">#4CAF50</color>
-    <color name="progress_warning">#FFC107</color>
-    <color name="progress_over">#F44336</color>
+    <color name="calories_burned">#10B981</color>
+    <color name="calories_burned_light">#D1FAE5</color>
+    <color name="calories_burned_container">#ECFDF5</color>
+
+    <color name="calories_remaining">#3B82F6</color>
+    <color name="calories_remaining_light">#DBEAFE</color>
+    <color name="calories_remaining_container">#EFF6FF</color>
+
+    <color name="calories_net">#8B5CF6</color>
+    <color name="calories_net_light">#EDE9FE</color>
+    <color name="calories_net_container">#F5F3FF</color>
+
+    <!-- ============================================== -->
+    <!-- MEAL TYPE COLORS - Vibrant & Distinct         -->
+    <!-- ============================================== -->
+    <color name="breakfast">#F97316</color>
+    <color name="breakfast_light">#FFEDD5</color>
+    <color name="breakfast_container">#FFF7ED</color>
+
+    <color name="lunch">#06B6D4</color>
+    <color name="lunch_light">#CFFAFE</color>
+    <color name="lunch_container">#ECFEFF</color>
+
+    <color name="dinner">#8B5CF6</color>
+    <color name="dinner_light">#EDE9FE</color>
+    <color name="dinner_container">#F5F3FF</color>
+
+    <color name="snack">#84CC16</color>
+    <color name="snack_light">#ECFCCB</color>
+    <color name="snack_container">#F7FEE7</color>
+
+    <!-- Legacy aliases for backward compatibility -->
+    <color name="meal_breakfast">@color/breakfast</color>
+    <color name="meal_lunch">@color/lunch</color>
+    <color name="meal_dinner">@color/dinner</color>
+    <color name="meal_snack">@color/snack</color>
+
+    <!-- ============================================== -->
+    <!-- WORKOUT CATEGORY COLORS                       -->
+    <!-- ============================================== -->
+    <color name="cardio">#EF4444</color>
+    <color name="cardio_light">#FEE2E2</color>
+    <color name="cardio_container">#FEF2F2</color>
+
+    <color name="strength">#6366F1</color>
+    <color name="strength_light">#E0E7FF</color>
+    <color name="strength_container">#EEF2FF</color>
+
+    <color name="flexibility">#14B8A6</color>
+    <color name="flexibility_light">#CCFBF1</color>
+    <color name="flexibility_container">#F0FDFA</color>
+
+    <!-- Legacy aliases -->
+    <color name="workout_cardio">@color/cardio</color>
+    <color name="workout_strength">@color/strength</color>
+    <color name="workout_flexibility">@color/flexibility</color>
+
+    <!-- ============================================== -->
+    <!-- NUTRITION COLORS                              -->
+    <!-- ============================================== -->
+    <color name="protein">#EC4899</color>
+    <color name="protein_light">#FCE7F3</color>
+    <color name="protein_container">#FDF2F8</color>
+
+    <color name="carbs">#F59E0B</color>
+    <color name="carbs_light">#FEF3C7</color>
+    <color name="carbs_container">#FFFBEB</color>
+
+    <color name="fat">#A855F7</color>
+    <color name="fat_light">#F3E8FF</color>
+    <color name="fat_container">#FAF5FF</color>
+
+    <!-- ============================================== -->
+    <!-- PROGRESS BAR COLORS                           -->
+    <!-- ============================================== -->
+    <color name="progress_background">#E5E7EB</color>
+    <color name="progress_normal">#10B981</color>
+    <color name="progress_warning">#F59E0B</color>
+    <color name="progress_over">#EF4444</color>
+    <color name="progress_track">#F3F4F6</color>
+
+    <!-- ============================================== -->
+    <!-- GRADIENT COLORS                               -->
+    <!-- ============================================== -->
+    <color name="gradient_primary_start">#10B981</color>
+    <color name="gradient_primary_end">#059669</color>
+    <color name="gradient_secondary_start">#F59E0B</color>
+    <color name="gradient_secondary_end">#D97706</color>
+    <color name="gradient_accent_start">#8B5CF6</color>
+    <color name="gradient_accent_end">#7C3AED</color>
+
+    <!-- ============================================== -->
+    <!-- SHADOW & OVERLAY                              -->
+    <!-- ============================================== -->
+    <color name="shadow">#1A000000</color>
+    <color name="shadow_light">#0D000000</color>
+    <color name="overlay">#80000000</color>
+    <color name="overlay_light">#40000000</color>
+    <color name="scrim">#52000000</color>
+
+    <!-- ============================================== -->
+    <!-- RIPPLE & INTERACTION                          -->
+    <!-- ============================================== -->
+    <color name="ripple_primary">#2010B981</color>
+    <color name="ripple_secondary">#20F59E0B</color>
+    <color name="ripple_neutral">#20000000</color>
+
+    <!-- ============================================== -->
+    <!-- CHIP COLORS                                   -->
+    <!-- ============================================== -->
+    <color name="chip_selected_background">#10B981</color>
+    <color name="chip_selected_text">#FFFFFF</color>
+    <color name="chip_unselected_background">#F3F4F6</color>
+    <color name="chip_unselected_text">#6B7280</color>
 </resources>

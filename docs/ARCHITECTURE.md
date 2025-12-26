@@ -9,20 +9,25 @@ TrackingCaloApp được xây dựng theo mô hình **MVVM (Model-View-ViewModel
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                         UI LAYER                                 │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐              │
-│  │  Activity   │  │  Fragment   │  │   Adapter   │              │
-│  │             │  │             │  │             │              │
-│  │ MainActivity│  │FoodEntries  │  │ FoodAdapter │              │
-│  │ AddFood     │  │WorkoutEntries│ │WorkoutAdapter│             │
-│  │ AddWorkout  │  │             │  │             │              │
-│  │ Diary       │  │             │  │             │              │
-│  │ Profile     │  │             │  │             │              │
-│  │ Onboarding  │  │             │  │             │              │
-│  └──────┬──────┘  └──────┬──────┘  └─────────────┘              │
-│         │                │                                       │
-│         └────────┬───────┘                                       │
-│                  │ observes LiveData                             │
-│                  ▼                                               │
+│  ┌─────────────┐  ┌─────────────────────────────┐               │
+│  │  Activity   │  │         Fragments           │               │
+│  │             │  │                             │               │
+│  │ MainActivity│  │ HomeFragment    AddFragment │               │
+│  │ (Container) │  │ DiaryFragment   ProfileFrag │               │
+│  │             │  │ AddFoodFragment             │               │
+│  │ Onboarding  │  │ AddWorkoutFragment          │               │
+│  │  Activity   │  │ FoodEntriesFragment         │               │
+│  │             │  │ WorkoutEntriesFragment      │               │
+│  └──────┬──────┘  └──────────┬──────────────────┘               │
+│         │                    │                                   │
+│         └─────────┬──────────┘                                   │
+│                   │ observes LiveData                            │
+│                   ▼                                              │
+│  ┌─────────────────────────────────────────────┐                │
+│  │              Adapters                        │                │
+│  │  FoodAdapter, WorkoutAdapter, EntryAdapters │                │
+│  │  DiaryPagerAdapter, AddPagerAdapter         │                │
+│  └─────────────────────────────────────────────┘                │
 ├─────────────────────────────────────────────────────────────────┤
 │                      DATA LAYER                                  │
 │  ┌─────────────────────────────────────────────────────────┐    │
@@ -86,23 +91,32 @@ TrackingCaloApp được xây dựng theo mô hình **MVVM (Model-View-ViewModel
 
 Chịu trách nhiệm hiển thị data và xử lý user interactions.
 
+**Kiến trúc Single Activity + Fragments**: App sử dụng một MainActivity làm container chính, các màn hình được triển khai dưới dạng Fragments và chuyển đổi qua Bottom Navigation.
+
 #### Activities
 
 | Activity | Chức năng |
 |----------|-----------|
-| `MainActivity` | Màn hình chính, hiển thị tổng quan calo |
+| `MainActivity` | Container chính, quản lý Bottom Navigation và Fragments |
 | `OnboardingActivity` | Thiết lập ban đầu cho user mới |
-| `AddFoodActivity` | Thêm thực phẩm vào nhật ký |
-| `AddWorkoutActivity` | Thêm bài tập vào nhật ký |
-| `DiaryActivity` | Xem nhật ký theo ngày |
-| `ProfileActivity` | Quản lý thông tin cá nhân |
 
-#### Fragments
+#### Main Fragments (Bottom Navigation)
 
 | Fragment | Chức năng |
 |----------|-----------|
-| `FoodEntriesFragment` | Hiển thị danh sách food entries |
-| `WorkoutEntriesFragment` | Hiển thị danh sách workout entries |
+| `HomeFragment` | Dashboard - hiển thị tổng quan calo, progress, hoạt động gần đây |
+| `DiaryFragment` | Nhật ký - ViewPager2 với tabs Food/Workout entries |
+| `AddFragment` | Container - ViewPager2 với tabs Thêm Food/Workout |
+| `ProfileFragment` | Hồ sơ - quản lý thông tin cá nhân và cài đặt |
+
+#### Child Fragments
+
+| Fragment | Parent | Chức năng |
+|----------|--------|-----------|
+| `AddFoodFragment` | AddFragment | Thêm thực phẩm vào nhật ký |
+| `AddWorkoutFragment` | AddFragment | Thêm bài tập vào nhật ký |
+| `FoodEntriesFragment` | DiaryFragment | Hiển thị danh sách food entries |
+| `WorkoutEntriesFragment` | DiaryFragment | Hiển thị danh sách workout entries |
 
 #### Adapters
 
@@ -113,7 +127,8 @@ Chịu trách nhiệm hiển thị data và xử lý user interactions.
 | `FoodEntryAdapter` | Adapter cho food entries |
 | `WorkoutEntryAdapter` | Adapter cho workout entries |
 | `RecentActivityAdapter` | Adapter cho hoạt động gần đây |
-| `DiaryPagerAdapter` | ViewPager2 adapter cho diary tabs |
+| `DiaryFragmentPagerAdapter` | ViewPager2 adapter cho diary tabs (Food/Workout entries) |
+| `AddPagerAdapter` | ViewPager2 adapter cho add tabs (Food/Workout) |
 
 ### 2. Data Layer (`data/`)
 
@@ -265,32 +280,42 @@ Utility classes và helper functions.
 └──────┬───────┘
        │
        ▼
-┌──────────────┐     No      ┌──────────────┐
-│  Onboarding  │◀────────────│  isComplete? │
-│   Complete?  │             └──────────────┘
-└──────┬───────┘
+┌──────────────┐     No      ┌──────────────────┐
+│  Onboarding  │◀────────────│  isOnboarding    │
+│   Activity   │             │    Complete?     │
+└──────┬───────┘             └──────────────────┘
        │ Yes
        ▼
-┌──────────────┐
-│ MainActivity │◀─────────────────────────────┐
-│   (Home)     │                              │
-└──────┬───────┘                              │
-       │                                      │
-       ├──────────────┬──────────────┐        │
-       ▼              ▼              ▼        │
-┌────────────┐ ┌────────────┐ ┌────────────┐  │
-│  AddFood   │ │ AddWorkout │ │   Diary    │  │
-│  Activity  │ │  Activity  │ │  Activity  │  │
-└─────┬──────┘ └─────┬──────┘ └─────┬──────┘  │
-      │              │              │         │
-      └──────────────┴──────────────┴─────────┘
-                     │
-                     ▼
-              ┌────────────┐
-              │  Profile   │
-              │  Activity  │
-              └────────────┘
+┌──────────────────────────────────────────────────────┐
+│                    MainActivity                       │
+│              (Single Activity Container)              │
+│  ┌────────────────────────────────────────────────┐  │
+│  │              Fragment Container                 │  │
+│  │  ┌──────────┐ ┌──────────┐ ┌──────────┐       │  │
+│  │  │  Home    │ │  Diary   │ │   Add    │       │  │
+│  │  │ Fragment │ │ Fragment │ │ Fragment │       │  │
+│  │  └──────────┘ └────┬─────┘ └────┬─────┘       │  │
+│  │                    │            │              │  │
+│  │              ┌─────┴─────┐ ┌────┴────┐        │  │
+│  │              │ViewPager2 │ │ViewPager2│        │  │
+│  │              │Food|Workout│ │Food|Workout│     │  │
+│  │              │ Entries   │ │  Add     │        │  │
+│  │              └───────────┘ └──────────┘        │  │
+│  │                                                │  │
+│  │  ┌──────────┐                                  │  │
+│  │  │ Profile  │                                  │  │
+│  │  │ Fragment │                                  │  │
+│  │  └──────────┘                                  │  │
+│  └────────────────────────────────────────────────┘  │
+│                                                      │
+│  ┌────────────────────────────────────────────────┐  │
+│  │           Bottom Navigation Bar                │  │
+│  │   [Home]    [Diary]    [Add]    [Profile]     │  │
+│  └────────────────────────────────────────────────┘  │
+└──────────────────────────────────────────────────────┘
 ```
+
+**Fragment Navigation**: Sử dụng FragmentManager để replace fragments trong container khi user chọn tab từ Bottom Navigation.
 
 ## 🎨 UI Components
 
@@ -307,12 +332,14 @@ Utility classes và helper functions.
 
 ```xml
 <com.google.android.material.bottomnavigation.BottomNavigationView>
-    - Home (MainActivity)
-    - Add Food (AddFoodActivity)
-    - Diary (DiaryActivity)
-    - Profile (ProfileActivity)
+    - Home (HomeFragment)
+    - Diary (DiaryFragment)
+    - Add (AddFragment → AddFoodFragment/AddWorkoutFragment)
+    - Profile (ProfileFragment)
 </com.google.android.material.bottomnavigation.BottomNavigationView>
 ```
+
+**Fragment Transaction**: MainActivity sử dụng `FragmentManager.beginTransaction().replace()` để chuyển đổi giữa các fragments.
 
 ## 🔧 Configuration
 

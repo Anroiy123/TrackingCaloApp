@@ -325,4 +325,22 @@ Room.databaseBuilder(context, AppDatabase.class, "calorie_tracker_db")
 3. **Background Thread**: Tất cả write operations chạy trên ExecutorService
 4. **Singleton**: Chỉ một instance database trong toàn app
 5. **Lazy Loading**: Data chỉ load khi cần thiết
+6. **Fragment Lifecycle**: LiveData tự động unsubscribe khi Fragment destroyed, tránh memory leaks
+
+## Data Flow với Fragments
+
+```
+Fragment (HomeFragment, DiaryFragment, etc.)
+    │
+    ├── observe LiveData ←──────────────────┐
+    │                                       │
+    ▼                                       │
+Repository (FoodRepository, etc.)           │
+    │                                       │
+    ▼                                       │
+DAO (FoodDao, etc.)                         │
+    │                                       │
+    ▼                                       │
+Room Database ──── LiveData updates ────────┘
+```
 

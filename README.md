@@ -86,33 +86,38 @@ app/src/main/java/com/example/trackingcaloapp/
 │   ├── FoodWithEntry.java            # Food with entry wrapper
 │   └── WorkoutWithEntry.java         # Workout with entry wrapper
 │
-├── 📁 ui/                            # UI layer
+├── 📁 ui/                            # UI layer (Single Activity + Fragments)
 │   ├── 📁 main/
-│   │   ├── MainActivity.java         # Home screen
-│   │   └── RecentActivityAdapter.java
+│   │   └── MainActivity.java         # Container chính + Bottom Navigation
 │   ├── 📁 onboarding/
 │   │   └── OnboardingActivity.java   # First-time setup
-│   ├── 📁 addfood/
-│   │   ├── AddFoodActivity.java      # Add food screen
-│   │   └── FoodAdapter.java
-│   ├── 📁 addworkout/
-│   │   ├── AddWorkoutActivity.java   # Add workout screen
+│   ├── 📁 home/
+│   │   ├── HomeFragment.java         # Dashboard fragment
+│   │   └── RecentActivityAdapter.java
+│   ├── 📁 add/
+│   │   ├── AddFragment.java          # Container với ViewPager2
+│   │   ├── AddPagerAdapter.java      # Adapter cho tabs Food/Workout
+│   │   ├── AddFoodFragment.java      # Thêm thực phẩm
+│   │   ├── AddWorkoutFragment.java   # Thêm bài tập
+│   │   ├── FoodAdapter.java
 │   │   └── WorkoutAdapter.java
 │   ├── 📁 diary/
-│   │   ├── DiaryActivity.java        # Diary screen
-│   │   ├── DiaryPagerAdapter.java
+│   │   ├── DiaryFragment.java        # Nhật ký với ViewPager2
+│   │   ├── DiaryFragmentPagerAdapter.java
 │   │   ├── FoodEntriesFragment.java
 │   │   ├── FoodEntryAdapter.java
 │   │   ├── WorkoutEntriesFragment.java
 │   │   └── WorkoutEntryAdapter.java
 │   └── 📁 profile/
-│       └── ProfileActivity.java      # Profile settings
+│       └── ProfileFragment.java      # Profile settings
 │
 └── 📁 utils/                         # Utilities
     ├── CalorieCalculator.java        # Calorie calculations
     ├── Constants.java                # App constants
     └── DateUtils.java                # Date utilities
 ```
+
+**Kiến trúc**: Single Activity (MainActivity) + Multiple Fragments, điều hướng qua Bottom Navigation Bar.
 
 ## 🚀 Cài đặt
 
@@ -155,21 +160,24 @@ Click Run (▶️) hoặc Shift+F10
 - App sẽ tự động tính mục tiêu calo hàng ngày
 
 ### 2. Thêm thực phẩm
-- Từ trang chủ, nhấn nút "+" hoặc "Thêm thực phẩm"
+- Từ trang chủ, nhấn tab "Add" ở bottom navigation
+- Chọn tab "Thực phẩm" trong màn hình Add
 - Tìm kiếm hoặc chọn từ danh sách
 - Nhập khối lượng (gram)
 - Chọn bữa ăn
 - Nhấn "Thêm"
 
 ### 3. Thêm bài tập
-- Từ trang chủ, nhấn "Thêm bài tập"
+- Từ trang chủ, nhấn tab "Add" ở bottom navigation
+- Chọn tab "Bài tập" trong màn hình Add
 - Chọn loại bài tập
 - Nhập thời gian/khoảng cách
 - Nhấn "Thêm"
 
 ### 4. Xem nhật ký
-- Nhấn vào tab "Nhật ký" ở bottom navigation
+- Nhấn vào tab "Diary" ở bottom navigation
 - Chuyển ngày bằng nút prev/next
+- Chuyển tab Food/Workout để xem chi tiết
 - Xem chi tiết thực phẩm và bài tập
 
 ## 🧮 Công thức tính toán
@@ -279,3 +287,6 @@ Distributed under the MIT License. See `LICENSE` for more information.
 - [Material Design](https://material.io/)
 - [Android Jetpack](https://developer.android.com/jetpack)
 - [Room Persistence Library](https://developer.android.com/training/data-storage/room)
+
+## connect emulator MUMU 
+& "D:\Program Files\Netease\MuMuPlayer\nx_main\adb.exe" connect 127.0.0.1:7555
