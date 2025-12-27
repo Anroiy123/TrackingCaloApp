@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.trackingcaloapp.data.local.dao.FoodDao;
@@ -26,25 +27,39 @@ import java.util.concurrent.Executors;
  */
 @Database(
     entities = {Food.class, FoodEntry.class, Workout.class, WorkoutEntry.class},
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 public abstract class AppDatabase extends RoomDatabase {
-    
+
     // DAOs
     public abstract FoodDao foodDao();
     public abstract FoodEntryDao foodEntryDao();
     public abstract WorkoutDao workoutDao();
     public abstract WorkoutEntryDao workoutEntryDao();
-    
+
     // Singleton instance
     private static volatile AppDatabase INSTANCE;
-    
+
     // Executor cho background operations
     private static final int NUMBER_OF_THREADS = 4;
     public static final ExecutorService databaseWriteExecutor =
             Executors.newFixedThreadPool(NUMBER_OF_THREADS);
-    
+
+    /**
+     * Migration from version 1 to 2
+     * Thêm các fields cho API integration: apiId, apiSource, cachedAt
+     */
+    static final Migration MIGRATION_1_2 = new Migration(1, 2) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            // Add new columns to foods table for API integration
+            database.execSQL("ALTER TABLE foods ADD COLUMN apiId INTEGER");
+            database.execSQL("ALTER TABLE foods ADD COLUMN apiSource TEXT");
+            database.execSQL("ALTER TABLE foods ADD COLUMN cachedAt INTEGER DEFAULT 0 NOT NULL");
+        }
+    };
+
     /**
      * Lấy instance của database (Singleton)
      */
@@ -57,6 +72,7 @@ public abstract class AppDatabase extends RoomDatabase {
                             AppDatabase.class,
                             "calorie_tracker_db"
                     )
+                    .addMigrations(MIGRATION_1_2)
                     .addCallback(sRoomDatabaseCallback)
                     .build();
                 }

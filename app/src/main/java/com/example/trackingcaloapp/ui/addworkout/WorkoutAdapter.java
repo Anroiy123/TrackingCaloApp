@@ -25,6 +25,7 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.ViewHold
 
     public interface OnWorkoutClickListener {
         void onWorkoutClick(Workout workout);
+        void onWorkoutLongClick(Workout workout);
     }
 
     public WorkoutAdapter(OnWorkoutClickListener listener) {
@@ -62,6 +63,7 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.ViewHold
         private final TextView tvWorkoutInfo;
         private final TextView tvCaloriesPerUnit;
         private final TextView tvUnit;
+        private final TextView tvCustomBadge;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -71,6 +73,7 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.ViewHold
             tvWorkoutInfo = itemView.findViewById(R.id.tvWorkoutInfo);
             tvCaloriesPerUnit = itemView.findViewById(R.id.tvCaloriesPerUnit);
             tvUnit = itemView.findViewById(R.id.tvUnit);
+            tvCustomBadge = itemView.findViewById(R.id.tvCustomBadge);
         }
 
         void bind(Workout workout, OnWorkoutClickListener listener) {
@@ -108,7 +111,19 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.ViewHold
                 ivCategoryIcon.setColorFilter(ContextCompat.getColor(itemView.getContext(), colorRes));
             }
 
+            // Show custom badge if workout is custom
+            tvCustomBadge.setVisibility(workout.isCustom() ? View.VISIBLE : View.GONE);
+
             itemView.setOnClickListener(v -> listener.onWorkoutClick(workout));
+
+            // Long-press for custom workouts only
+            itemView.setOnLongClickListener(v -> {
+                if (workout.isCustom() && listener != null) {
+                    listener.onWorkoutLongClick(workout);
+                    return true;
+                }
+                return false;
+            });
         }
     }
 }

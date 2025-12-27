@@ -21,6 +21,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
 
     public interface OnFoodClickListener {
         void onFoodClick(Food food);
+        void onFoodLongClick(Food food);
     }
 
     public FoodAdapter(OnFoodClickListener listener) {
@@ -55,12 +56,14 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
         private final TextView tvFoodName;
         private final TextView tvFoodInfo;
         private final TextView tvCalories;
+        private final TextView tvCustomBadge;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvFoodName = itemView.findViewById(R.id.tvFoodName);
             tvFoodInfo = itemView.findViewById(R.id.tvFoodInfo);
             tvCalories = itemView.findViewById(R.id.tvCalories);
+            tvCustomBadge = itemView.findViewById(R.id.tvCustomBadge);
         }
 
         void bind(Food food, OnFoodClickListener listener) {
@@ -68,7 +71,19 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
             tvFoodInfo.setText(String.format("%.0f cal / 100g", food.getCalories()));
             tvCalories.setText(String.valueOf((int) food.getCalories()));
 
+            // Show custom badge if food is custom
+            tvCustomBadge.setVisibility(food.isCustom() ? View.VISIBLE : View.GONE);
+
             itemView.setOnClickListener(v -> listener.onFoodClick(food));
+
+            // Long-press for custom foods only
+            itemView.setOnLongClickListener(v -> {
+                if (food.isCustom() && listener != null) {
+                    listener.onFoodLongClick(food);
+                    return true;
+                }
+                return false;
+            });
         }
     }
 }

@@ -27,10 +27,14 @@ import com.example.trackingcaloapp.ui.addworkout.WorkoutAdapter;
 import com.example.trackingcaloapp.utils.Constants;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.List;
+
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 
 public class AddWorkoutFragment extends Fragment implements WorkoutAdapter.OnWorkoutClickListener {
 
@@ -38,6 +42,7 @@ public class AddWorkoutFragment extends Fragment implements WorkoutAdapter.OnWor
     private ChipGroup chipGroupCategory;
     private RecyclerView rvWorkouts;
     private TextView tvEmpty;
+    private FloatingActionButton fabAddCustomWorkout;
 
     private WorkoutRepository workoutRepository;
     private WorkoutEntryRepository workoutEntryRepository;
@@ -72,10 +77,14 @@ public class AddWorkoutFragment extends Fragment implements WorkoutAdapter.OnWor
         chipGroupCategory = view.findViewById(R.id.chipGroupCategory);
         rvWorkouts = view.findViewById(R.id.rvWorkouts);
         tvEmpty = view.findViewById(R.id.tvEmpty);
+        fabAddCustomWorkout = view.findViewById(R.id.fabAddCustomWorkout);
 
         workoutAdapter = new WorkoutAdapter(this);
         rvWorkouts.setLayoutManager(new LinearLayoutManager(requireContext()));
         rvWorkouts.setAdapter(workoutAdapter);
+
+        // Setup FAB click listener
+        fabAddCustomWorkout.setOnClickListener(v -> showCreateWorkoutDialog());
     }
 
     private void setupSearch() {
@@ -160,6 +169,20 @@ public class AddWorkoutFragment extends Fragment implements WorkoutAdapter.OnWor
         showAddWorkoutDialog(workout);
     }
 
+    @Override
+    public void onWorkoutLongClick(Workout workout) {
+        new AlertDialog.Builder(requireContext(), R.style.Theme_App_Dialog)
+                .setTitle(workout.getName())
+                .setItems(new String[]{"Chỉnh sửa", "Xóa"}, (dialog, which) -> {
+                    if (which == 0) {
+                        showEditWorkoutDialog(workout);
+                    } else {
+                        showDeleteWorkoutConfirmation(workout);
+                    }
+                })
+                .show();
+    }
+
     private void showAddWorkoutDialog(Workout workout) {
         View dialogView = LayoutInflater.from(requireContext())
                 .inflate(R.layout.dialog_add_workout_entry, null);
@@ -200,7 +223,7 @@ public class AddWorkoutFragment extends Fragment implements WorkoutAdapter.OnWor
 
         etQuantity.setText("30");
 
-        new AlertDialog.Builder(requireContext())
+        new AlertDialog.Builder(requireContext(), R.style.Theme_App_Dialog)
                 .setView(dialogView)
                 .setPositiveButton("Thêm", (dialog, which) -> {
                     try {
@@ -228,5 +251,170 @@ public class AddWorkoutFragment extends Fragment implements WorkoutAdapter.OnWor
 
         workoutEntryRepository.insert(entry);
         Toast.makeText(requireContext(), "Đã thêm " + workout.getName(), Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * Show dialog to create custom workout
+     */
+    private void showCreateWorkoutDialog() {
+        View dialogView = LayoutInflater.from(requireContext())
+                .inflate(R.layout.dialog_create_custom_workout, null);
+
+        TextInputEditText etName = dialogView.findViewById(R.id.etWorkoutName);
+        TextInputEditText etCalories = dialogView.findViewById(R.id.etCaloriesPerUnit);
+        AutoCompleteTextView spinnerUnit = dialogView.findViewById(R.id.spinnerUnit);
+        AutoCompleteTextView spinnerCategory = dialogView.findViewById(R.id.spinnerCategory);
+
+        // Setup unit spinner
+        String[] units = {"phút", "km", "lần"};
+        ArrayAdapter<String> unitAdapter = new ArrayAdapter<>(requireContext(),
+                android.R.layout.simple_dropdown_item_1line, units);
+        spinnerUnit.setAdapter(unitAdapter);
+        spinnerUnit.setText(units[0], false); // Default: "phút"
+
+        // Setup category spinner
+        String[] categoryNames = {"Cardio", "Sức mạnh", "Linh hoạt"};
+        String[] categoryValues = {Constants.WORKOUT_CARDIO, Constants.WORKOUT_STRENGTH, Constants.WORKOUT_FLEXIBILITY};
+        ArrayAdapter<String> categoryAdapter = new ArrayAdapter<>(requireContext(),
+                android.R.layout.simple_dropdown_item_1line, categoryNames);
+        spinnerCategory.setAdapter(categoryAdapter);
+        spinnerCategory.setText(categoryNames[0], false); // Default: "Cardio"
+
+        new AlertDialog.Builder(requireContext(), R.style.Theme_App_Dialog)
+                .setTitle(R.string.create_custom_workout)
+                .setView(dialogView)
+                .setPositiveButton("Tạo", (dialog, which) -> {
+                    String name = etName.getText().toString().trim();
+                    if (name.isEmpty()) {
+                        Toast.makeText(requireContext(), R.string.error_name_required, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    float caloriesPerUnit = parseFloat(etCalories, 5);
+
+                    // Validate calories > 0
+                    if (caloriesPerUnit <= 0) {
+                        Toast.makeText(requireContext(), R.string.error_calories_required, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    String unit = spinnerUnit.getText().toString();
+                    if (unit.isEmpty()) {
+                        unit = "phút"; // Default
+                    }
+
+                    // Get selected category
+                    int categoryIndex = java.util.Arrays.asList(categoryNames)
+                            .indexOf(spinnerCategory.getText().toString());
+                    String category = categoryIndex >= 0 ? categoryValues[categoryIndex] : Constants.WORKOUT_CARDIO;
+
+                    // Create custom workout with isCustom = true
+                    Workout workout = new Workout(name, caloriesPerUnit, unit, category, true);
+                    workoutRepository.insert(workout);
+                    Toast.makeText(requireContext(), R.string.workout_created, Toast.LENGTH_SHORT).show();
+                })
+                .setNegativeButton("Hủy", null)
+                .show();
+    }
+
+    /**
+     * Parse float from TextInputEditText with default value
+     */
+    private float parseFloat(TextInputEditText et, float defaultValue) {
+        try {
+            String text = et.getText().toString().trim();
+            return text.isEmpty() ? defaultValue : Float.parseFloat(text);
+        } catch (NumberFormatException e) {
+            return defaultValue;
+        }
+    }
+
+    /**
+     * Show dialog to edit custom workout
+     */
+    private void showEditWorkoutDialog(Workout workout) {
+        View dialogView = LayoutInflater.from(requireContext())
+                .inflate(R.layout.dialog_create_custom_workout, null);
+
+        TextInputEditText etName = dialogView.findViewById(R.id.etWorkoutName);
+        TextInputEditText etCalories = dialogView.findViewById(R.id.etCaloriesPerUnit);
+        AutoCompleteTextView spinnerUnit = dialogView.findViewById(R.id.spinnerUnit);
+        AutoCompleteTextView spinnerCategory = dialogView.findViewById(R.id.spinnerCategory);
+
+        // Pre-fill values
+        etName.setText(workout.getName());
+        etCalories.setText(String.valueOf(workout.getCaloriesPerUnit()));
+
+        // Setup unit spinner
+        String[] units = {"phút", "km", "lần"};
+        ArrayAdapter<String> unitAdapter = new ArrayAdapter<>(requireContext(),
+                android.R.layout.simple_dropdown_item_1line, units);
+        spinnerUnit.setAdapter(unitAdapter);
+        spinnerUnit.setText(workout.getUnit(), false);
+
+        // Setup category spinner
+        String[] categoryNames = {"Cardio", "Sức mạnh", "Linh hoạt"};
+        String[] categoryValues = {Constants.WORKOUT_CARDIO, Constants.WORKOUT_STRENGTH, Constants.WORKOUT_FLEXIBILITY};
+        ArrayAdapter<String> categoryAdapter = new ArrayAdapter<>(requireContext(),
+                android.R.layout.simple_dropdown_item_1line, categoryNames);
+        spinnerCategory.setAdapter(categoryAdapter);
+
+        // Set current category
+        int currentCategoryIndex = java.util.Arrays.asList(categoryValues).indexOf(workout.getCategory());
+        if (currentCategoryIndex >= 0) {
+            spinnerCategory.setText(categoryNames[currentCategoryIndex], false);
+        }
+
+        new AlertDialog.Builder(requireContext(), R.style.Theme_App_Dialog)
+                .setTitle(R.string.edit_workout)
+                .setView(dialogView)
+                .setPositiveButton("Lưu", (dialog, which) -> {
+                    String name = etName.getText().toString().trim();
+                    if (name.isEmpty()) {
+                        Toast.makeText(requireContext(), R.string.error_name_required, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    float caloriesPerUnit = parseFloat(etCalories, 5);
+                    if (caloriesPerUnit <= 0) {
+                        Toast.makeText(requireContext(), R.string.error_calories_required, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    String unit = spinnerUnit.getText().toString();
+                    if (unit.isEmpty()) {
+                        unit = "phút";
+                    }
+
+                    int categoryIndex = java.util.Arrays.asList(categoryNames)
+                            .indexOf(spinnerCategory.getText().toString());
+                    String category = categoryIndex >= 0 ? categoryValues[categoryIndex] : Constants.WORKOUT_CARDIO;
+
+                    // Update workout object
+                    workout.setName(name);
+                    workout.setCaloriesPerUnit(caloriesPerUnit);
+                    workout.setUnit(unit);
+                    workout.setCategory(category);
+
+                    workoutRepository.update(workout);
+                    Toast.makeText(requireContext(), "Đã cập nhật", Toast.LENGTH_SHORT).show();
+                })
+                .setNegativeButton("Hủy", null)
+                .show();
+    }
+
+    /**
+     * Show confirmation dialog before deleting workout
+     */
+    private void showDeleteWorkoutConfirmation(Workout workout) {
+        new AlertDialog.Builder(requireContext(), R.style.Theme_App_Dialog)
+                .setTitle("Xóa bài tập?")
+                .setMessage("Bạn có chắc muốn xóa \"" + workout.getName() + "\"?")
+                .setPositiveButton("Xóa", (dialog, which) -> {
+                    workoutRepository.delete(workout);
+                    Toast.makeText(requireContext(), "Đã xóa", Toast.LENGTH_SHORT).show();
+                })
+                .setNegativeButton("Hủy", null)
+                .show();
     }
 }

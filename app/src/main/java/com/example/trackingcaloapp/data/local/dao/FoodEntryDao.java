@@ -9,6 +9,10 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import com.example.trackingcaloapp.data.local.entity.FoodEntry;
+import com.example.trackingcaloapp.model.DailyCalorieSum;
+import com.example.trackingcaloapp.model.HourlyCalorieSum;
+import com.example.trackingcaloapp.model.MacroSum;
+import com.example.trackingcaloapp.model.MealTypeCalories;
 
 import java.util.List;
 
@@ -120,5 +124,45 @@ public interface FoodEntryDao {
      */
     @Query("SELECT COUNT(*) FROM food_entries WHERE date BETWEEN :startOfDay AND :endOfDay")
     int getEntryCountByDate(long startOfDay, long endOfDay);
+
+    // ==================== CHART AGGREGATION ====================
+
+    /**
+     * Lấy tổng calo theo từng ngày trong khoảng thời gian (cho LineChart)
+     * Group by ngày (chia timestamp cho 86400000 ms = 1 ngày)
+     */
+    @Query("SELECT (date / 86400000) * 86400000 as dayTimestamp, " +
+           "COALESCE(SUM(totalCalories), 0) as totalCalories " +
+           "FROM food_entries WHERE date BETWEEN :startDate AND :endDate " +
+           "GROUP BY date / 86400000 ORDER BY dayTimestamp ASC")
+    LiveData<List<DailyCalorieSum>> getDailyCaloriesSummary(long startDate, long endDate);
+
+    /**
+     * Lấy tổng calo theo loại bữa ăn trong khoảng thời gian (cho BarChart)
+     */
+    @Query("SELECT mealType, COALESCE(SUM(totalCalories), 0) as totalCalories " +
+           "FROM food_entries WHERE date BETWEEN :startDate AND :endDate " +
+           "GROUP BY mealType ORDER BY mealType ASC")
+    LiveData<List<MealTypeCalories>> getCaloriesByMealType(long startDate, long endDate);
+
+    /**
+     * Lấy tổng macro nutrients trong khoảng thời gian (cho PieChart)
+     */
+    @Query("SELECT COALESCE(SUM(totalProtein), 0) as protein, " +
+           "COALESCE(SUM(totalCarbs), 0) as carbs, " +
+           "COALESCE(SUM(totalFat), 0) as fat " +
+           "FROM food_entries WHERE date BETWEEN :startDate AND :endDate")
+    LiveData<MacroSum> getMacroSummary(long startDate, long endDate);
+
+    /**
+     * Lấy tổng calo theo giờ trong ngày (cho LineChart trong DiaryFragment)
+     * Extract hour từ timestamp: (date % 86400000) / 3600000
+     * 86400000 ms = 1 ngày, 3600000 ms = 1 giờ
+     */
+    @Query("SELECT ((date % 86400000) / 3600000) as hour, " +
+           "COALESCE(SUM(totalCalories), 0) as totalCalories " +
+           "FROM food_entries WHERE date BETWEEN :startDate AND :endDate " +
+           "GROUP BY (date % 86400000) / 3600000 ORDER BY hour ASC")
+    LiveData<List<HourlyCalorieSum>> getHourlyCaloriesSummary(long startDate, long endDate);
 }
 

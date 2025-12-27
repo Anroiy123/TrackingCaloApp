@@ -303,6 +303,108 @@
 
         </LinearLayout>
 
+        <!-- Card Thống kê 7 ngày - Charts Section -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_base"
+            app:cardBackgroundColor="@color/surface"
+            app:cardCornerRadius="@dimen/radius_lg"
+            app:cardElevation="@dimen/elevation_sm"
+            app:strokeColor="@color/outline"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/spacing_base">
+
+                <!-- Header với icon -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="@dimen/icon_md"
+                        android:layout_height="@dimen/icon_md"
+                        android:src="@drawable/ic_chart"
+                        app:tint="@color/text_secondary" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/spacing_sm"
+                        android:layout_weight="1"
+                        android:text="Thống kê 7 ngày"
+                        android:textAppearance="@style/TextAppearance.App.Title.Medium"
+                        android:textColor="@color/text_primary" />
+
+                </LinearLayout>
+
+                <!-- Tab selector for chart types -->
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tabChartType"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_md"
+                    app:tabGravity="fill"
+                    app:tabMode="fixed"
+                    app:tabIndicatorColor="@color/primary"
+                    app:tabSelectedTextColor="@color/primary"
+                    app:tabTextColor="@color/text_secondary"
+                    app:tabRippleColor="@color/primary_ripple">
+
+                    <com.google.android.material.tabs.TabItem
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Xu hướng" />
+
+                    <com.google.android.material.tabs.TabItem
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Bữa ăn" />
+
+                    <com.google.android.material.tabs.TabItem
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Dinh dưỡng" />
+
+                </com.google.android.material.tabs.TabLayout>
+
+                <!-- ViewFlipper for charts -->
+                <ViewFlipper
+                    android:id="@+id/chartFlipper"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginTop="@dimen/spacing_md">
+
+                    <!-- LineChart - Xu hướng calo -->
+                    <com.github.mikephil.charting.charts.LineChart
+                        android:id="@+id/chartLine"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                    <!-- BarChart - Bữa ăn -->
+                    <com.github.mikephil.charting.charts.BarChart
+                        android:id="@+id/chartBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                    <!-- PieChart - Dinh dưỡng -->
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/chartPie"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                </ViewFlipper>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
         <!-- Card Hoạt động gần đây -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"

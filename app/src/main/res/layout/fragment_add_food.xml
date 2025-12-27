@@ -1,170 +1,199 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
-    android:orientation="vertical">
+    android:background="@color/background">
 
-    <!-- Search Bar -->
-    <com.google.android.material.card.MaterialCardView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/spacing_base"
-        android:layout_marginTop="@dimen/spacing_base"
-        app:cardBackgroundColor="@color/surface"
-        app:cardCornerRadius="@dimen/radius_lg"
-        app:cardElevation="@dimen/elevation_none"
-        app:strokeColor="@color/outline"
-        app:strokeWidth="1dp">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+        <!-- Search Bar -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:boxBackgroundColor="@android:color/transparent"
-            app:boxStrokeWidth="0dp"
-            app:boxStrokeWidthFocused="0dp"
-            app:hintEnabled="false"
-            app:startIconDrawable="@drawable/ic_search"
-            app:startIconTint="@color/text_hint">
+            android:layout_marginHorizontal="@dimen/spacing_base"
+            android:layout_marginTop="@dimen/spacing_base"
+            app:cardBackgroundColor="@color/surface"
+            app:cardCornerRadius="@dimen/radius_lg"
+            app:cardElevation="@dimen/elevation_none"
+            app:strokeColor="@color/outline"
+            app:strokeWidth="1dp">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etSearch"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:hint="@string/search_food"
-                android:inputType="text"
-                android:paddingVertical="@dimen/spacing_md"
-                android:textAppearance="@style/TextAppearance.App.Body.Medium"
-                android:textColor="@color/text_primary"
-                android:textColorHint="@color/text_hint" />
+                app:boxBackgroundColor="@android:color/transparent"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp"
+                app:hintEnabled="false"
+                app:startIconDrawable="@drawable/ic_search"
+                app:startIconTint="@color/text_hint">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etSearch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:hint="@string/search_food"
+                    android:inputType="text"
+                    android:paddingVertical="@dimen/spacing_md"
+                    android:textAppearance="@style/TextAppearance.App.Body.Medium"
+                    android:textColor="@color/text_primary"
+                    android:textColorHint="@color/text_hint" />
 
-    </com.google.android.material.card.MaterialCardView>
+            </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Meal Type Chips -->
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/spacing_base"
-        android:clipToPadding="false"
-        android:scrollbars="none">
+        </com.google.android.material.card.MaterialCardView>
 
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/chipGroupMealType"
-            android:layout_width="wrap_content"
+        <!-- Loading indicator for API search -->
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:layout_marginHorizontal="@dimen/spacing_base"
+            android:indeterminate="true"
+            android:visibility="gone" />
+
+        <!-- Meal Type Chips -->
+        <HorizontalScrollView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_base"
+            android:clipToPadding="false"
+            android:scrollbars="none">
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroupMealType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="@dimen/spacing_base"
+                app:singleSelection="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipBreakfast"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="@string/breakfast"
+                    app:checkedIconEnabled="true"
+                    app:chipBackgroundColor="@color/chip_background_color"
+                    app:chipStrokeColor="@color/chip_stroke_color"
+                    app:chipStrokeWidth="1dp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipLunch"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lunch"
+                    app:checkedIconEnabled="true"
+                    app:chipBackgroundColor="@color/chip_background_color"
+                    app:chipStrokeColor="@color/chip_stroke_color"
+                    app:chipStrokeWidth="1dp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipDinner"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/dinner"
+                    app:checkedIconEnabled="true"
+                    app:chipBackgroundColor="@color/chip_background_color"
+                    app:chipStrokeColor="@color/chip_stroke_color"
+                    app:chipStrokeWidth="1dp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipSnack"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/snack"
+                    app:checkedIconEnabled="true"
+                    app:chipBackgroundColor="@color/chip_background_color"
+                    app:chipStrokeColor="@color/chip_stroke_color"
+                    app:chipStrokeWidth="1dp" />
+
+            </com.google.android.material.chip.ChipGroup>
+
+        </HorizontalScrollView>
+
+        <!-- Food List -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvFoods"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/spacing_sm"
+            android:layout_weight="1"
+            android:clipToPadding="false"
             android:paddingHorizontal="@dimen/spacing_base"
-            app:singleSelection="true">
+            android:paddingBottom="88dp" />
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipBreakfast"
-                style="@style/Widget.Material3.Chip.Filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="true"
-                android:text="@string/breakfast"
-                app:checkedIconEnabled="true"
-                app:chipBackgroundColor="@color/chip_background_color"
-                app:chipStrokeColor="@color/chip_stroke_color"
-                app:chipStrokeWidth="1dp" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipLunch"
-                style="@style/Widget.Material3.Chip.Filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/lunch"
-                app:checkedIconEnabled="true"
-                app:chipBackgroundColor="@color/chip_background_color"
-                app:chipStrokeColor="@color/chip_stroke_color"
-                app:chipStrokeWidth="1dp" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipDinner"
-                style="@style/Widget.Material3.Chip.Filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/dinner"
-                app:checkedIconEnabled="true"
-                app:chipBackgroundColor="@color/chip_background_color"
-                app:chipStrokeColor="@color/chip_stroke_color"
-                app:chipStrokeWidth="1dp" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipSnack"
-                style="@style/Widget.Material3.Chip.Filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/snack"
-                app:checkedIconEnabled="true"
-                app:chipBackgroundColor="@color/chip_background_color"
-                app:chipStrokeColor="@color/chip_stroke_color"
-                app:chipStrokeWidth="1dp" />
-
-        </com.google.android.material.chip.ChipGroup>
-
-    </HorizontalScrollView>
-
-    <!-- Food List -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvFoods"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="@dimen/spacing_sm"
-        android:layout_weight="1"
-        android:clipToPadding="false"
-        android:paddingHorizontal="@dimen/spacing_base"
-        android:paddingBottom="@dimen/spacing_xl" />
-
-    <!-- Empty State -->
-    <LinearLayout
-        android:id="@+id/layoutEmpty"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="@dimen/spacing_xl"
-        android:visibility="gone">
-
+        <!-- Empty State -->
         <LinearLayout
-            android:layout_width="@dimen/icon_container_2xl"
-            android:layout_height="@dimen/icon_container_2xl"
-            android:background="@drawable/bg_stat_consumed"
-            android:gravity="center">
+            android:id="@+id/layoutEmpty"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/spacing_xl"
+            android:visibility="gone">
 
-            <ImageView
-                android:layout_width="@dimen/icon_2xl"
-                android:layout_height="@dimen/icon_2xl"
-                android:alpha="0.6"
-                android:src="@drawable/ic_food"
-                app:tint="@color/calories_consumed" />
+            <LinearLayout
+                android:layout_width="@dimen/icon_container_2xl"
+                android:layout_height="@dimen/icon_container_2xl"
+                android:background="@drawable/bg_stat_consumed"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="@dimen/icon_2xl"
+                    android:layout_height="@dimen/icon_2xl"
+                    android:alpha="0.6"
+                    android:src="@drawable/ic_food"
+                    app:tint="@color/calories_consumed" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvEmpty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_lg"
+                android:gravity="center"
+                android:text="Không tìm thấy thực phẩm"
+                android:textAppearance="@style/TextAppearance.App.Title.Medium"
+                android:textColor="@color/text_secondary" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_xs"
+                android:gravity="center"
+                android:text="Thử tìm kiếm với từ khóa khác"
+                android:textAppearance="@style/TextAppearance.App.Body.Medium"
+                android:textColor="@color/text_hint" />
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/tvEmpty"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_lg"
-            android:gravity="center"
-            android:text="Không tìm thấy thực phẩm"
-            android:textAppearance="@style/TextAppearance.App.Title.Medium"
-            android:textColor="@color/text_secondary" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_xs"
-            android:gravity="center"
-            android:text="Thử tìm kiếm với từ khóa khác"
-            android:textAppearance="@style/TextAppearance.App.Body.Medium"
-            android:textColor="@color/text_hint" />
-
     </LinearLayout>
 
-</LinearLayout>
+    <!-- FAB for adding custom food -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabAddCustomFood"
+        style="@style/Widget.App.FloatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="@dimen/spacing_base"
+        android:layout_marginBottom="80dp"
+        android:contentDescription="@string/create_custom_food"
+        android:src="@drawable/ic_add"
+        app:tint="@color/white" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

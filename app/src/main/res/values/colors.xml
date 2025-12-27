@@ -191,6 +191,7 @@
     <color name="ripple_primary">#2010B981</color>
     <color name="ripple_secondary">#20F59E0B</color>
     <color name="ripple_neutral">#20000000</color>
+    <color name="primary_ripple">#2010B981</color>
 
     <!-- ============================================== -->
     <!-- CHIP COLORS                                   -->

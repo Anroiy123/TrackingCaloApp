@@ -1,5 +1,6 @@
 package com.example.trackingcaloapp.data.local.entity;
 
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
@@ -10,17 +11,27 @@ import androidx.room.PrimaryKey;
  */
 @Entity(tableName = "foods")
 public class Food {
-    
+
     @PrimaryKey(autoGenerate = true)
     private int id;
-    
+
     private String name;           // Tên thực phẩm (VD: "Phở bò")
     private float calories;        // Calo per 100g
     private float protein;         // Protein (g) per 100g
     private float carbs;           // Carbohydrate (g) per 100g
     private float fat;             // Chất béo (g) per 100g
-    private String category;       // Loại: "com", "pho", "thit", "rau", "trai_cay", "do_uong", "an_vat"
+    private String category;       // Loại: "com", "pho", "thit", "rau", "trai_cay", "do_uong", "an_vat", "api"
     private boolean isCustom;      // true = user tự tạo, false = có sẵn trong app
+
+    // API Integration fields
+    @ColumnInfo(name = "apiId")
+    private Long apiId;            // FatSecret food_id (null = local food)
+
+    @ColumnInfo(name = "apiSource")
+    private String apiSource;      // "fatsecret" hoặc null
+
+    @ColumnInfo(name = "cachedAt", defaultValue = "0")
+    private long cachedAt;         // Timestamp khi cache từ API
     
     // Constructor đầy đủ
     public Food(String name, float calories, float protein, float carbs, float fat, String category, boolean isCustom) {
@@ -103,7 +114,39 @@ public class Food {
     public void setCustom(boolean custom) {
         isCustom = custom;
     }
-    
+
+    // API fields getters/setters
+    public Long getApiId() {
+        return apiId;
+    }
+
+    public void setApiId(Long apiId) {
+        this.apiId = apiId;
+    }
+
+    public String getApiSource() {
+        return apiSource;
+    }
+
+    public void setApiSource(String apiSource) {
+        this.apiSource = apiSource;
+    }
+
+    public long getCachedAt() {
+        return cachedAt;
+    }
+
+    public void setCachedAt(long cachedAt) {
+        this.cachedAt = cachedAt;
+    }
+
+    /**
+     * Check if this food is from external API
+     */
+    public boolean isFromApi() {
+        return apiSource != null && !apiSource.isEmpty();
+    }
+
     /**
      * Tính calo dựa trên khối lượng thực tế (gram)
      * @param grams Khối lượng thực phẩm (gram)

@@ -1,266 +1,375 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    android:orientation="vertical">
+    android:fillViewport="true">
 
-    <!-- Date Selector Card -->
-    <com.google.android.material.card.MaterialCardView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/surface"
-        app:cardCornerRadius="0dp"
-        app:cardElevation="@dimen/elevation_sm">
+        android:orientation="vertical">
 
-        <LinearLayout
+        <!-- Date Selector Card -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingHorizontal="@dimen/spacing_sm"
-            android:paddingVertical="@dimen/spacing_sm">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnPrevDay"
-                style="@style/Widget.Material3.Button.IconButton"
-                android:layout_width="@dimen/icon_button_size"
-                android:layout_height="@dimen/icon_button_size"
-                android:contentDescription="Ngày trước"
-                app:icon="@drawable/ic_chevron_left"
-                app:iconTint="@color/primary" />
+            app:cardBackgroundColor="@color/surface"
+            app:cardCornerRadius="0dp"
+            app:cardElevation="@dimen/elevation_sm">
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="@dimen/spacing_sm"
+                android:paddingVertical="@dimen/spacing_sm">
 
-                <TextView
-                    android:id="@+id/tvSelectedDate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Hôm nay"
-                    android:textAppearance="@style/TextAppearance.App.Title.Medium"
-                    android:textColor="@color/text_primary" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnPrevDay"
+                    style="@style/Widget.Material3.Button.IconButton"
+                    android:layout_width="@dimen/icon_button_size"
+                    android:layout_height="@dimen/icon_button_size"
+                    android:contentDescription="Ngày trước"
+                    app:icon="@drawable/ic_chevron_left"
+                    app:iconTint="@color/primary" />
 
-                <TextView
-                    android:id="@+id/tvDateSubtitle"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_xxs"
-                    android:text="26 tháng 12, 2024"
-                    android:textAppearance="@style/TextAppearance.App.Body.Small"
-                    android:textColor="@color/text_secondary" />
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvSelectedDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Hôm nay"
+                        android:textAppearance="@style/TextAppearance.App.Title.Medium"
+                        android:textColor="@color/text_primary" />
+
+                    <TextView
+                        android:id="@+id/tvDateSubtitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_xxs"
+                        android:text="26 tháng 12, 2024"
+                        android:textAppearance="@style/TextAppearance.App.Body.Small"
+                        android:textColor="@color/text_secondary" />
+
+                </LinearLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnNextDay"
+                    style="@style/Widget.Material3.Button.IconButton"
+                    android:layout_width="@dimen/icon_button_size"
+                    android:layout_height="@dimen/icon_button_size"
+                    android:contentDescription="Ngày sau"
+                    app:icon="@drawable/ic_chevron_right"
+                    app:iconTint="@color/primary" />
 
             </LinearLayout>
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnNextDay"
-                style="@style/Widget.Material3.Button.IconButton"
-                android:layout_width="@dimen/icon_button_size"
-                android:layout_height="@dimen/icon_button_size"
-                android:contentDescription="Ngày sau"
-                app:icon="@drawable/ic_chevron_right"
-                app:iconTint="@color/primary" />
+        </com.google.android.material.card.MaterialCardView>
 
-        </LinearLayout>
-
-    </com.google.android.material.card.MaterialCardView>
-
-    <!-- Summary Card -->
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/spacing_base"
-        android:layout_marginTop="@dimen/spacing_base"
-        app:cardBackgroundColor="@color/surface"
-        app:cardCornerRadius="@dimen/radius_lg"
-        app:cardElevation="@dimen/elevation_none"
-        app:strokeColor="@color/outline"
-        app:strokeWidth="1dp">
-
-        <LinearLayout
+        <!-- Summary Card -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="@dimen/spacing_lg">
+            android:layout_marginHorizontal="@dimen/spacing_base"
+            android:layout_marginTop="@dimen/spacing_base"
+            app:cardBackgroundColor="@color/surface"
+            app:cardCornerRadius="@dimen/radius_lg"
+            app:cardElevation="@dimen/elevation_none"
+            app:strokeColor="@color/outline"
+            app:strokeWidth="1dp">
 
-            <!-- Ăn vào -->
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
+                android:orientation="horizontal"
+                android:padding="@dimen/spacing_lg">
 
+                <!-- Ăn vào -->
                 <LinearLayout
-                    android:layout_width="@dimen/icon_container_md"
-                    android:layout_height="@dimen/icon_container_md"
-                    android:background="@drawable/bg_stat_consumed"
-                    android:gravity="center">
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="@dimen/icon_container_md"
+                        android:layout_height="@dimen/icon_container_md"
+                        android:background="@drawable/bg_stat_consumed"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:layout_width="@dimen/icon_sm"
+                            android:layout_height="@dimen/icon_sm"
+                            android:src="@drawable/ic_food"
+                            app:tint="@color/calories_consumed" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tvTotalConsumed"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_sm"
+                        android:fontFamily="sans-serif-medium"
+                        android:text="0"
+                        android:textColor="@color/calories_consumed"
+                        android:textSize="@dimen/text_size_large"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ăn vào"
+                        android:textAppearance="@style/TextAppearance.App.Label.Small"
+                        android:textColor="@color/text_secondary" />
+
+                </LinearLayout>
+
+                <!-- Divider -->
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginVertical="@dimen/spacing_sm"
+                    android:background="@color/outline" />
+
+                <!-- Đốt cháy -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="@dimen/icon_container_md"
+                        android:layout_height="@dimen/icon_container_md"
+                        android:background="@drawable/bg_stat_burned"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:layout_width="@dimen/icon_sm"
+                            android:layout_height="@dimen/icon_sm"
+                            android:src="@drawable/ic_workout"
+                            app:tint="@color/calories_burned" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tvTotalBurned"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_sm"
+                        android:fontFamily="sans-serif-medium"
+                        android:text="0"
+                        android:textColor="@color/calories_burned"
+                        android:textSize="@dimen/text_size_large"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Đốt cháy"
+                        android:textAppearance="@style/TextAppearance.App.Label.Small"
+                        android:textColor="@color/text_secondary" />
+
+                </LinearLayout>
+
+                <!-- Divider -->
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginVertical="@dimen/spacing_sm"
+                    android:background="@color/outline" />
+
+                <!-- NET -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="@dimen/icon_container_md"
+                        android:layout_height="@dimen/icon_container_md"
+                        android:background="@drawable/bg_stat_net"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:layout_width="@dimen/icon_sm"
+                            android:layout_height="@dimen/icon_sm"
+                            android:src="@drawable/ic_diary"
+                            app:tint="@color/calories_net" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tvNetCalories"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_sm"
+                        android:fontFamily="sans-serif-medium"
+                        android:text="0"
+                        android:textColor="@color/calories_net"
+                        android:textSize="@dimen/text_size_large"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="NET"
+                        android:textAppearance="@style/TextAppearance.App.Label.Small"
+                        android:textColor="@color/text_secondary" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Chart Card -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/spacing_base"
+            android:layout_marginTop="@dimen/spacing_base"
+            app:cardBackgroundColor="@color/surface"
+            app:cardCornerRadius="@dimen/radius_lg"
+            app:cardElevation="@dimen/elevation_none"
+            app:strokeColor="@color/outline"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/spacing_base">
+
+                <!-- Chart Header -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
                     <ImageView
                         android:layout_width="@dimen/icon_sm"
                         android:layout_height="@dimen/icon_sm"
-                        android:src="@drawable/ic_food"
-                        app:tint="@color/calories_consumed" />
+                        android:src="@drawable/ic_chart"
+                        app:tint="@color/primary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/spacing_sm"
+                        android:text="Thống kê"
+                        android:textAppearance="@style/TextAppearance.App.Title.Medium"
+                        android:textColor="@color/text_primary" />
 
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/tvTotalConsumed"
-                    android:layout_width="wrap_content"
+                <!-- Tab selector for chart types -->
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tabChartType"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_sm"
-                    android:fontFamily="sans-serif-medium"
-                    android:text="0"
-                    android:textColor="@color/calories_consumed"
-                    android:textSize="@dimen/text_size_large"
-                    android:textStyle="bold" />
+                    android:layout_marginTop="@dimen/spacing_md"
+                    app:tabGravity="fill"
+                    app:tabMode="fixed"
+                    app:tabIndicatorColor="@color/primary"
+                    app:tabSelectedTextColor="@color/primary"
+                    app:tabTextColor="@color/text_secondary"
+                    app:tabRippleColor="@color/primary_ripple">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Ăn vào"
-                    android:textAppearance="@style/TextAppearance.App.Label.Small"
-                    android:textColor="@color/text_secondary" />
+                    <com.google.android.material.tabs.TabItem
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Bữa ăn" />
+
+                    <com.google.android.material.tabs.TabItem
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Dinh dưỡng" />
+
+                    <com.google.android.material.tabs.TabItem
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Theo giờ" />
+
+                </com.google.android.material.tabs.TabLayout>
+
+                <!-- ViewFlipper for charts -->
+                <ViewFlipper
+                    android:id="@+id/chartFlipper"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginTop="@dimen/spacing_md">
+
+                    <!-- BarChart - Bữa ăn -->
+                    <com.github.mikephil.charting.charts.BarChart
+                        android:id="@+id/chartBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                    <!-- PieChart - Dinh dưỡng -->
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/chartPie"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                    <!-- LineChart - Theo giờ -->
+                    <com.github.mikephil.charting.charts.LineChart
+                        android:id="@+id/chartLine"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                </ViewFlipper>
 
             </LinearLayout>
 
-            <!-- Divider -->
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:layout_marginVertical="@dimen/spacing_sm"
-                android:background="@color/outline" />
+        </com.google.android.material.card.MaterialCardView>
 
-            <!-- Đốt cháy -->
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
+        <!-- Tab Layout for entries -->
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_base"
+            android:background="@color/background"
+            app:tabGravity="fill"
+            app:tabIconTint="@color/tab_icon_color"
+            app:tabIndicatorColor="@color/primary"
+            app:tabIndicatorFullWidth="false"
+            app:tabIndicatorHeight="3dp"
+            app:tabMode="fixed"
+            app:tabRippleColor="@color/primary_container"
+            app:tabSelectedTextColor="@color/primary"
+            app:tabTextAppearance="@style/TextAppearance.App.Label.Large"
+            app:tabTextColor="@color/text_secondary" />
 
-                <LinearLayout
-                    android:layout_width="@dimen/icon_container_md"
-                    android:layout_height="@dimen/icon_container_md"
-                    android:background="@drawable/bg_stat_burned"
-                    android:gravity="center">
+        <!-- Divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/outline" />
 
-                    <ImageView
-                        android:layout_width="@dimen/icon_sm"
-                        android:layout_height="@dimen/icon_sm"
-                        android:src="@drawable/ic_workout"
-                        app:tint="@color/calories_burned" />
+        <!-- ViewPager for tabs -->
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:minHeight="300dp" />
 
-                </LinearLayout>
+    </LinearLayout>
 
-                <TextView
-                    android:id="@+id/tvTotalBurned"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_sm"
-                    android:fontFamily="sans-serif-medium"
-                    android:text="0"
-                    android:textColor="@color/calories_burned"
-                    android:textSize="@dimen/text_size_large"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Đốt cháy"
-                    android:textAppearance="@style/TextAppearance.App.Label.Small"
-                    android:textColor="@color/text_secondary" />
-
-            </LinearLayout>
-
-            <!-- Divider -->
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:layout_marginVertical="@dimen/spacing_sm"
-                android:background="@color/outline" />
-
-            <!-- NET -->
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="@dimen/icon_container_md"
-                    android:layout_height="@dimen/icon_container_md"
-                    android:background="@drawable/bg_stat_net"
-                    android:gravity="center">
-
-                    <ImageView
-                        android:layout_width="@dimen/icon_sm"
-                        android:layout_height="@dimen/icon_sm"
-                        android:src="@drawable/ic_diary"
-                        app:tint="@color/calories_net" />
-
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/tvNetCalories"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_sm"
-                    android:fontFamily="sans-serif-medium"
-                    android:text="0"
-                    android:textColor="@color/calories_net"
-                    android:textSize="@dimen/text_size_large"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="NET"
-                    android:textAppearance="@style/TextAppearance.App.Label.Small"
-                    android:textColor="@color/text_secondary" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </com.google.android.material.card.MaterialCardView>
-
-    <!-- Tab Layout -->
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/spacing_base"
-        android:background="@color/background"
-        app:tabGravity="fill"
-        app:tabIconTint="@color/tab_icon_color"
-        app:tabIndicatorColor="@color/primary"
-        app:tabIndicatorFullWidth="false"
-        app:tabIndicatorHeight="3dp"
-        app:tabMode="fixed"
-        app:tabRippleColor="@color/primary_container"
-        app:tabSelectedTextColor="@color/primary"
-        app:tabTextAppearance="@style/TextAppearance.App.Label.Large"
-        app:tabTextColor="@color/text_secondary" />
-
-    <!-- Divider -->
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/outline" />
-
-    <!-- ViewPager for tabs -->
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/viewPager"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
-
-</LinearLayout>
+</androidx.core.widget.NestedScrollView>

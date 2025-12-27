@@ -7,6 +7,10 @@ import androidx.lifecycle.LiveData;
 import com.example.trackingcaloapp.data.local.dao.FoodEntryDao;
 import com.example.trackingcaloapp.data.local.database.AppDatabase;
 import com.example.trackingcaloapp.data.local.entity.FoodEntry;
+import com.example.trackingcaloapp.model.DailyCalorieSum;
+import com.example.trackingcaloapp.model.HourlyCalorieSum;
+import com.example.trackingcaloapp.model.MacroSum;
+import com.example.trackingcaloapp.model.MealTypeCalories;
 
 import java.util.List;
 
@@ -94,7 +98,37 @@ public class FoodEntryRepository {
     public LiveData<Float> getTotalCaloriesByMealType(long startOfDay, long endOfDay, String mealType) {
         return foodEntryDao.getTotalCaloriesByMealType(startOfDay, endOfDay, mealType);
     }
-    
+
+    // ==================== CHART AGGREGATION ====================
+
+    /**
+     * Lấy tổng calo theo từng ngày trong khoảng thời gian (cho LineChart)
+     */
+    public LiveData<List<DailyCalorieSum>> getDailyCaloriesSummary(long startDate, long endDate) {
+        return foodEntryDao.getDailyCaloriesSummary(startDate, endDate);
+    }
+
+    /**
+     * Lấy tổng calo theo loại bữa ăn trong khoảng thời gian (cho BarChart)
+     */
+    public LiveData<List<MealTypeCalories>> getCaloriesByMealType(long startDate, long endDate) {
+        return foodEntryDao.getCaloriesByMealType(startDate, endDate);
+    }
+
+    /**
+     * Lấy tổng macro nutrients trong khoảng thời gian (cho PieChart)
+     */
+    public LiveData<MacroSum> getMacroSummary(long startDate, long endDate) {
+        return foodEntryDao.getMacroSummary(startDate, endDate);
+    }
+
+    /**
+     * Lấy tổng calo theo giờ trong ngày (cho LineChart trong DiaryFragment)
+     */
+    public LiveData<List<HourlyCalorieSum>> getHourlyCaloriesSummary(long startDate, long endDate) {
+        return foodEntryDao.getHourlyCaloriesSummary(startDate, endDate);
+    }
+
     // ==================== INSERT ====================
     
     /**

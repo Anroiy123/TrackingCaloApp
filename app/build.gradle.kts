@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
 }
@@ -14,6 +16,18 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // FatSecret API credentials from local.properties
+        val localProperties = Properties()
+        val localPropertiesFile = rootProject.file("local.properties")
+        if (localPropertiesFile.exists()) {
+            localProperties.load(localPropertiesFile.inputStream())
+        }
+
+        buildConfigField("String", "FATSECRET_CLIENT_ID",
+            "\"${localProperties.getProperty("FATSECRET_CLIENT_ID", "")}\"")
+        buildConfigField("String", "FATSECRET_CLIENT_SECRET",
+            "\"${localProperties.getProperty("FATSECRET_CLIENT_SECRET", "")}\"")
     }
 
     buildTypes {
@@ -28,6 +42,10 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 }
 
@@ -52,6 +70,12 @@ dependencies {
 
     // ViewPager2
     implementation(libs.viewpager2)
+
+    // MPAndroidChart
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+
+    // Volley HTTP Client
+    implementation(libs.volley)
 
     // Testing
     testImplementation(libs.junit)

@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.ViewFlipper;
 
 import com.google.android.material.button.MaterialButton;
 
@@ -18,7 +19,11 @@ import com.example.trackingcaloapp.R;
 import com.example.trackingcaloapp.data.local.database.AppDatabase;
 import com.example.trackingcaloapp.data.repository.FoodEntryRepository;
 import com.example.trackingcaloapp.data.repository.WorkoutEntryRepository;
+import com.example.trackingcaloapp.utils.ChartHelper;
 import com.example.trackingcaloapp.utils.DateUtils;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.charts.PieChart;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -31,6 +36,13 @@ public class DiaryFragment extends Fragment {
     private TextView tvTotalConsumed, tvTotalBurned, tvNetCalories;
     private TabLayout tabLayout;
     private ViewPager2 viewPager;
+
+    // Chart views
+    private TabLayout tabChartType;
+    private ViewFlipper chartFlipper;
+    private BarChart chartBar;
+    private PieChart chartPie;
+    private LineChart chartLine;
 
     private FoodEntryRepository foodEntryRepository;
     private WorkoutEntryRepository workoutEntryRepository;
@@ -55,6 +67,7 @@ public class DiaryFragment extends Fragment {
 
         initViews(view);
         setupDateNavigation();
+        setupCharts();
         setupViewPager();
         loadData();
     }
@@ -76,6 +89,13 @@ public class DiaryFragment extends Fragment {
         tabLayout = view.findViewById(R.id.tabLayout);
         viewPager = view.findViewById(R.id.viewPager);
 
+        // Chart views
+        tabChartType = view.findViewById(R.id.tabChartType);
+        chartFlipper = view.findViewById(R.id.chartFlipper);
+        chartBar = view.findViewById(R.id.chartBar);
+        chartPie = view.findViewById(R.id.chartPie);
+        chartLine = view.findViewById(R.id.chartLine);
+
         updateDateDisplay();
     }
 
@@ -87,6 +107,7 @@ public class DiaryFragment extends Fragment {
             selectedDate = cal.getTimeInMillis();
             updateDateDisplay();
             loadData();
+            loadChartData();
             updatePagerData();
         });
 
@@ -99,8 +120,30 @@ public class DiaryFragment extends Fragment {
                 selectedDate = cal.getTimeInMillis();
                 updateDateDisplay();
                 loadData();
+                loadChartData();
                 updatePagerData();
             }
+        });
+    }
+
+    private void setupCharts() {
+        // Setup chart configurations
+        ChartHelper.setupBarChart(chartBar, requireContext());
+        ChartHelper.setupPieChart(chartPie, requireContext());
+        ChartHelper.setupLineChart(chartLine, requireContext());
+
+        // Setup tab listener to switch between charts
+        tabChartType.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                chartFlipper.setDisplayedChild(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {}
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {}
         });
     }
 
@@ -142,6 +185,32 @@ public class DiaryFragment extends Fragment {
             tvTotalBurned.setText(String.valueOf((int) caloriesBurned));
             updateNetCalories();
         });
+
+        // Load chart data
+        loadChartData();
+    }
+
+    private void loadChartData() {
+        long startOfDay = DateUtils.getStartOfDay(selectedDate);
+        long endOfDay = DateUtils.getEndOfDay(selectedDate);
+
+        // BarChart - Meal type comparison
+        foodEntryRepository.getCaloriesByMealType(startOfDay, endOfDay)
+            .observe(getViewLifecycleOwner(), mealData -> {
+                ChartHelper.updateBarChartData(chartBar, mealData, requireContext());
+            });
+
+        // PieChart - Macro distribution
+        foodEntryRepository.getMacroSummary(startOfDay, endOfDay)
+            .observe(getViewLifecycleOwner(), macroData -> {
+                ChartHelper.updatePieChartData(chartPie, macroData, requireContext());
+            });
+
+        // LineChart - Hourly trend
+        foodEntryRepository.getHourlyCaloriesSummary(startOfDay, endOfDay)
+            .observe(getViewLifecycleOwner(), hourlyData -> {
+                ChartHelper.updateHourlyLineChartData(chartLine, hourlyData, requireContext());
+            });
     }
 
     private void updateNetCalories() {

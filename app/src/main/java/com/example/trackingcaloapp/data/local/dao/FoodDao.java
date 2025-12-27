@@ -116,5 +116,38 @@ public interface FoodDao {
      */
     @Query("SELECT DISTINCT category FROM foods ORDER BY category ASC")
     LiveData<List<String>> getAllCategories();
+
+    // ==================== API INTEGRATION ====================
+
+    /**
+     * Tìm food theo API ID (để check cache)
+     */
+    @Query("SELECT * FROM foods WHERE apiId = :apiId AND apiSource = 'fatsecret' LIMIT 1")
+    Food getFoodByApiId(long apiId);
+
+    /**
+     * Lấy tất cả foods từ API (cached)
+     */
+    @Query("SELECT * FROM foods WHERE apiSource = 'fatsecret' ORDER BY name ASC")
+    LiveData<List<Food>> getApiFoods();
+
+    /**
+     * Xóa cached foods cũ hơn X timestamp
+     */
+    @Query("DELETE FROM foods WHERE apiSource = 'fatsecret' AND cachedAt < :timestamp")
+    void deleteOldCachedFoods(long timestamp);
+
+    /**
+     * Search tất cả foods (local + API), local foods hiện trước
+     */
+    @Query("SELECT * FROM foods WHERE name LIKE '%' || :query || '%' " +
+           "ORDER BY CASE WHEN apiSource IS NULL THEN 0 ELSE 1 END, name ASC")
+    LiveData<List<Food>> searchAllFoods(String query);
+
+    /**
+     * Đếm số lượng cached foods từ API
+     */
+    @Query("SELECT COUNT(*) FROM foods WHERE apiSource = 'fatsecret'")
+    int getApiCachedFoodCount();
 }
 

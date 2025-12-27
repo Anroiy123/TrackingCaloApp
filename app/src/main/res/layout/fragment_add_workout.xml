@@ -1,170 +1,189 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
-    android:orientation="vertical">
+    android:background="@color/background">
 
-    <!-- Search Bar -->
-    <com.google.android.material.card.MaterialCardView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/spacing_base"
-        android:layout_marginTop="@dimen/spacing_base"
-        app:cardBackgroundColor="@color/surface"
-        app:cardCornerRadius="@dimen/radius_lg"
-        app:cardElevation="@dimen/elevation_none"
-        app:strokeColor="@color/outline"
-        app:strokeWidth="1dp">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+        <!-- Search Bar -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:boxBackgroundColor="@android:color/transparent"
-            app:boxStrokeWidth="0dp"
-            app:boxStrokeWidthFocused="0dp"
-            app:hintEnabled="false"
-            app:startIconDrawable="@drawable/ic_search"
-            app:startIconTint="@color/text_hint">
+            android:layout_marginHorizontal="@dimen/spacing_base"
+            android:layout_marginTop="@dimen/spacing_base"
+            app:cardBackgroundColor="@color/surface"
+            app:cardCornerRadius="@dimen/radius_lg"
+            app:cardElevation="@dimen/elevation_none"
+            app:strokeColor="@color/outline"
+            app:strokeWidth="1dp">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etSearch"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:hint="@string/search_workout"
-                android:inputType="text"
-                android:paddingVertical="@dimen/spacing_md"
-                android:textAppearance="@style/TextAppearance.App.Body.Medium"
-                android:textColor="@color/text_primary"
-                android:textColorHint="@color/text_hint" />
+                app:boxBackgroundColor="@android:color/transparent"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp"
+                app:hintEnabled="false"
+                app:startIconDrawable="@drawable/ic_search"
+                app:startIconTint="@color/text_hint">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etSearch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:hint="@string/search_workout"
+                    android:inputType="text"
+                    android:paddingVertical="@dimen/spacing_md"
+                    android:textAppearance="@style/TextAppearance.App.Body.Medium"
+                    android:textColor="@color/text_primary"
+                    android:textColorHint="@color/text_hint" />
 
-    </com.google.android.material.card.MaterialCardView>
+            </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Category Chips -->
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/spacing_base"
-        android:clipToPadding="false"
-        android:scrollbars="none">
+        </com.google.android.material.card.MaterialCardView>
 
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/chipGroupCategory"
-            android:layout_width="wrap_content"
+        <!-- Category Chips -->
+        <HorizontalScrollView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_base"
+            android:clipToPadding="false"
+            android:scrollbars="none">
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroupCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="@dimen/spacing_base"
+                app:singleSelection="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipAll"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="Tất cả"
+                    app:checkedIconEnabled="true"
+                    app:chipBackgroundColor="@color/chip_background_color"
+                    app:chipStrokeColor="@color/chip_stroke_color"
+                    app:chipStrokeWidth="1dp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipCardio"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cardio"
+                    app:checkedIconEnabled="true"
+                    app:chipBackgroundColor="@color/chip_background_color"
+                    app:chipStrokeColor="@color/chip_stroke_color"
+                    app:chipStrokeWidth="1dp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipStrength"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/strength"
+                    app:checkedIconEnabled="true"
+                    app:chipBackgroundColor="@color/chip_background_color"
+                    app:chipStrokeColor="@color/chip_stroke_color"
+                    app:chipStrokeWidth="1dp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipFlexibility"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/flexibility"
+                    app:checkedIconEnabled="true"
+                    app:chipBackgroundColor="@color/chip_background_color"
+                    app:chipStrokeColor="@color/chip_stroke_color"
+                    app:chipStrokeWidth="1dp" />
+
+            </com.google.android.material.chip.ChipGroup>
+
+        </HorizontalScrollView>
+
+        <!-- Workout List -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvWorkouts"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/spacing_sm"
+            android:layout_weight="1"
+            android:clipToPadding="false"
             android:paddingHorizontal="@dimen/spacing_base"
-            app:singleSelection="true">
+            android:paddingBottom="88dp" />
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipAll"
-                style="@style/Widget.Material3.Chip.Filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="true"
-                android:text="Tất cả"
-                app:checkedIconEnabled="true"
-                app:chipBackgroundColor="@color/chip_background_color"
-                app:chipStrokeColor="@color/chip_stroke_color"
-                app:chipStrokeWidth="1dp" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipCardio"
-                style="@style/Widget.Material3.Chip.Filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/cardio"
-                app:checkedIconEnabled="true"
-                app:chipBackgroundColor="@color/chip_background_color"
-                app:chipStrokeColor="@color/chip_stroke_color"
-                app:chipStrokeWidth="1dp" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipStrength"
-                style="@style/Widget.Material3.Chip.Filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/strength"
-                app:checkedIconEnabled="true"
-                app:chipBackgroundColor="@color/chip_background_color"
-                app:chipStrokeColor="@color/chip_stroke_color"
-                app:chipStrokeWidth="1dp" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipFlexibility"
-                style="@style/Widget.Material3.Chip.Filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/flexibility"
-                app:checkedIconEnabled="true"
-                app:chipBackgroundColor="@color/chip_background_color"
-                app:chipStrokeColor="@color/chip_stroke_color"
-                app:chipStrokeWidth="1dp" />
-
-        </com.google.android.material.chip.ChipGroup>
-
-    </HorizontalScrollView>
-
-    <!-- Workout List -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvWorkouts"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="@dimen/spacing_sm"
-        android:layout_weight="1"
-        android:clipToPadding="false"
-        android:paddingHorizontal="@dimen/spacing_base"
-        android:paddingBottom="@dimen/spacing_xl" />
-
-    <!-- Empty State -->
-    <LinearLayout
-        android:id="@+id/layoutEmpty"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="@dimen/spacing_xl"
-        android:visibility="gone">
-
+        <!-- Empty State -->
         <LinearLayout
-            android:layout_width="@dimen/icon_container_2xl"
-            android:layout_height="@dimen/icon_container_2xl"
-            android:background="@drawable/bg_stat_burned"
-            android:gravity="center">
+            android:id="@+id/layoutEmpty"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/spacing_xl"
+            android:visibility="gone">
 
-            <ImageView
-                android:layout_width="@dimen/icon_2xl"
-                android:layout_height="@dimen/icon_2xl"
-                android:alpha="0.6"
-                android:src="@drawable/ic_workout"
-                app:tint="@color/calories_burned" />
+            <LinearLayout
+                android:layout_width="@dimen/icon_container_2xl"
+                android:layout_height="@dimen/icon_container_2xl"
+                android:background="@drawable/bg_stat_burned"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="@dimen/icon_2xl"
+                    android:layout_height="@dimen/icon_2xl"
+                    android:alpha="0.6"
+                    android:src="@drawable/ic_workout"
+                    app:tint="@color/calories_burned" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvEmpty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_lg"
+                android:gravity="center"
+                android:text="Không tìm thấy bài tập"
+                android:textAppearance="@style/TextAppearance.App.Title.Medium"
+                android:textColor="@color/text_secondary" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_xs"
+                android:gravity="center"
+                android:text="Thử tìm kiếm với từ khóa khác"
+                android:textAppearance="@style/TextAppearance.App.Body.Medium"
+                android:textColor="@color/text_hint" />
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/tvEmpty"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_lg"
-            android:gravity="center"
-            android:text="Không tìm thấy bài tập"
-            android:textAppearance="@style/TextAppearance.App.Title.Medium"
-            android:textColor="@color/text_secondary" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_xs"
-            android:gravity="center"
-            android:text="Thử tìm kiếm với từ khóa khác"
-            android:textAppearance="@style/TextAppearance.App.Body.Medium"
-            android:textColor="@color/text_hint" />
-
     </LinearLayout>
 
-</LinearLayout>
+    <!-- FAB for adding custom workout -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabAddCustomWorkout"
+        style="@style/Widget.App.FloatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="@dimen/spacing_base"
+        android:layout_marginBottom="80dp"
+        android:contentDescription="@string/create_custom_workout"
+        android:src="@drawable/ic_add"
+        app:tint="@color/white" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
