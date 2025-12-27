@@ -24,6 +24,7 @@ public class UserPreferences {
     // Keys cho cài đặt app
     private static final String KEY_IS_ONBOARDING_COMPLETE = "is_onboarding_complete";
     private static final String KEY_THEME_MODE = "theme_mode";
+    private static final String KEY_IS_LOGGED_IN = "is_logged_in";
     
     // Activity levels
     public static final String ACTIVITY_SEDENTARY = "sedentary";           // Ít vận động
@@ -242,6 +243,20 @@ public class UserPreferences {
         return sharedPreferences.getString(KEY_THEME_MODE, "system");
     }
     
+// ==================== LOGIN STATE ====================
+
+    public void setLoggedIn(boolean loggedIn) {
+        sharedPreferences.edit().putBoolean(KEY_IS_LOGGED_IN, loggedIn).apply();
+    }
+
+    public boolean isLoggedIn() {
+        return sharedPreferences.getBoolean(KEY_IS_LOGGED_IN, false);
+    }
+
+    public void logout() {
+        sharedPreferences.edit().putBoolean(KEY_IS_LOGGED_IN, false).apply();
+    }
+
     // ==================== HELPER METHODS ====================
     
     /**

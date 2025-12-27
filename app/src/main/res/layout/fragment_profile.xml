@@ -332,7 +332,7 @@
             android:layout_height="@dimen/button_height_lg"
             android:layout_marginTop="@dimen/spacing_xl"
             android:text="@string/save"
-            app:icon="@drawable/ic_profile" />
+            app:icon="@drawable/ic_profile" />        <!-- Divider -->        <View            android:layout_width="match_parent"            android:layout_height="1dp"            android:layout_marginTop="@dimen/spacing_xl"            android:layout_marginBottom="@dimen/spacing_base"            android:background="@color/outline" />        <!-- Logout Button -->        <com.google.android.material.button.MaterialButton            android:id="@+id/btnLogout"            style="@style/Widget.Material3.Button.OutlinedButton"            android:layout_width="match_parent"            android:layout_height="@dimen/button_height_lg"            android:text="@string/logout"            android:textColor="@color/error"            app:strokeColor="@color/error"            app:icon="@drawable/ic_close"            app:iconTint="@color/error" />
 
     </LinearLayout>
 

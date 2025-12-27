@@ -1,5 +1,6 @@
 package com.example.trackingcaloapp.ui.profile;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,9 +16,11 @@ import androidx.fragment.app.Fragment;
 
 import com.example.trackingcaloapp.R;
 import com.example.trackingcaloapp.data.preferences.UserPreferences;
+import com.example.trackingcaloapp.ui.login.LoginActivity;
 import com.example.trackingcaloapp.utils.CalorieCalculator;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class ProfileFragment extends Fragment {
@@ -26,7 +29,7 @@ public class ProfileFragment extends Fragment {
     private Spinner spinnerGender, spinnerActivityLevel, spinnerWeightGoal;
     private TextView tvBMI;
     private Chip chipBMICategory;
-    private MaterialButton btnCalculateGoal, btnSave;
+    private MaterialButton btnCalculateGoal, btnSave, btnLogout;
 
     private UserPreferences userPreferences;
 
@@ -73,6 +76,7 @@ public class ProfileFragment extends Fragment {
         chipBMICategory = view.findViewById(R.id.chipBMICategory);
         btnCalculateGoal = view.findViewById(R.id.btnCalculateGoal);
         btnSave = view.findViewById(R.id.btnSave);
+        btnLogout = view.findViewById(R.id.btnLogout);
     }
 
     private void setupSpinners() {
@@ -95,6 +99,7 @@ public class ProfileFragment extends Fragment {
     private void setupButtons() {
         btnCalculateGoal.setOnClickListener(v -> calculateAndSetGoal());
         btnSave.setOnClickListener(v -> saveProfile());
+        btnLogout.setOnClickListener(v -> showLogoutConfirmation());
     }
 
     private void loadUserData() {
@@ -211,6 +216,27 @@ public class ProfileFragment extends Fragment {
 
         } catch (NumberFormatException e) {
             Toast.makeText(requireContext(), "Vui lòng nhập số hợp lệ", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void showLogoutConfirmation() {
+        new MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.logout)
+            .setMessage(R.string.logout_confirm)
+            .setPositiveButton(R.string.confirm, (dialog, which) -> performLogout())
+            .setNegativeButton(R.string.cancel, null)
+            .show();
+    }
+
+    private void performLogout() {
+        userPreferences.logout();
+
+        Intent intent = new Intent(requireContext(), LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+
+        if (getActivity() != null) {
+            getActivity().finish();
         }
     }
 }

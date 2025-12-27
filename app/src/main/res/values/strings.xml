@@ -32,7 +32,7 @@
     <string name="calories">Calo</string>
     <string name="protein">Protein</string>
     <string name="carbs">Carbs</string>
-    <string name="fat">Chất béo</string>
+    <string name="fat">Fat</string>
     <string name="per_100g">per 100g</string>
     <string name="select_meal_type">Chọn bữa ăn</string>
 
@@ -98,4 +98,38 @@
     <!-- Validation -->
     <string name="field_required">Trường này là bắt buộc</string>
     <string name="invalid_value">Giá trị không hợp lệ</string>
+
+    <!-- Custom Food/Workout -->
+    <string name="create_custom_food">Tạo món ăn mới</string>
+    <string name="create_custom_workout">Tạo bài tập mới</string>
+    <string name="calories_per_100g">Calo (per 100g)</string>
+    <string name="protein_per_100g">Protein (g)</string>
+    <string name="carbs_per_100g">Carbs (g)</string>
+    <string name="fat_per_100g">Fat (g)</string>
+    <string name="select_category">Chọn loại</string>
+    <string name="food_created">Đã tạo món ăn mới</string>
+    <string name="workout_created">Đã tạo bài tập mới</string>
+    <string name="error_name_required">Vui lòng nhập tên</string>
+    <string name="error_calories_required">Vui lòng nhập calo > 0</string>
+    <string name="calories_per_unit">Calo đốt cháy</string>
+    <string name="select_unit">Đơn vị</string>
+    <string name="select_workout_category">Loại bài tập</string>
+    <string name="custom_badge">Tự tạo</string>
+    <string name="edit_food">Chỉnh sửa món ăn</string>
+    <string name="edit_workout">Chỉnh sửa bài tập</string>
+    <string name="delete_food_title">Xóa món ăn?</string>
+    <string name="delete_workout_title">Xóa bài tập?</string>
+    <string name="delete_warning_entries">đang được sử dụng trong %d mục nhật ký. Xóa sẽ xóa luôn các mục này.</string>
+    <string name="delete_confirm">Bạn có chắc muốn xóa</string>
+    <string name="updated">Đã cập nhật</string>
+    <string name="deleted">Đã xóa</string>
+    <!-- Login -->
+    <string name="login">Đăng nhập</string>
+    <string name="logout">Đăng xuất</string>
+    <string name="username">Tên đăng nhập</string>
+    <string name="password">Mật khẩu</string>
+    <string name="remember_me">Ghi nhớ đăng nhập</string>
+    <string name="login_subtitle">Theo dõi calo hàng ngày</string>
+    <string name="login_error">Tên đăng nhập hoặc mật khẩu không đúng</string>
+    <string name="logout_confirm">Bạn có chắc muốn đăng xuất?</string>
 </resources>
