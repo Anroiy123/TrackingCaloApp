@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData;
 import com.example.trackingcaloapp.data.local.dao.FoodDao;
 import com.example.trackingcaloapp.data.local.database.AppDatabase;
 import com.example.trackingcaloapp.data.local.entity.Food;
+import com.example.trackingcaloapp.utils.Constants;
 
 import java.util.List;
 
@@ -67,7 +68,16 @@ public class FoodRepository {
     public LiveData<List<Food>> getFoodsByCategory(String category) {
         return foodDao.getFoodsByCategory(category);
     }
-    
+
+    /**
+     * Lấy thực phẩm phù hợp với loại bữa ăn
+     * @param mealType 0=breakfast, 1=lunch, 2=dinner, 3=snack
+     */
+    public LiveData<List<Food>> getFoodsByMealType(int mealType) {
+        List<String> categories = Constants.getCategoriesForMealType(mealType);
+        return foodDao.getFoodsByCategories(categories);
+    }
+
     /**
      * Lấy thực phẩm do user tự tạo
      */

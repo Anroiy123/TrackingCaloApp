@@ -320,14 +320,6 @@
                     app:chipBackgroundColor="@color/success_container"
                     app:chipStrokeWidth="0dp" />
 
-                <TextView
-                    android:id="@+id/tvBMICategory"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    android:text="Bình thường"
-                    android:textColor="@color/success" />
-
             </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>

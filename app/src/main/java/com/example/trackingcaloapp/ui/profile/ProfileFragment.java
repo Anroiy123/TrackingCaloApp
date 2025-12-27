@@ -17,13 +17,15 @@ import com.example.trackingcaloapp.R;
 import com.example.trackingcaloapp.data.preferences.UserPreferences;
 import com.example.trackingcaloapp.utils.CalorieCalculator;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.chip.Chip;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class ProfileFragment extends Fragment {
 
     private TextInputEditText etName, etAge, etHeight, etWeight, etCalorieGoal;
     private Spinner spinnerGender, spinnerActivityLevel, spinnerWeightGoal;
-    private TextView tvBMI, tvBMICategory;
+    private TextView tvBMI;
+    private Chip chipBMICategory;
     private MaterialButton btnCalculateGoal, btnSave;
 
     private UserPreferences userPreferences;
@@ -68,7 +70,7 @@ public class ProfileFragment extends Fragment {
         spinnerActivityLevel = view.findViewById(R.id.spinnerActivityLevel);
         spinnerWeightGoal = view.findViewById(R.id.spinnerWeightGoal);
         tvBMI = view.findViewById(R.id.tvBMI);
-        tvBMICategory = view.findViewById(R.id.tvBMICategory);
+        chipBMICategory = view.findViewById(R.id.chipBMICategory);
         btnCalculateGoal = view.findViewById(R.id.btnCalculateGoal);
         btnSave = view.findViewById(R.id.btnSave);
     }
@@ -122,24 +124,33 @@ public class ProfileFragment extends Fragment {
             String category = CalorieCalculator.getBMICategory(bmi);
 
             tvBMI.setText(String.format("%.1f", bmi));
-            tvBMICategory.setText(category);
+            chipBMICategory.setText(category);
 
-            int colorRes;
+            // Set color based on BMI category (Asian standard)
+            int colorRes, bgColorRes;
             if (bmi < 18.5f) {
-                colorRes = R.color.warning;
+                colorRes = R.color.warning;  // Thiếu cân
+                bgColorRes = R.color.warning_container;
+            } else if (bmi < 23f) {
+                colorRes = R.color.success;  // Bình thường
+                bgColorRes = R.color.success_container;
             } else if (bmi < 25f) {
-                colorRes = R.color.success;
+                colorRes = R.color.warning;  // Thừa cân
+                bgColorRes = R.color.warning_container;
             } else if (bmi < 30f) {
-                colorRes = R.color.warning;
+                colorRes = R.color.secondary;  // Tiền béo phì
+                bgColorRes = R.color.secondary_container;
             } else {
-                colorRes = R.color.error;
+                colorRes = R.color.error;  // Béo phì
+                bgColorRes = R.color.error_container;
             }
             tvBMI.setTextColor(requireContext().getColor(colorRes));
-            tvBMICategory.setTextColor(requireContext().getColor(colorRes));
+            chipBMICategory.setTextColor(requireContext().getColor(colorRes));
+            chipBMICategory.setChipBackgroundColorResource(bgColorRes);
 
         } catch (NumberFormatException e) {
             tvBMI.setText("--");
-            tvBMICategory.setText("");
+            chipBMICategory.setText("--");
         }
     }
 

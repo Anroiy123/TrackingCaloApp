@@ -150,7 +150,8 @@ public class CalorieCalculator {
     }
     
     /**
-     * Lấy phân loại BMI
+     * Lấy phân loại BMI theo tiêu chuẩn châu Á
+     * Nguồn: WHO Expert Consultation 2004 - Appropriate BMI for Asian populations
      */
     public static String getBMICategory(float bmi) {
         if (bmi < 18.5f) {
@@ -160,9 +161,13 @@ public class CalorieCalculator {
         } else if (bmi < 25f) {
             return "Thừa cân";
         } else if (bmi < 30f) {
+            return "Tiền béo phì";
+        } else if (bmi < 35f) {
             return "Béo phì độ I";
-        } else {
+        } else if (bmi < 40f) {
             return "Béo phì độ II";
+        } else {
+            return "Béo phì độ III";
         }
     }
     

@@ -4,8 +4,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
+
+import com.google.android.material.button.MaterialButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,7 +26,7 @@ import java.util.Calendar;
 
 public class DiaryFragment extends Fragment {
 
-    private ImageButton btnPrevDay, btnNextDay;
+    private MaterialButton btnPrevDay, btnNextDay;
     private TextView tvSelectedDate;
     private TextView tvTotalConsumed, tvTotalBurned, tvNetCalories;
     private TabLayout tabLayout;

@@ -86,7 +86,13 @@ public interface FoodDao {
      */
     @Query("SELECT * FROM foods WHERE category = :category ORDER BY name ASC")
     LiveData<List<Food>> getFoodsByCategory(String category);
-    
+
+    /**
+     * Lấy thực phẩm theo nhiều categories (dùng cho filter theo bữa ăn)
+     */
+    @Query("SELECT * FROM foods WHERE category IN (:categories) ORDER BY name ASC")
+    LiveData<List<Food>> getFoodsByCategories(List<String> categories);
+
     /**
      * Lấy tất cả thực phẩm do user tự tạo
      */

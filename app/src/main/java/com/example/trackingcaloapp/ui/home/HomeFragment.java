@@ -1,6 +1,6 @@
 package com.example.trackingcaloapp.ui.home;
 
-import android.content.Intent;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,8 +22,6 @@ import com.example.trackingcaloapp.data.local.entity.WorkoutEntry;
 import com.example.trackingcaloapp.data.preferences.UserPreferences;
 import com.example.trackingcaloapp.data.repository.FoodEntryRepository;
 import com.example.trackingcaloapp.data.repository.WorkoutEntryRepository;
-import com.example.trackingcaloapp.ui.addfood.AddFoodActivity;
-import com.example.trackingcaloapp.ui.addworkout.AddWorkoutActivity;
 import com.example.trackingcaloapp.ui.main.RecentActivityAdapter;
 import com.example.trackingcaloapp.utils.DateUtils;
 import com.google.android.material.button.MaterialButton;
@@ -31,6 +29,14 @@ import com.google.android.material.button.MaterialButton;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
+
+    // Interface để communicate với MainActivity
+    public interface OnNavigationListener {
+        void navigateToAddFood();
+        void navigateToAddWorkout();
+    }
+
+    private OnNavigationListener navigationListener;
 
     private TextView tvDate;
     private TextView tvNetCalories;
@@ -54,6 +60,23 @@ public class HomeFragment extends Fragment {
     private float cachedBurned = 0f;
     private List<FoodEntry> cachedFoodEntries;
     private List<WorkoutEntry> cachedWorkoutEntries;
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof OnNavigationListener) {
+            navigationListener = (OnNavigationListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnNavigationListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        navigationListener = null;
+    }
 
     @Nullable
     @Override
@@ -106,11 +129,15 @@ public class HomeFragment extends Fragment {
 
     private void setupButtons() {
         btnAddFood.setOnClickListener(v -> {
-            startActivity(new Intent(requireContext(), AddFoodActivity.class));
+            if (navigationListener != null) {
+                navigationListener.navigateToAddFood();
+            }
         });
 
         btnAddWorkout.setOnClickListener(v -> {
-            startActivity(new Intent(requireContext(), AddWorkoutActivity.class));
+            if (navigationListener != null) {
+                navigationListener.navigateToAddWorkout();
+            }
         });
     }
 

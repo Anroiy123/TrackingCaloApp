@@ -20,7 +20,7 @@ import com.example.trackingcaloapp.ui.profile.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements HomeFragment.OnNavigationListener {
 
     private BottomNavigationView bottomNavigation;
     private UserPreferences userPreferences;
@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_new);
+        setContentView(R.layout.activity_main);
 
         userPreferences = new UserPreferences(this);
 
@@ -148,6 +148,25 @@ public class MainActivity extends AppCompatActivity {
             bottomNavigation.setSelectedItemId(R.id.nav_home);
         } else {
             super.onBackPressed();
+        }
+    }
+
+    // Implement HomeFragment.OnNavigationListener
+    @Override
+    public void navigateToAddFood() {
+        // Switch to Add tab and select Food tab
+        bottomNavigation.setSelectedItemId(R.id.nav_add);
+        if (addFragment != null) {
+            addFragment.setCurrentTab(0); // 0 = Food tab
+        }
+    }
+
+    @Override
+    public void navigateToAddWorkout() {
+        // Switch to Add tab and select Workout tab
+        bottomNavigation.setSelectedItemId(R.id.nav_add);
+        if (addFragment != null) {
+            addFragment.setCurrentTab(1); // 1 = Workout tab
         }
     }
 }

@@ -1,5 +1,8 @@
 package com.example.trackingcaloapp.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Class chứa các hằng số sử dụng trong ứng dụng.
  */
@@ -145,6 +148,47 @@ public class Constants {
             default:
                 return "ic_food";
         }
+    }
+
+    /**
+     * Lấy danh sách categories phù hợp cho loại bữa ăn
+     * @param mealType 0=breakfast, 1=lunch, 2=dinner, 3=snack
+     * @return Danh sách category strings
+     */
+    public static List<String> getCategoriesForMealType(int mealType) {
+        List<String> categories = new ArrayList<>();
+        switch (mealType) {
+            case MEAL_BREAKFAST:
+                categories.add(FOOD_PHO);
+                categories.add(FOOD_BUN);
+                categories.add(FOOD_BANH);
+                categories.add(FOOD_XOI);
+                categories.add(FOOD_DO_UONG);
+                categories.add(FOOD_TRUNG);
+                break;
+            case MEAL_LUNCH:
+                categories.add(FOOD_COM);
+                categories.add(FOOD_THIT);
+                categories.add(FOOD_HAI_SAN);
+                categories.add(FOOD_RAU);
+                categories.add(FOOD_TRUNG);
+                break;
+            case MEAL_DINNER:
+                categories.add(FOOD_COM);
+                categories.add(FOOD_PHO);
+                categories.add(FOOD_BUN);
+                categories.add(FOOD_THIT);
+                categories.add(FOOD_HAI_SAN);
+                categories.add(FOOD_RAU);
+                categories.add(FOOD_TRUNG);
+                break;
+            case MEAL_SNACK:
+                categories.add(FOOD_AN_VAT);
+                categories.add(FOOD_TRAI_CAY);
+                categories.add(FOOD_DO_UONG);
+                break;
+        }
+        return categories;
     }
 }
 

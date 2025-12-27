@@ -62,7 +62,7 @@ public class AddFoodFragment extends Fragment implements FoodAdapter.OnFoodClick
         initViews(view);
         setupSearch();
         setupMealTypeChips(view);
-        loadFoods();
+        loadFoodsByMealType();
     }
 
 
@@ -89,7 +89,7 @@ public class AddFoodFragment extends Fragment implements FoodAdapter.OnFoodClick
             public void afterTextChanged(Editable s) {
                 String query = s.toString().trim();
                 if (query.isEmpty()) {
-                    loadFoods();
+                    loadFoodsByMealType();
                 } else {
                     searchFoods(query);
                 }
@@ -116,11 +116,15 @@ public class AddFoodFragment extends Fragment implements FoodAdapter.OnFoodClick
             } else if (checkedId == R.id.chipSnack) {
                 selectedMealType = Constants.MEAL_SNACK;
             }
+
+            // Clear search and reload foods for selected meal type
+            etSearch.setText("");
+            loadFoodsByMealType();
         });
     }
 
-    private void loadFoods() {
-        LiveData<List<Food>> foodsLiveData = foodRepository.getAllFoods();
+    private void loadFoodsByMealType() {
+        LiveData<List<Food>> foodsLiveData = foodRepository.getFoodsByMealType(selectedMealType);
         foodsLiveData.observe(getViewLifecycleOwner(), foods -> {
             if (foods != null && !foods.isEmpty()) {
                 foodAdapter.setFoods(foods);

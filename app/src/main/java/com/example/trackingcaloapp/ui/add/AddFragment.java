@@ -51,4 +51,14 @@ public class AddFragment extends Fragment {
             }
         }).attach();
     }
+
+    /**
+     * Set tab hiện tại (0 = Food, 1 = Workout)
+     * Được gọi từ HomeFragment khi user click nút Add Food/Workout
+     */
+    public void setCurrentTab(int position) {
+        if (viewPager != null && position >= 0 && position < 2) {
+            viewPager.setCurrentItem(position, false);
+        }
+    }
 }
