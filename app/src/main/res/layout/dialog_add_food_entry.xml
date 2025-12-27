@@ -66,6 +66,22 @@
         android:layout_marginVertical="@dimen/spacing_base"
         android:background="@color/outline" />
 
+    <!-- Meal Type Selector -->
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/spacing_base"
+        android:hint="@string/select_meal_type">
+
+        <AutoCompleteTextView
+            android:id="@+id/spinnerMealType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
     <!-- Quantity Input -->
     <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.App.TextInputLayout"

@@ -6,6 +6,8 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -168,6 +170,18 @@ public class AddFoodFragment extends Fragment implements FoodAdapter.OnFoodClick
         TextView tvCarbs = dialogView.findViewById(R.id.tvCarbs);
         TextView tvFat = dialogView.findViewById(R.id.tvFat);
 
+        // Setup meal type spinner
+        AutoCompleteTextView spinnerMealType = dialogView.findViewById(R.id.spinnerMealType);
+        String[] mealTypes = getResources().getStringArray(R.array.meal_types);
+        ArrayAdapter<String> mealAdapter = new ArrayAdapter<>(
+                requireContext(),
+                android.R.layout.simple_dropdown_item_1line,
+                mealTypes
+        );
+        spinnerMealType.setAdapter(mealAdapter);
+        // Pre-select based on current tab (smart default)
+        spinnerMealType.setText(mealTypes[selectedMealType], false);
+
         tvFoodName.setText(food.getName());
         tvFoodInfo.setText(String.format("%.0f cal / 100g", food.getCalories()));
 
@@ -199,7 +213,9 @@ public class AddFoodFragment extends Fragment implements FoodAdapter.OnFoodClick
                 .setPositiveButton("Thêm", (dialog, which) -> {
                     try {
                         float quantity = Float.parseFloat(etQuantity.getText().toString());
-                        addFoodEntry(food, quantity);
+                        // Get selected meal type from spinner
+                        int dialogMealType = getMealTypeFromSelection(spinnerMealType.getText().toString());
+                        addFoodEntry(food, quantity, dialogMealType);
                     } catch (NumberFormatException e) {
                         // Ignore
                     }
@@ -208,11 +224,24 @@ public class AddFoodFragment extends Fragment implements FoodAdapter.OnFoodClick
                 .show();
     }
 
-    private void addFoodEntry(Food food, float quantity) {
+    /**
+     * Convert meal type selection string to int constant
+     */
+    private int getMealTypeFromSelection(String selection) {
+        String[] mealTypes = getResources().getStringArray(R.array.meal_types);
+        for (int i = 0; i < mealTypes.length; i++) {
+            if (mealTypes[i].equals(selection)) {
+                return i;
+            }
+        }
+        return selectedMealType; // fallback to tab selection
+    }
+
+    private void addFoodEntry(Food food, float quantity, int mealType) {
         FoodEntry entry = new FoodEntry();
         entry.setFoodId(food.getId());
         entry.setQuantity(quantity);
-        entry.setMealType(selectedMealType);
+        entry.setMealType(mealType);
         entry.setDate(System.currentTimeMillis());
         entry.setTotalCalories(food.calculateCalories(quantity));
         entry.setTotalProtein(food.calculateProtein(quantity));

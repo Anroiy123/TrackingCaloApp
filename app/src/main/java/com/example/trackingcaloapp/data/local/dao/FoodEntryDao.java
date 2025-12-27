@@ -62,13 +62,13 @@ public interface FoodEntryDao {
      * @param startOfDay Timestamp đầu ngày (00:00:00)
      * @param endOfDay Timestamp cuối ngày (23:59:59)
      */
-    @Query("SELECT * FROM food_entries WHERE date BETWEEN :startOfDay AND :endOfDay ORDER BY date ASC")
+    @Query("SELECT * FROM food_entries WHERE date BETWEEN :startOfDay AND :endOfDay ORDER BY mealType ASC, date ASC")
     LiveData<List<FoodEntry>> getEntriesByDate(long startOfDay, long endOfDay);
     
     /**
      * Lấy các entries trong một ngày (không LiveData)
      */
-    @Query("SELECT * FROM food_entries WHERE date BETWEEN :startOfDay AND :endOfDay ORDER BY date ASC")
+    @Query("SELECT * FROM food_entries WHERE date BETWEEN :startOfDay AND :endOfDay ORDER BY mealType ASC, date ASC")
     List<FoodEntry> getEntriesByDateSync(long startOfDay, long endOfDay);
     
     /**

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Meal types for food entry dialog -->
+    <string-array name="meal_types">
+        <item>Bữa sáng</item>
+        <item>Bữa trưa</item>
+        <item>Bữa tối</item>
+        <item>Bữa phụ</item>
+    </string-array>
+
+    <!-- Activity levels for profile -->
+    <string-array name="activity_levels">
+        <item>Ít vận động</item>
+        <item>Vận động nhẹ</item>
+        <item>Vận động vừa</item>
+        <item>Vận động nhiều</item>
+        <item>Vận động rất nhiều</item>
+    </string-array>
+
+    <!-- Weight goals for profile -->
+    <string-array name="weight_goals">
+        <item>Giảm cân</item>
+        <item>Duy trì</item>
+        <item>Tăng cân</item>
+    </string-array>
+
+    <!-- Gender options -->
+    <string-array name="genders">
+        <item>Nam</item>
+        <item>Nữ</item>
+    </string-array>
+</resources>
