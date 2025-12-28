@@ -5,23 +5,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trackingcaloapp.R;
 import com.example.trackingcaloapp.data.local.database.AppDatabase;
-import com.example.trackingcaloapp.data.local.entity.FoodEntry;
 import com.example.trackingcaloapp.data.repository.FoodEntryRepository;
+import com.example.trackingcaloapp.model.FoodWithEntry;
 import com.example.trackingcaloapp.utils.DateUtils;
 
-import java.util.List;
-
-public class FoodEntriesFragment extends Fragment {
+public class FoodEntriesFragment extends Fragment 
+        implements FoodEntryAdapter.OnFoodEntryClickListener {
 
     private RecyclerView rvFoodEntries;
     private TextView tvEmpty;
@@ -49,7 +49,7 @@ public class FoodEntriesFragment extends Fragment {
         AppDatabase db = AppDatabase.getInstance(requireContext());
         repository = new FoodEntryRepository(db.foodEntryDao());
         
-        adapter = new FoodEntryAdapter();
+        adapter = new FoodEntryAdapter(this);
         rvFoodEntries.setLayoutManager(new LinearLayoutManager(requireContext()));
         rvFoodEntries.setAdapter(adapter);
         
@@ -69,8 +69,7 @@ public class FoodEntriesFragment extends Fragment {
         long startOfDay = DateUtils.getStartOfDay(selectedDate);
         long endOfDay = DateUtils.getEndOfDay(selectedDate);
 
-        LiveData<List<FoodEntry>> entriesLiveData = repository.getEntriesByDate(startOfDay, endOfDay);
-        entriesLiveData.observe(getViewLifecycleOwner(), entries -> {
+        repository.getEntriesWithFoodByDate(startOfDay, endOfDay).observe(getViewLifecycleOwner(), entries -> {
             if (entries != null && !entries.isEmpty()) {
                 adapter.setEntries(entries);
                 rvFoodEntries.setVisibility(View.VISIBLE);
@@ -82,5 +81,26 @@ public class FoodEntriesFragment extends Fragment {
             }
         });
     }
-}
 
+    @Override
+    public void onFoodEntryClick(FoodWithEntry entry) {
+        // Optional: Show details or edit dialog
+    }
+
+    @Override
+    public void onFoodEntryLongClick(FoodWithEntry entry) {
+        showDeleteConfirmationDialog(entry);
+    }
+
+    private void showDeleteConfirmationDialog(FoodWithEntry entry) {
+        new AlertDialog.Builder(requireContext(), R.style.Theme_App_Dialog)
+                .setTitle("Xoá thực phẩm?")
+                .setMessage("Bạn có chắc muốn xoá \"" + entry.getFoodName() + "\"?")
+                .setPositiveButton("Xoá", (dialog, which) -> {
+                    repository.deleteById(entry.getEntryId());
+                    Toast.makeText(requireContext(), "Đã xoá", Toast.LENGTH_SHORT).show();
+                })
+                .setNegativeButton("Huỷ", null)
+                .show();
+    }
+}

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
@@ -17,6 +18,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.trackingcaloapp.R;
 import com.example.trackingcaloapp.data.local.database.AppDatabase;
+import com.example.trackingcaloapp.data.preferences.UserPreferences;
 import com.example.trackingcaloapp.data.repository.FoodEntryRepository;
 import com.example.trackingcaloapp.data.repository.WorkoutEntryRepository;
 import com.example.trackingcaloapp.utils.ChartHelper;
@@ -34,6 +36,8 @@ public class DiaryFragment extends Fragment {
     private MaterialButton btnPrevDay, btnNextDay;
     private TextView tvSelectedDate;
     private TextView tvTotalConsumed, tvTotalBurned, tvNetCalories;
+    private TextView tvCalorieGoal, tvCaloriesRemaining;
+    private ProgressBar progressCalories;
     private TabLayout tabLayout;
     private ViewPager2 viewPager;
 
@@ -44,11 +48,16 @@ public class DiaryFragment extends Fragment {
     private PieChart chartPie;
     private LineChart chartLine;
 
+    private UserPreferences userPreferences;
     private FoodEntryRepository foodEntryRepository;
     private WorkoutEntryRepository workoutEntryRepository;
 
     private long selectedDate = System.currentTimeMillis();
     private DiaryFragmentPagerAdapter pagerAdapter;
+    
+    // Cached values
+    private float cachedConsumed = 0f;
+    private float cachedBurned = 0f;
 
     @Nullable
     @Override
@@ -61,6 +70,7 @@ public class DiaryFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        userPreferences = new UserPreferences(requireContext());
         AppDatabase db = AppDatabase.getInstance(requireContext());
         foodEntryRepository = new FoodEntryRepository(db.foodEntryDao());
         workoutEntryRepository = new WorkoutEntryRepository(db.workoutEntryDao());
@@ -86,6 +96,9 @@ public class DiaryFragment extends Fragment {
         tvTotalConsumed = view.findViewById(R.id.tvTotalConsumed);
         tvTotalBurned = view.findViewById(R.id.tvTotalBurned);
         tvNetCalories = view.findViewById(R.id.tvNetCalories);
+        tvCalorieGoal = view.findViewById(R.id.tvCalorieGoal);
+        tvCaloriesRemaining = view.findViewById(R.id.tvCaloriesRemaining);
+        progressCalories = view.findViewById(R.id.progressCalories);
         tabLayout = view.findViewById(R.id.tabLayout);
         viewPager = view.findViewById(R.id.viewPager);
 
@@ -171,18 +184,24 @@ public class DiaryFragment extends Fragment {
     private void loadData() {
         long startOfDay = DateUtils.getStartOfDay(selectedDate);
         long endOfDay = DateUtils.getEndOfDay(selectedDate);
+        
+        // Hiển thị calorie goal
+        int calorieGoal = userPreferences.getDailyCalorieGoal();
+        if (tvCalorieGoal != null) {
+            tvCalorieGoal.setText(String.valueOf(calorieGoal));
+        }
 
         LiveData<Float> consumedLiveData = foodEntryRepository.getTotalCaloriesByDate(startOfDay, endOfDay);
         consumedLiveData.observe(getViewLifecycleOwner(), consumed -> {
-            float caloriesConsumed = consumed != null ? consumed : 0f;
-            tvTotalConsumed.setText(String.valueOf((int) caloriesConsumed));
+            cachedConsumed = consumed != null ? consumed : 0f;
+            tvTotalConsumed.setText(String.valueOf((int) cachedConsumed));
             updateNetCalories();
         });
 
         LiveData<Float> burnedLiveData = workoutEntryRepository.getTotalCaloriesBurnedByDate(startOfDay, endOfDay);
         burnedLiveData.observe(getViewLifecycleOwner(), burned -> {
-            float caloriesBurned = burned != null ? burned : 0f;
-            tvTotalBurned.setText(String.valueOf((int) caloriesBurned));
+            cachedBurned = burned != null ? burned : 0f;
+            tvTotalBurned.setText(String.valueOf((int) cachedBurned));
             updateNetCalories();
         });
 
@@ -214,14 +233,21 @@ public class DiaryFragment extends Fragment {
     }
 
     private void updateNetCalories() {
-        String consumedText = tvTotalConsumed.getText().toString();
-        String burnedText = tvTotalBurned.getText().toString();
-
-        int consumed = consumedText.isEmpty() ? 0 : Integer.parseInt(consumedText);
-        int burned = burnedText.isEmpty() ? 0 : Integer.parseInt(burnedText);
-
-        int netCalories = consumed - burned;
+        int netCalories = (int) (cachedConsumed - cachedBurned);
         tvNetCalories.setText(String.valueOf(netCalories));
+        
+        // Cập nhật remaining và progress
+        int calorieGoal = userPreferences.getDailyCalorieGoal();
+        int remaining = calorieGoal - netCalories;
+        
+        if (tvCaloriesRemaining != null) {
+            tvCaloriesRemaining.setText(String.valueOf(remaining));
+        }
+        
+        if (progressCalories != null) {
+            int progress = calorieGoal > 0 ? (int) ((netCalories / (float) calorieGoal) * 100) : 0;
+            progressCalories.setProgress(Math.min(Math.max(progress, 0), 100));
+        }
     }
 
     public long getSelectedDate() {

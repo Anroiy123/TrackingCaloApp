@@ -16,4 +16,10 @@ local.properties
 .claude
 .kiro
 docs/CLAUDE_SKILLS_GUIDE.md
-plans
+plans/
+CLAUDE.md
+CLAUDE_skill.md
+# IDE
+.idea/
+.vscode/
+

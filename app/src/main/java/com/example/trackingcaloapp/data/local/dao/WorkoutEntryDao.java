@@ -6,9 +6,11 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Transaction;
 import androidx.room.Update;
 
 import com.example.trackingcaloapp.data.local.entity.WorkoutEntry;
+import com.example.trackingcaloapp.model.WorkoutEntryWithWorkout;
 
 import java.util.List;
 
@@ -70,7 +72,16 @@ public interface WorkoutEntryDao {
      */
     @Query("SELECT * FROM workout_entries WHERE date BETWEEN :startOfDay AND :endOfDay ORDER BY date ASC")
     List<WorkoutEntry> getEntriesByDateSync(long startOfDay, long endOfDay);
-    
+
+    /**
+     * Lấy các entries với thông tin Workout trong một ngày cụ thể (JOIN)
+     * @param startOfDay Timestamp đầu ngày (00:00:00)
+     * @param endOfDay Timestamp cuối ngày (23:59:59)
+     */
+    @Transaction
+    @Query("SELECT * FROM workout_entries WHERE date BETWEEN :startOfDay AND :endOfDay ORDER BY date ASC")
+    LiveData<List<WorkoutEntryWithWorkout>> getEntriesWithWorkoutByDate(long startOfDay, long endOfDay);
+
     // ==================== AGGREGATION ====================
     
     /**

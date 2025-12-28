@@ -12,7 +12,8 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trackingcaloapp.R;
-import com.example.trackingcaloapp.data.local.entity.FoodEntry;
+import com.example.trackingcaloapp.model.FoodEntryWithFood;
+import com.example.trackingcaloapp.model.FoodWithEntry;
 import com.example.trackingcaloapp.utils.Constants;
 import com.example.trackingcaloapp.utils.DateUtils;
 import com.google.android.material.chip.Chip;
@@ -22,10 +23,33 @@ import java.util.List;
 
 public class FoodEntryAdapter extends RecyclerView.Adapter<FoodEntryAdapter.ViewHolder> {
 
-    private List<FoodEntry> entries = new ArrayList<>();
+    private List<FoodWithEntry> entries = new ArrayList<>();
+    private OnFoodEntryClickListener listener;
 
-    public void setEntries(List<FoodEntry> entries) {
-        this.entries = entries;
+    public interface OnFoodEntryClickListener {
+        void onFoodEntryClick(FoodWithEntry entry);
+        void onFoodEntryLongClick(FoodWithEntry entry);
+    }
+
+    public FoodEntryAdapter() {
+        this.listener = null;
+    }
+
+    public FoodEntryAdapter(OnFoodEntryClickListener listener) {
+        this.listener = listener;
+    }
+
+    public void setListener(OnFoodEntryClickListener listener) {
+        this.listener = listener;
+    }
+
+    public void setEntries(List<FoodEntryWithFood> entriesWithFood) {
+        this.entries.clear();
+        if (entriesWithFood != null) {
+            for (FoodEntryWithFood item : entriesWithFood) {
+                this.entries.add(item.toFoodWithEntry());
+            }
+        }
         notifyDataSetChanged();
     }
 
@@ -39,13 +63,20 @@ public class FoodEntryAdapter extends RecyclerView.Adapter<FoodEntryAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        FoodEntry entry = entries.get(position);
-        holder.bind(entry);
+        FoodWithEntry entry = entries.get(position);
+        holder.bind(entry, listener);
     }
 
     @Override
     public int getItemCount() {
         return entries.size();
+    }
+
+    public FoodWithEntry getEntryAt(int position) {
+        if (position >= 0 && position < entries.size()) {
+            return entries.get(position);
+        }
+        return null;
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -68,20 +99,37 @@ public class FoodEntryAdapter extends RecyclerView.Adapter<FoodEntryAdapter.View
             tvTime = itemView.findViewById(R.id.tvTime);
         }
 
-        void bind(FoodEntry entry) {
-            tvFoodName.setText("Thực phẩm #" + entry.getFoodId());
+        void bind(FoodWithEntry entry, OnFoodEntryClickListener listener) {
+            // Hiển thị tên thực phẩm thay vì ID
+            tvFoodName.setText(entry.getFoodName());
             tvQuantity.setText(String.format("%.0fg", entry.getQuantity()));
             tvCalories.setText(String.valueOf((int) entry.getTotalCalories()));
             tvTime.setText(DateUtils.formatTime(entry.getDate()));
 
+            // Set click listeners
+            itemView.setOnClickListener(v -> {
+                if (listener != null) {
+                    listener.onFoodEntryClick(entry);
+                }
+            });
+
+            itemView.setOnLongClickListener(v -> {
+                if (listener != null) {
+                    listener.onFoodEntryLongClick(entry);
+                    return true;
+                }
+                return false;
+            });
+
             // Set meal type chip text and colors
-            String mealName = Constants.getMealTypeName(entry.getMealType());
+            int mealType = entry.getMealType();
+            String mealName = Constants.getMealTypeName(mealType);
             if (chipMealType != null) {
                 chipMealType.setText(mealName);
 
                 int colorRes;
                 int containerColorRes;
-                switch (entry.getMealType()) {
+                switch (mealType) {
                     case Constants.MEAL_BREAKFAST:
                         colorRes = R.color.breakfast;
                         containerColorRes = R.color.breakfast_container;

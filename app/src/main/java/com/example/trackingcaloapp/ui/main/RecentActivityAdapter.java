@@ -12,8 +12,10 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trackingcaloapp.R;
-import com.example.trackingcaloapp.data.local.entity.FoodEntry;
-import com.example.trackingcaloapp.data.local.entity.WorkoutEntry;
+import com.example.trackingcaloapp.model.FoodEntryWithFood;
+import com.example.trackingcaloapp.model.FoodWithEntry;
+import com.example.trackingcaloapp.model.WorkoutEntryWithWorkout;
+import com.example.trackingcaloapp.model.WorkoutWithEntry;
 import com.example.trackingcaloapp.utils.Constants;
 import com.example.trackingcaloapp.utils.DateUtils;
 
@@ -26,18 +28,18 @@ public class RecentActivityAdapter extends RecyclerView.Adapter<RecentActivityAd
 
     private List<ActivityItem> items = new ArrayList<>();
 
-    public void setData(List<FoodEntry> foodEntries, List<WorkoutEntry> workoutEntries) {
+    public void setData(List<FoodEntryWithFood> foodEntries, List<WorkoutEntryWithWorkout> workoutEntries) {
         items.clear();
 
         if (foodEntries != null) {
-            for (FoodEntry entry : foodEntries) {
-                items.add(new ActivityItem(entry));
+            for (FoodEntryWithFood entry : foodEntries) {
+                items.add(new ActivityItem(entry.toFoodWithEntry()));
             }
         }
 
         if (workoutEntries != null) {
-            for (WorkoutEntry entry : workoutEntries) {
-                items.add(new ActivityItem(entry));
+            for (WorkoutEntryWithWorkout entry : workoutEntries) {
+                items.add(new ActivityItem(entry.toWorkoutWithEntry()));
             }
         }
 
@@ -89,8 +91,9 @@ public class RecentActivityAdapter extends RecyclerView.Adapter<RecentActivityAd
 
         void bind(ActivityItem item) {
             if (item.isFood()) {
-                FoodEntry entry = item.getFoodEntry();
-                tvActivityName.setText("Thực phẩm #" + entry.getFoodId());
+                FoodWithEntry entry = item.getFoodWithEntry();
+                // Hiển thị tên thực phẩm thay vì ID
+                tvActivityName.setText(entry.getFoodName());
                 String mealName = Constants.getMealTypeName(entry.getMealType());
                 String time = DateUtils.formatTime(entry.getDate());
                 tvActivityInfo.setText(mealName + " • " + time);
@@ -107,8 +110,9 @@ public class RecentActivityAdapter extends RecyclerView.Adapter<RecentActivityAd
                     layoutTypeIcon.setBackgroundResource(R.drawable.bg_stat_consumed);
                 }
             } else {
-                WorkoutEntry entry = item.getWorkoutEntry();
-                tvActivityName.setText("Bài tập #" + entry.getWorkoutId());
+                WorkoutWithEntry entry = item.getWorkoutWithEntry();
+                // Hiển thị tên bài tập thay vì ID
+                tvActivityName.setText(entry.getWorkoutName());
                 String time = DateUtils.formatTime(entry.getDate());
                 tvActivityInfo.setText(time);
                 tvCalories.setText("-" + (int) entry.getCaloriesBurned() + " cal");
@@ -129,31 +133,31 @@ public class RecentActivityAdapter extends RecyclerView.Adapter<RecentActivityAd
 
     // Helper class to combine food and workout entries
     static class ActivityItem {
-        private FoodEntry foodEntry;
-        private WorkoutEntry workoutEntry;
+        private FoodWithEntry foodWithEntry;
+        private WorkoutWithEntry workoutWithEntry;
 
-        ActivityItem(FoodEntry foodEntry) {
-            this.foodEntry = foodEntry;
+        ActivityItem(FoodWithEntry foodWithEntry) {
+            this.foodWithEntry = foodWithEntry;
         }
 
-        ActivityItem(WorkoutEntry workoutEntry) {
-            this.workoutEntry = workoutEntry;
+        ActivityItem(WorkoutWithEntry workoutWithEntry) {
+            this.workoutWithEntry = workoutWithEntry;
         }
 
         boolean isFood() {
-            return foodEntry != null;
+            return foodWithEntry != null;
         }
 
-        FoodEntry getFoodEntry() {
-            return foodEntry;
+        FoodWithEntry getFoodWithEntry() {
+            return foodWithEntry;
         }
 
-        WorkoutEntry getWorkoutEntry() {
-            return workoutEntry;
+        WorkoutWithEntry getWorkoutWithEntry() {
+            return workoutWithEntry;
         }
 
         long getDate() {
-            return isFood() ? foodEntry.getDate() : workoutEntry.getDate();
+            return isFood() ? foodWithEntry.getDate() : workoutWithEntry.getDate();
         }
     }
 }

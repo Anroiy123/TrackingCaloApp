@@ -151,22 +151,8 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnNa
         }
     }
 
-    // Implement HomeFragment.OnNavigationListener
     @Override
-    public void navigateToAddFood() {
-        // Switch to Add tab and select Food tab
-        bottomNavigation.setSelectedItemId(R.id.nav_add);
-        if (addFragment != null) {
-            addFragment.setCurrentTab(0); // 0 = Food tab
-        }
-    }
-
-    @Override
-    public void navigateToAddWorkout() {
-        // Switch to Add tab and select Workout tab
-        bottomNavigation.setSelectedItemId(R.id.nav_add);
-        if (addFragment != null) {
-            addFragment.setCurrentTab(1); // 1 = Workout tab
-        }
+    public void navigateToDiary() {
+        bottomNavigation.setSelectedItemId(R.id.nav_diary);
     }
 }

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/spacing_base">
+
+    <!-- Title -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/spacing_base"
+        android:text="Chỉnh sửa mục tiêu"
+        android:textAppearance="@style/TextAppearance.App.Title.Medium"
+        android:textColor="@color/text_primary" />
+
+    <!-- Activity Level -->
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.App.TextInputLayout.ExposedDropdownMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/activity_level">
+
+        <AutoCompleteTextView
+            android:id="@+id/spinnerActivityLevel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Weight Goal -->
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.App.TextInputLayout.ExposedDropdownMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_sm"
+        android:hint="@string/weight_goal">
+
+        <AutoCompleteTextView
+            android:id="@+id/spinnerWeightGoal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Advanced Weight Goal Button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnAdvancedGoal"
+        style="@style/Widget.App.Button.Outlined"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_sm"
+        android:text="Đặt mục tiêu chi tiết"
+        app:icon="@drawable/ic_target" />
+
+    <!-- Target Weight Info (shown if set) -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardTargetInfo"
+        style="@style/Widget.App.CardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_sm"
+        android:visibility="gone"
+        app:cardBackgroundColor="@color/surface_variant">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/spacing_sm">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mục tiêu đã đặt"
+                android:textAppearance="@style/TextAppearance.App.Label.Small"
+                android:textColor="@color/text_secondary" />
+
+            <TextView
+                android:id="@+id/tvTargetInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_xs"
+                android:text="65 kg trong 10 tuần"
+                android:textAppearance="@style/TextAppearance.App.Body.Medium"
+                android:textColor="@color/text_primary" />
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Calorie Goal -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilCalorieGoal"
+        style="@style/Widget.App.TextInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_sm"
+        android:hint="@string/daily_calorie_goal"
+        app:errorEnabled="true"
+        app:suffixText="kcal">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etCalorieGoal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Auto Calculate Button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnCalculateGoal"
+        style="@style/Widget.App.Button.Text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:text="Tính tự động"
+        app:icon="@drawable/ic_time" />
+
+    <!-- Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_sm"
+        android:gravity="end"
+        android:orientation="horizontal">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCancel"
+            style="@style/Widget.App.Button.Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cancel" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSave"
+            style="@style/Widget.App.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_sm"
+            android:text="@string/save" />
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,504 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/spacing_base"
+            android:paddingTop="@dimen/spacing_base"
+            android:paddingBottom="100dp">
+
+            <!-- Header -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/profile"
+                android:textAppearance="@style/TextAppearance.App.Headline.Small"
+                android:textColor="@color/text_primary" />
+
+            <!-- Personal Info Card (View Mode) -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardPersonalInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_base"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardBackgroundColor="@color/surface"
+                app:cardCornerRadius="@dimen/radius_base"
+                app:cardElevation="@dimen/elevation_none"
+                app:rippleColor="@color/primary_container"
+                app:strokeColor="@color/outline"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_base">
+
+                    <!-- Section Title -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="@dimen/icon_md"
+                            android:layout_height="@dimen/icon_md"
+                            android:src="@drawable/ic_profile"
+                            app:tint="@color/primary" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/spacing_sm"
+                            android:layout_weight="1"
+                            android:text="Thông tin cá nhân"
+                            android:textAppearance="@style/TextAppearance.App.Title.Medium"
+                            android:textColor="@color/text_primary" />
+
+                        <ImageView
+                            android:layout_width="@dimen/icon_sm"
+                            android:layout_height="@dimen/icon_sm"
+                            android:src="@drawable/ic_edit"
+                            app:tint="@color/text_hint" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_xs"
+                        android:text="Nhấn giữ để chỉnh sửa"
+                        android:textAppearance="@style/TextAppearance.App.Body.Small"
+                        android:textColor="@color/text_hint" />
+
+                    <!-- Name -->
+                    <TextView
+                        android:id="@+id/tvName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_base"
+                        android:text="Hùng"
+                        android:textAppearance="@style/TextAppearance.App.Title.Large"
+                        android:textColor="@color/text_primary" />
+
+                    <!-- Info Grid -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_sm"
+                        android:orientation="horizontal">
+
+                        <!-- Age -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Tuổi"
+                                android:textAppearance="@style/TextAppearance.App.Body.Small"
+                                android:textColor="@color/text_hint" />
+
+                            <TextView
+                                android:id="@+id/tvAge"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="21"
+                                android:textAppearance="@style/TextAppearance.App.Body.Large"
+                                android:textColor="@color/text_primary" />
+
+                        </LinearLayout>
+
+                        <!-- Gender -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Giới tính"
+                                android:textAppearance="@style/TextAppearance.App.Body.Small"
+                                android:textColor="@color/text_hint" />
+
+                            <TextView
+                                android:id="@+id/tvGender"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Nam"
+                                android:textAppearance="@style/TextAppearance.App.Body.Large"
+                                android:textColor="@color/text_primary" />
+
+                        </LinearLayout>
+
+                        <!-- Height -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Chiều cao"
+                                android:textAppearance="@style/TextAppearance.App.Body.Small"
+                                android:textColor="@color/text_hint" />
+
+                            <TextView
+                                android:id="@+id/tvHeight"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="165 cm"
+                                android:textAppearance="@style/TextAppearance.App.Body.Large"
+                                android:textColor="@color/text_primary" />
+
+                        </LinearLayout>
+
+                        <!-- Weight -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Cân nặng"
+                                android:textAppearance="@style/TextAppearance.App.Body.Small"
+                                android:textColor="@color/text_hint" />
+
+                            <TextView
+                                android:id="@+id/tvWeight"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="85 kg"
+                                android:textAppearance="@style/TextAppearance.App.Body.Large"
+                                android:textColor="@color/text_primary" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Goals Card (View Mode) -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardGoals"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_base"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardBackgroundColor="@color/surface"
+                app:cardCornerRadius="@dimen/radius_base"
+                app:cardElevation="@dimen/elevation_none"
+                app:rippleColor="@color/secondary_container"
+                app:strokeColor="@color/outline"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_base">
+
+                    <!-- Section Title -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="@dimen/icon_md"
+                            android:layout_height="@dimen/icon_md"
+                            android:src="@drawable/ic_diary"
+                            app:tint="@color/secondary" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/spacing_sm"
+                            android:layout_weight="1"
+                            android:text="Mục tiêu"
+                            android:textAppearance="@style/TextAppearance.App.Title.Medium"
+                            android:textColor="@color/text_primary" />
+
+                        <ImageView
+                            android:layout_width="@dimen/icon_sm"
+                            android:layout_height="@dimen/icon_sm"
+                            android:src="@drawable/ic_edit"
+                            app:tint="@color/text_hint" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_xs"
+                        android:text="Nhấn giữ để chỉnh sửa"
+                        android:textAppearance="@style/TextAppearance.App.Body.Small"
+                        android:textColor="@color/text_hint" />
+
+                    <!-- Goals Info -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_base"
+                        android:orientation="horizontal">
+
+                        <!-- Activity Level -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Mức vận động"
+                                android:textAppearance="@style/TextAppearance.App.Body.Small"
+                                android:textColor="@color/text_hint" />
+
+                            <TextView
+                                android:id="@+id/tvActivityLevel"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Vận động vừa"
+                                android:textAppearance="@style/TextAppearance.App.Body.Large"
+                                android:textColor="@color/text_primary" />
+
+                        </LinearLayout>
+
+                        <!-- Weight Goal -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Mục tiêu"
+                                android:textAppearance="@style/TextAppearance.App.Body.Small"
+                                android:textColor="@color/text_hint" />
+
+                            <TextView
+                                android:id="@+id/tvWeightGoal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Giữ cân"
+                                android:textAppearance="@style/TextAppearance.App.Body.Large"
+                                android:textColor="@color/text_primary" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <!-- Calorie Goal - Highlighted -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_sm"
+                        android:background="@drawable/bg_rounded_secondary"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="@dimen/spacing_sm">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Mục tiêu calo/ngày"
+                            android:textAppearance="@style/TextAppearance.App.Body.Small"
+                            android:textColor="@color/on_secondary_container" />
+
+                        <TextView
+                            android:id="@+id/tvCalorieGoal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="2761 kcal"
+                            android:textAppearance="@style/TextAppearance.App.Title.Large"
+                            android:textColor="@color/on_secondary_container"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- BMI Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardBMI"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_base"
+                app:cardBackgroundColor="@color/primary_container"
+                app:cardCornerRadius="@dimen/radius_base"
+                app:cardElevation="@dimen/elevation_none">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_xl">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Chỉ số BMI"
+                        android:textAppearance="@style/TextAppearance.App.Label.Large"
+                        android:textColor="@color/on_primary_container" />
+
+                    <TextView
+                        android:id="@+id/tvBMI"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_xs"
+                        android:fontFamily="sans-serif-medium"
+                        android:text="22.5"
+                        android:textColor="@color/on_primary_container"
+                        android:textSize="@dimen/text_size_calorie"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipBMICategory"
+                        style="@style/Widget.Material3.Chip.Suggestion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_sm"
+                        android:text="Bình thường"
+                        android:textColor="@color/success"
+                        app:chipBackgroundColor="@color/success_container"
+                        app:chipStrokeWidth="0dp" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Weight Trend Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardWeightTrend"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_base"
+                app:cardBackgroundColor="@color/surface"
+                app:cardCornerRadius="@dimen/radius_base"
+                app:cardElevation="@dimen/elevation_none"
+                app:strokeColor="@color/outline"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_base">
+
+                    <!-- Section Title -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="@dimen/icon_md"
+                            android:layout_height="@dimen/icon_md"
+                            android:src="@drawable/ic_chart"
+                            app:tint="@color/tertiary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/spacing_sm"
+                            android:text="Xu hướng cân nặng"
+                            android:textAppearance="@style/TextAppearance.App.Title.Medium"
+                            android:textColor="@color/text_primary" />
+
+                    </LinearLayout>
+
+                    <!-- Chart -->
+                    <com.github.mikephil.charting.charts.LineChart
+                        android:id="@+id/chartWeightTrend"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:layout_marginTop="@dimen/spacing_sm" />
+
+                    <!-- Empty State -->
+                    <TextView
+                        android:id="@+id/tvEmptyChart"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_base"
+                        android:gravity="center"
+                        android:padding="@dimen/spacing_xl"
+                        android:text="Chưa có dữ liệu cân nặng.\nHãy ghi lại cân nặng đầu tiên!"
+                        android:textAppearance="@style/TextAppearance.App.Body.Medium"
+                        android:textColor="@color/text_hint"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Divider -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/spacing_xl"
+                android:layout_marginBottom="@dimen/spacing_base"
+                android:background="@color/outline" />
+
+            <!-- Logout Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnLogout"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_height_lg"
+                android:text="@string/logout"
+                android:textColor="@color/error"
+                app:strokeColor="@color/error" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <!-- FAB for Quick Weight Log -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabLogWeight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/spacing_base"
+        android:contentDescription="Ghi cân nặng"
+        android:src="@drawable/ic_add"
+        app:backgroundTint="@color/primary"
+        app:tint="@color/on_primary" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

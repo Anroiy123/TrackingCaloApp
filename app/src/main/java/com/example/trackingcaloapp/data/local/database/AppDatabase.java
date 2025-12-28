@@ -11,10 +11,12 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.trackingcaloapp.data.local.dao.FoodDao;
 import com.example.trackingcaloapp.data.local.dao.FoodEntryDao;
+import com.example.trackingcaloapp.data.local.dao.WeightLogDao;
 import com.example.trackingcaloapp.data.local.dao.WorkoutDao;
 import com.example.trackingcaloapp.data.local.dao.WorkoutEntryDao;
 import com.example.trackingcaloapp.data.local.entity.Food;
 import com.example.trackingcaloapp.data.local.entity.FoodEntry;
+import com.example.trackingcaloapp.data.local.entity.WeightLog;
 import com.example.trackingcaloapp.data.local.entity.Workout;
 import com.example.trackingcaloapp.data.local.entity.WorkoutEntry;
 
@@ -26,8 +28,8 @@ import java.util.concurrent.Executors;
  * Singleton pattern để đảm bảo chỉ có một instance duy nhất.
  */
 @Database(
-    entities = {Food.class, FoodEntry.class, Workout.class, WorkoutEntry.class},
-    version = 2,
+    entities = {Food.class, FoodEntry.class, Workout.class, WorkoutEntry.class, WeightLog.class},
+    version = 3,
     exportSchema = false
 )
 public abstract class AppDatabase extends RoomDatabase {
@@ -37,6 +39,7 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract FoodEntryDao foodEntryDao();
     public abstract WorkoutDao workoutDao();
     public abstract WorkoutEntryDao workoutEntryDao();
+    public abstract WeightLogDao weightLogDao();
 
     // Singleton instance
     private static volatile AppDatabase INSTANCE;
@@ -61,6 +64,22 @@ public abstract class AppDatabase extends RoomDatabase {
     };
 
     /**
+     * Migration from version 2 to 3
+     * Thêm bảng weight_logs cho Weight Tracking feature
+     */
+    static final Migration MIGRATION_2_3 = new Migration(2, 3) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("CREATE TABLE IF NOT EXISTS weight_logs (" +
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                    "weight REAL NOT NULL, " +
+                    "timestamp INTEGER NOT NULL, " +
+                    "note TEXT)");
+            database.execSQL("CREATE INDEX IF NOT EXISTS idx_weight_logs_timestamp ON weight_logs(timestamp)");
+        }
+    };
+
+    /**
      * Lấy instance của database (Singleton)
      */
     public static AppDatabase getDatabase(final Context context) {
@@ -72,7 +91,7 @@ public abstract class AppDatabase extends RoomDatabase {
                             AppDatabase.class,
                             "calorie_tracker_db"
                     )
-                    .addMigrations(MIGRATION_1_2)
+                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
                     .addCallback(sRoomDatabaseCallback)
                     .build();
                 }

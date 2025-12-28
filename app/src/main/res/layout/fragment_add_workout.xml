@@ -66,45 +66,53 @@
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipAll"
-                    style="@style/Widget.Material3.Chip.Filter"
+                    style="@style/Widget.App.Chip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
                     android:text="Tất cả"
+                    android:textColor="@color/chip_text_color"
                     app:checkedIconEnabled="true"
+                    app:checkedIconTint="@color/white"
                     app:chipBackgroundColor="@color/chip_background_color"
                     app:chipStrokeColor="@color/chip_stroke_color"
                     app:chipStrokeWidth="1dp" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipCardio"
-                    style="@style/Widget.Material3.Chip.Filter"
+                    style="@style/Widget.App.Chip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/cardio"
+                    android:textColor="@color/chip_text_color"
                     app:checkedIconEnabled="true"
+                    app:checkedIconTint="@color/white"
                     app:chipBackgroundColor="@color/chip_background_color"
                     app:chipStrokeColor="@color/chip_stroke_color"
                     app:chipStrokeWidth="1dp" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipStrength"
-                    style="@style/Widget.Material3.Chip.Filter"
+                    style="@style/Widget.App.Chip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/strength"
+                    android:textColor="@color/chip_text_color"
                     app:checkedIconEnabled="true"
+                    app:checkedIconTint="@color/white"
                     app:chipBackgroundColor="@color/chip_background_color"
                     app:chipStrokeColor="@color/chip_stroke_color"
                     app:chipStrokeWidth="1dp" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipFlexibility"
-                    style="@style/Widget.Material3.Chip.Filter"
+                    style="@style/Widget.App.Chip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/flexibility"
+                    android:textColor="@color/chip_text_color"
                     app:checkedIconEnabled="true"
+                    app:checkedIconTint="@color/white"
                     app:chipBackgroundColor="@color/chip_background_color"
                     app:chipStrokeColor="@color/chip_stroke_color"
                     app:chipStrokeWidth="1dp" />

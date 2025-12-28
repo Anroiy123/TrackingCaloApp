@@ -12,7 +12,7 @@
         android:orientation="vertical"
         android:paddingHorizontal="@dimen/spacing_base"
         android:paddingTop="@dimen/spacing_base"
-        android:paddingBottom="@dimen/spacing_xl">
+        android:paddingBottom="@dimen/bottom_nav_height">
 
         <!-- Header với greeting và ngày -->
         <LinearLayout
@@ -143,6 +143,18 @@
                         android:textAppearance="@style/TextAppearance.App.Body.Small"
                         android:textColor="@color/text_tertiary" />
 
+                    <!-- Target Weight Info -->
+                    <TextView
+                        android:id="@+id/tvTargetInfo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/spacing_xs"
+                        android:text="🎯 65kg • Còn 30 ngày"
+                        android:textAppearance="@style/TextAppearance.App.Body.Small"
+                        android:textColor="@color/primary"
+                        android:visibility="gone" />
+
                 </LinearLayout>
 
                 <!-- Stats Row với background colors -->
@@ -269,40 +281,6 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Quick Actions - Thêm thực phẩm & Thêm bài tập -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_base"
-            android:orientation="horizontal">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnAddFood"
-                style="@style/Widget.App.Button"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/button_height_lg"
-                android:layout_marginEnd="@dimen/spacing_sm"
-                android:layout_weight="1"
-                android:text="@string/add_food"
-                app:icon="@drawable/ic_food"
-                app:iconGravity="textStart"
-                app:iconPadding="@dimen/spacing_sm" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnAddWorkout"
-                style="@style/Widget.App.Button.Outlined"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/button_height_lg"
-                android:layout_marginStart="@dimen/spacing_sm"
-                android:layout_weight="1"
-                android:text="@string/add_workout"
-                app:icon="@drawable/ic_workout"
-                app:iconGravity="textStart"
-                app:iconPadding="@dimen/spacing_sm"
-                app:strokeColor="@color/calories_burned" />
-
-        </LinearLayout>
-
         <!-- Card Thống kê 7 ngày - Charts Section -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
@@ -320,7 +298,7 @@
                 android:orientation="vertical"
                 android:padding="@dimen/spacing_base">
 
-                <!-- Header với icon -->
+                <!-- Header với icon và Period Toggle -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -334,13 +312,56 @@
                         app:tint="@color/text_secondary" />
 
                     <TextView
+                        android:id="@+id/tvStatisticsTitle"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_sm"
                         android:layout_weight="1"
-                        android:text="Thống kê 7 ngày"
+                        android:text="Thống kê"
                         android:textAppearance="@style/TextAppearance.App.Title.Medium"
                         android:textColor="@color/text_primary" />
+
+                    <!-- Period Toggle ChipGroup -->
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/chipGroupPeriod"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:singleSelection="true"
+                        app:selectionRequired="true"
+                        app:chipSpacingHorizontal="4dp">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip1Day"
+                            style="@style/Widget.Material3.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="1D"
+                            android:textSize="12sp"
+                            app:chipMinHeight="28dp"
+                            app:chipCornerRadius="14dp" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip7Day"
+                            style="@style/Widget.Material3.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="true"
+                            android:text="7D"
+                            android:textSize="12sp"
+                            app:chipMinHeight="28dp"
+                            app:chipCornerRadius="14dp" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip30Day"
+                            style="@style/Widget.Material3.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="30D"
+                            android:textSize="12sp"
+                            app:chipMinHeight="28dp"
+                            app:chipCornerRadius="14dp" />
+
+                    </com.google.android.material.chip.ChipGroup>
 
                 </LinearLayout>
 
@@ -410,6 +431,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_base"
+            android:layout_marginBottom="@dimen/spacing_xl"
             app:cardBackgroundColor="@color/surface"
             app:cardCornerRadius="@dimen/radius_lg"
             app:cardElevation="@dimen/elevation_sm"
@@ -422,10 +444,12 @@
                 android:orientation="vertical"
                 android:padding="@dimen/spacing_base">
 
-                <!-- Header với icon -->
+                <!-- Header với icon - Clickable để toggle -->
                 <LinearLayout
+                    android:id="@+id/layoutRecentHeader"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
@@ -453,59 +477,77 @@
                         android:textAppearance="@style/TextAppearance.App.Label.Medium"
                         android:textColor="@color/primary" />
 
+                    <!-- Expand/Collapse Icon -->
+                    <ImageView
+                        android:id="@+id/ivExpandCollapse"
+                        android:layout_width="@dimen/icon_md"
+                        android:layout_height="@dimen/icon_md"
+                        android:layout_marginStart="@dimen/spacing_xs"
+                        android:src="@drawable/ic_expand_more"
+                        app:tint="@color/text_secondary" />
+
                 </LinearLayout>
 
-                <!-- Divider -->
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="@dimen/spacing_md"
-                    android:background="@color/outline" />
-
-                <!-- RecyclerView cho activities -->
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvRecentActivities"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_sm"
-                    android:clipToPadding="false"
-                    android:nestedScrollingEnabled="false" />
-
-                <!-- Empty State -->
+                <!-- Collapsible Content -->
                 <LinearLayout
-                    android:id="@+id/layoutNoActivities"
+                    android:id="@+id/layoutRecentContent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:padding="@dimen/spacing_xl"
-                    android:visibility="gone">
+                    android:orientation="vertical">
 
-                    <ImageView
-                        android:layout_width="@dimen/icon_2xl"
-                        android:layout_height="@dimen/icon_2xl"
-                        android:alpha="0.5"
-                        android:src="@drawable/ic_diary"
-                        app:tint="@color/text_hint" />
-
-                    <TextView
-                        android:id="@+id/tvNoActivities"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                    <!-- Divider -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
                         android:layout_marginTop="@dimen/spacing_md"
-                        android:gravity="center"
-                        android:text="@string/no_entries"
-                        android:textAppearance="@style/TextAppearance.App.Body.Medium"
-                        android:textColor="@color/text_hint" />
+                        android:background="@color/outline" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <!-- RecyclerView cho activities -->
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvRecentActivities"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_xs"
+                        android:layout_marginTop="@dimen/spacing_sm"
+                        android:clipToPadding="false"
+                        android:nestedScrollingEnabled="false" />
+
+                    <!-- Empty State -->
+                    <LinearLayout
+                        android:id="@+id/layoutNoActivities"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="Hãy thêm bữa ăn hoặc bài tập đầu tiên"
-                        android:textAppearance="@style/TextAppearance.App.Body.Small"
-                        android:textColor="@color/text_tertiary" />
+                        android:orientation="vertical"
+                        android:padding="@dimen/spacing_xl"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:layout_width="@dimen/icon_2xl"
+                            android:layout_height="@dimen/icon_2xl"
+                            android:alpha="0.5"
+                            android:src="@drawable/ic_diary"
+                            app:tint="@color/text_hint" />
+
+                        <TextView
+                            android:id="@+id/tvNoActivities"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/spacing_md"
+                            android:gravity="center"
+                            android:text="@string/no_entries"
+                            android:textAppearance="@style/TextAppearance.App.Body.Medium"
+                            android:textColor="@color/text_hint" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/spacing_xs"
+                            android:gravity="center"
+                            android:text="Hãy thêm bữa ăn hoặc bài tập đầu tiên"
+                            android:textAppearance="@style/TextAppearance.App.Body.Small"
+                            android:textColor="@color/text_tertiary" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 

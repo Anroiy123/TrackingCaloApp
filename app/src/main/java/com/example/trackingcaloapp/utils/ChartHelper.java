@@ -14,6 +14,7 @@ import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.LegendEntry;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
@@ -292,7 +293,8 @@ public class ChartHelper {
     }
 
     /**
-     * Update PieChart data với macro summary
+     * Update PieChart data với macro summary.
+     * Chỉ hiển thị số gam trong slice, không có label text (legend ở dưới đã có).
      */
     public static void updatePieChartData(PieChart chart, MacroSum data, Context ctx) {
         if (data == null || data.getTotal() == 0) {
@@ -305,16 +307,18 @@ public class ChartHelper {
         List<PieEntry> entries = new ArrayList<>();
         List<Integer> colors = new ArrayList<>();
 
+        // Không truyền label vào PieEntry - chỉ hiển thị số gam
+        // Legend ở dưới sẽ hiển thị tên macro với màu tương ứng
         if (data.getProtein() > 0) {
-            entries.add(new PieEntry(data.getProtein(), "Protein"));
+            entries.add(new PieEntry(data.getProtein()));
             colors.add(COLOR_PROTEIN);
         }
         if (data.getCarbs() > 0) {
-            entries.add(new PieEntry(data.getCarbs(), "Carbs"));
+            entries.add(new PieEntry(data.getCarbs()));
             colors.add(COLOR_CARBS);
         }
         if (data.getFat() > 0) {
-            entries.add(new PieEntry(data.getFat(), "Fat"));
+            entries.add(new PieEntry(data.getFat()));
             colors.add(COLOR_FAT);
         }
 
@@ -332,7 +336,7 @@ public class ChartHelper {
         dataSet.setSliceSpace(2f);
         dataSet.setSelectionShift(5f);
 
-        // Value formatter để hiển thị gram
+        // Value formatter để hiển thị gram (chỉ số + "g")
         dataSet.setValueFormatter(new com.github.mikephil.charting.formatter.ValueFormatter() {
             @Override
             public String getFormattedValue(float value) {
@@ -345,6 +349,20 @@ public class ChartHelper {
 
         // Set center text với tổng
         chart.setCenterText((int) data.getTotal() + "g");
+
+        // Manually set legend entries để hiển thị tên macro
+        Legend legend = chart.getLegend();
+        List<LegendEntry> legendEntries = new ArrayList<>();
+        if (data.getProtein() > 0) {
+            legendEntries.add(new LegendEntry("Protein", Legend.LegendForm.SQUARE, 10f, 2f, null, COLOR_PROTEIN));
+        }
+        if (data.getCarbs() > 0) {
+            legendEntries.add(new LegendEntry("Carbs", Legend.LegendForm.SQUARE, 10f, 2f, null, COLOR_CARBS));
+        }
+        if (data.getFat() > 0) {
+            legendEntries.add(new LegendEntry("Fat", Legend.LegendForm.SQUARE, 10f, 2f, null, COLOR_FAT));
+        }
+        legend.setCustom(legendEntries);
 
         chart.animateY(500);
         chart.invalidate();
@@ -417,5 +435,21 @@ public class ChartHelper {
      */
     public static long getWeekEndTimestamp() {
         return DateUtils.getEndOfToday();
+    }
+
+    /**
+     * Calculate date range for given period.
+     * @param days Number of days (1, 7, or 30)
+     * @return long[] with [startDate, endDate]
+     */
+    public static long[] getDateRangeForPeriod(int days) {
+        long endDate = DateUtils.getEndOfToday();
+        long startDate;
+        if (days <= 1) {
+            startDate = DateUtils.getStartOfToday();
+        } else {
+            startDate = DateUtils.getStartOfDay(DateUtils.getDaysAgo(days - 1));
+        }
+        return new long[]{startDate, endDate};
     }
 }

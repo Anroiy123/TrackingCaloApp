@@ -8,6 +8,7 @@ import com.example.trackingcaloapp.data.local.dao.FoodEntryDao;
 import com.example.trackingcaloapp.data.local.database.AppDatabase;
 import com.example.trackingcaloapp.data.local.entity.FoodEntry;
 import com.example.trackingcaloapp.model.DailyCalorieSum;
+import com.example.trackingcaloapp.model.FoodEntryWithFood;
 import com.example.trackingcaloapp.model.HourlyCalorieSum;
 import com.example.trackingcaloapp.model.MacroSum;
 import com.example.trackingcaloapp.model.MealTypeCalories;
@@ -61,7 +62,14 @@ public class FoodEntryRepository {
     public LiveData<List<FoodEntry>> getEntriesByDateAndMealType(long startOfDay, long endOfDay, String mealType) {
         return foodEntryDao.getEntriesByDateAndMealType(startOfDay, endOfDay, mealType);
     }
-    
+
+    /**
+     * Lấy entries với thông tin Food trong một ngày (JOIN)
+     */
+    public LiveData<List<FoodEntryWithFood>> getEntriesWithFoodByDate(long startOfDay, long endOfDay) {
+        return foodEntryDao.getEntriesWithFoodByDate(startOfDay, endOfDay);
+    }
+
     // ==================== AGGREGATION ====================
     
     /**

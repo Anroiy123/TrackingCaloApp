@@ -21,6 +21,11 @@ public class UserPreferences {
     private static final String KEY_DAILY_CALORIE_GOAL = "daily_calorie_goal";
     private static final String KEY_WEIGHT_GOAL = "weight_goal";
     
+    // Keys cho mục tiêu cân nặng cụ thể
+    private static final String KEY_TARGET_WEIGHT = "target_weight";
+    private static final String KEY_TARGET_DATE = "target_date";
+    private static final String KEY_WEEKLY_RATE = "weekly_rate";
+    
     // Keys cho cài đặt app
     private static final String KEY_IS_ONBOARDING_COMPLETE = "is_onboarding_complete";
     private static final String KEY_THEME_MODE = "theme_mode";
@@ -189,6 +194,76 @@ public class UserPreferences {
 
     public String getWeightGoal() {
         return sharedPreferences.getString(KEY_WEIGHT_GOAL, GOAL_MAINTAIN);
+    }
+
+    // ==================== TARGET WEIGHT GOAL ====================
+    
+    /**
+     * Lưu cân nặng mục tiêu (kg)
+     */
+    public void setTargetWeight(float weight) {
+        sharedPreferences.edit().putFloat(KEY_TARGET_WEIGHT, weight).apply();
+    }
+    
+    /**
+     * Lấy cân nặng mục tiêu (kg). Trả về 0 nếu chưa set.
+     */
+    public float getTargetWeight() {
+        return sharedPreferences.getFloat(KEY_TARGET_WEIGHT, 0f);
+    }
+    
+    /**
+     * Kiểm tra đã set target weight chưa
+     */
+    public boolean hasTargetWeight() {
+        return getTargetWeight() > 0;
+    }
+    
+    /**
+     * Lưu ngày mục tiêu (timestamp)
+     */
+    public void setTargetDate(long timestamp) {
+        sharedPreferences.edit().putLong(KEY_TARGET_DATE, timestamp).apply();
+    }
+    
+    /**
+     * Lấy ngày mục tiêu (timestamp). Trả về 0 nếu chưa set.
+     */
+    public long getTargetDate() {
+        return sharedPreferences.getLong(KEY_TARGET_DATE, 0L);
+    }
+    
+    /**
+     * Kiểm tra đã set target date chưa
+     */
+    public boolean hasTargetDate() {
+        return getTargetDate() > 0;
+    }
+    
+    /**
+     * Lưu tốc độ giảm/tăng cân mỗi tuần (kg/tuần)
+     * Giá trị phổ biến: 0.25, 0.5, 0.75, 1.0
+     */
+    public void setWeeklyRate(float rate) {
+        sharedPreferences.edit().putFloat(KEY_WEEKLY_RATE, rate).apply();
+    }
+    
+    /**
+     * Lấy tốc độ giảm/tăng cân mỗi tuần (kg/tuần). Mặc định 0.5kg/tuần.
+     */
+    public float getWeeklyRate() {
+        return sharedPreferences.getFloat(KEY_WEEKLY_RATE, 0.5f);
+    }
+    
+    /**
+     * Xóa mục tiêu cân nặng (reset về chế độ đơn giản)
+     */
+    public void clearWeightGoalTarget() {
+        sharedPreferences.edit()
+            .remove(KEY_TARGET_WEIGHT)
+            .remove(KEY_TARGET_DATE)
+            .remove(KEY_WEEKLY_RATE)
+            .apply();
     }
 
     // Get weight goal as int (spinner position)

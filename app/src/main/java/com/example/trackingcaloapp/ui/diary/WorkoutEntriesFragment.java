@@ -5,23 +5,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trackingcaloapp.R;
 import com.example.trackingcaloapp.data.local.database.AppDatabase;
-import com.example.trackingcaloapp.data.local.entity.WorkoutEntry;
 import com.example.trackingcaloapp.data.repository.WorkoutEntryRepository;
+import com.example.trackingcaloapp.model.WorkoutWithEntry;
 import com.example.trackingcaloapp.utils.DateUtils;
 
-import java.util.List;
-
-public class WorkoutEntriesFragment extends Fragment {
+public class WorkoutEntriesFragment extends Fragment 
+        implements WorkoutEntryAdapter.OnWorkoutEntryClickListener {
 
     private RecyclerView rvWorkoutEntries;
     private TextView tvEmpty;
@@ -49,7 +49,7 @@ public class WorkoutEntriesFragment extends Fragment {
         AppDatabase db = AppDatabase.getInstance(requireContext());
         repository = new WorkoutEntryRepository(db.workoutEntryDao());
         
-        adapter = new WorkoutEntryAdapter();
+        adapter = new WorkoutEntryAdapter(this);
         rvWorkoutEntries.setLayoutManager(new LinearLayoutManager(requireContext()));
         rvWorkoutEntries.setAdapter(adapter);
         
@@ -69,8 +69,7 @@ public class WorkoutEntriesFragment extends Fragment {
         long startOfDay = DateUtils.getStartOfDay(selectedDate);
         long endOfDay = DateUtils.getEndOfDay(selectedDate);
 
-        LiveData<List<WorkoutEntry>> entriesLiveData = repository.getEntriesByDate(startOfDay, endOfDay);
-        entriesLiveData.observe(getViewLifecycleOwner(), entries -> {
+        repository.getEntriesWithWorkoutByDate(startOfDay, endOfDay).observe(getViewLifecycleOwner(), entries -> {
             if (entries != null && !entries.isEmpty()) {
                 adapter.setEntries(entries);
                 rvWorkoutEntries.setVisibility(View.VISIBLE);
@@ -82,5 +81,26 @@ public class WorkoutEntriesFragment extends Fragment {
             }
         });
     }
-}
 
+    @Override
+    public void onWorkoutEntryClick(WorkoutWithEntry entry) {
+        // Optional: Show details or edit dialog
+    }
+
+    @Override
+    public void onWorkoutEntryLongClick(WorkoutWithEntry entry) {
+        showDeleteConfirmationDialog(entry);
+    }
+
+    private void showDeleteConfirmationDialog(WorkoutWithEntry entry) {
+        new AlertDialog.Builder(requireContext(), R.style.Theme_App_Dialog)
+                .setTitle("Xoá bài tập?")
+                .setMessage("Bạn có chắc muốn xoá \"" + entry.getWorkoutName() + "\"?")
+                .setPositiveButton("Xoá", (dialog, which) -> {
+                    repository.deleteById(entry.getEntryId());
+                    Toast.makeText(requireContext(), "Đã xoá", Toast.LENGTH_SHORT).show();
+                })
+                .setNegativeButton("Huỷ", null)
+                .show();
+    }
+}

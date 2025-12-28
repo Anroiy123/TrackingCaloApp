@@ -1,235 +1,309 @@
 package com.example.trackingcaloapp.ui.profile;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.trackingcaloapp.R;
-import com.example.trackingcaloapp.data.preferences.UserPreferences;
+import com.example.trackingcaloapp.data.local.entity.WeightLog;
+import com.example.trackingcaloapp.model.UserInfo;
 import com.example.trackingcaloapp.ui.login.LoginActivity;
-import com.example.trackingcaloapp.utils.CalorieCalculator;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.LimitLine;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+
+/**
+ * ProfileFragment với View Mode (read-only) và Edit Mode (long press).
+ * Hiển thị thông tin cá nhân, mục tiêu, BMI và biểu đồ xu hướng cân nặng.
+ */
 public class ProfileFragment extends Fragment {
 
-    private TextInputEditText etName, etAge, etHeight, etWeight, etCalorieGoal;
-    private Spinner spinnerGender, spinnerActivityLevel, spinnerWeightGoal;
+    private ProfileViewModel viewModel;
+
+    // Cards
+    private MaterialCardView cardPersonalInfo, cardGoals, cardBMI, cardWeightTrend;
+
+    // Personal Info Views
+    private TextView tvName, tvAge, tvGender, tvHeight, tvWeight;
+
+    // Goals Views
+    private TextView tvActivityLevel, tvWeightGoal, tvCalorieGoal;
+
+    // BMI Views
     private TextView tvBMI;
     private Chip chipBMICategory;
-    private MaterialButton btnCalculateGoal, btnSave, btnLogout;
 
-    private UserPreferences userPreferences;
+    // Weight Trend Views
+    private LineChart chartWeightTrend;
+    private TextView tvEmptyChart;
 
-    private final String[] genders = {"Nam", "Nữ"};
-    private final String[] activityLevels = {
-            "Ít vận động",
-            "Vận động nhẹ",
-            "Vận động vừa",
-            "Vận động nhiều",
-            "Vận động rất nhiều"
-    };
-    private final String[] weightGoals = {"Giảm cân", "Giữ cân", "Tăng cân"};
+    // Actions
+    private FloatingActionButton fabLogWeight;
+    private MaterialButton btnLogout;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_profile, container, false);
+        return inflater.inflate(R.layout.fragment_profile_new, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        userPreferences = new UserPreferences(requireContext());
+        viewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
 
         initViews(view);
-        setupSpinners();
-        setupButtons();
-        loadUserData();
+        setupChart();
+        setupLongPressListeners();
+        setupClickListeners();
+        observeData();
     }
 
-
     private void initViews(View view) {
-        etName = view.findViewById(R.id.etName);
-        etAge = view.findViewById(R.id.etAge);
-        etHeight = view.findViewById(R.id.etHeight);
-        etWeight = view.findViewById(R.id.etWeight);
-        etCalorieGoal = view.findViewById(R.id.etCalorieGoal);
-        spinnerGender = view.findViewById(R.id.spinnerGender);
-        spinnerActivityLevel = view.findViewById(R.id.spinnerActivityLevel);
-        spinnerWeightGoal = view.findViewById(R.id.spinnerWeightGoal);
+        // Cards
+        cardPersonalInfo = view.findViewById(R.id.cardPersonalInfo);
+        cardGoals = view.findViewById(R.id.cardGoals);
+        cardBMI = view.findViewById(R.id.cardBMI);
+        cardWeightTrend = view.findViewById(R.id.cardWeightTrend);
+
+        // Personal Info
+        tvName = view.findViewById(R.id.tvName);
+        tvAge = view.findViewById(R.id.tvAge);
+        tvGender = view.findViewById(R.id.tvGender);
+        tvHeight = view.findViewById(R.id.tvHeight);
+        tvWeight = view.findViewById(R.id.tvWeight);
+
+        // Goals
+        tvActivityLevel = view.findViewById(R.id.tvActivityLevel);
+        tvWeightGoal = view.findViewById(R.id.tvWeightGoal);
+        tvCalorieGoal = view.findViewById(R.id.tvCalorieGoal);
+
+        // BMI
         tvBMI = view.findViewById(R.id.tvBMI);
         chipBMICategory = view.findViewById(R.id.chipBMICategory);
-        btnCalculateGoal = view.findViewById(R.id.btnCalculateGoal);
-        btnSave = view.findViewById(R.id.btnSave);
+
+        // Weight Trend
+        chartWeightTrend = view.findViewById(R.id.chartWeightTrend);
+        tvEmptyChart = view.findViewById(R.id.tvEmptyChart);
+
+        // Actions
+        fabLogWeight = view.findViewById(R.id.fabLogWeight);
         btnLogout = view.findViewById(R.id.btnLogout);
     }
 
-    private void setupSpinners() {
-        ArrayAdapter<String> genderAdapter = new ArrayAdapter<>(
-                requireContext(), android.R.layout.simple_spinner_item, genders);
-        genderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerGender.setAdapter(genderAdapter);
+    private void setupChart() {
+        chartWeightTrend.getDescription().setEnabled(false);
+        chartWeightTrend.setTouchEnabled(true);
+        chartWeightTrend.setDragEnabled(true);
+        chartWeightTrend.setScaleEnabled(false);
+        chartWeightTrend.setPinchZoom(false);
+        chartWeightTrend.setDrawGridBackground(false);
+        chartWeightTrend.getLegend().setEnabled(false);
 
-        ArrayAdapter<String> activityAdapter = new ArrayAdapter<>(
-                requireContext(), android.R.layout.simple_spinner_item, activityLevels);
-        activityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerActivityLevel.setAdapter(activityAdapter);
+        // X Axis
+        XAxis xAxis = chartWeightTrend.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setDrawGridLines(false);
+        xAxis.setGranularity(1f);
+        xAxis.setTextColor(requireContext().getColor(R.color.text_secondary));
+        xAxis.setValueFormatter(new ValueFormatter() {
+            private final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM", Locale.getDefault());
+            @Override
+            public String getFormattedValue(float value) {
+                return sdf.format(new Date((long) value));
+            }
+        });
 
-        ArrayAdapter<String> goalAdapter = new ArrayAdapter<>(
-                requireContext(), android.R.layout.simple_spinner_item, weightGoals);
-        goalAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerWeightGoal.setAdapter(goalAdapter);
+        // Y Axis
+        YAxis leftAxis = chartWeightTrend.getAxisLeft();
+        leftAxis.setDrawGridLines(true);
+        leftAxis.setGridColor(requireContext().getColor(R.color.outline));
+        leftAxis.setTextColor(requireContext().getColor(R.color.text_secondary));
+
+        chartWeightTrend.getAxisRight().setEnabled(false);
     }
 
-    private void setupButtons() {
-        btnCalculateGoal.setOnClickListener(v -> calculateAndSetGoal());
-        btnSave.setOnClickListener(v -> saveProfile());
+    private void setupLongPressListeners() {
+        cardPersonalInfo.setOnLongClickListener(v -> {
+            showEditPersonalInfoDialog();
+            return true;
+        });
+
+        cardGoals.setOnLongClickListener(v -> {
+            showEditGoalsDialog();
+            return true;
+        });
+    }
+
+    private void setupClickListeners() {
+        fabLogWeight.setOnClickListener(v -> showQuickWeightLogDialog());
+
         btnLogout.setOnClickListener(v -> showLogoutConfirmation());
     }
 
-    private void loadUserData() {
-        etName.setText(userPreferences.getUserName());
-        etAge.setText(String.valueOf(userPreferences.getAge()));
-        etHeight.setText(String.valueOf(userPreferences.getHeight()));
-        etWeight.setText(String.valueOf(userPreferences.getWeight()));
-        etCalorieGoal.setText(String.valueOf(userPreferences.getDailyCalorieGoal()));
-
-        String gender = userPreferences.getGender();
-        spinnerGender.setSelection(gender.equals("male") ? 0 : 1);
-
-        int activityLevel = userPreferences.getActivityLevelPosition();
-        spinnerActivityLevel.setSelection(Math.max(0, activityLevel - 1));
-
-        spinnerWeightGoal.setSelection(userPreferences.getWeightGoalPosition());
-
-        updateBMI();
+    private void observeData() {
+        viewModel.getUserInfo().observe(getViewLifecycleOwner(), this::updateUserInfoDisplay);
+        viewModel.getWeightLogs().observe(getViewLifecycleOwner(), this::updateWeightChart);
     }
 
-    private void updateBMI() {
-        try {
-            float height = Float.parseFloat(etHeight.getText().toString());
-            float weight = Float.parseFloat(etWeight.getText().toString());
+    // ==================== UPDATE UI ====================
 
-            float bmi = CalorieCalculator.calculateBMI(weight, height);
-            String category = CalorieCalculator.getBMICategory(bmi);
+    private void updateUserInfoDisplay(UserInfo info) {
+        if (info == null) return;
 
-            tvBMI.setText(String.format("%.1f", bmi));
-            chipBMICategory.setText(category);
+        // Personal Info
+        tvName.setText(info.getName());
+        tvAge.setText(String.valueOf(info.getAge()));
+        tvGender.setText(info.getGenderDisplay());
+        tvHeight.setText(String.format(Locale.getDefault(), "%.0f cm", info.getHeight()));
+        tvWeight.setText(String.format(Locale.getDefault(), "%.1f kg", info.getWeight()));
 
-            // Set color based on BMI category (Asian standard)
-            int colorRes, bgColorRes;
-            if (bmi < 18.5f) {
-                colorRes = R.color.warning;  // Thiếu cân
-                bgColorRes = R.color.warning_container;
-            } else if (bmi < 23f) {
-                colorRes = R.color.success;  // Bình thường
-                bgColorRes = R.color.success_container;
-            } else if (bmi < 25f) {
-                colorRes = R.color.warning;  // Thừa cân
-                bgColorRes = R.color.warning_container;
-            } else if (bmi < 30f) {
-                colorRes = R.color.secondary;  // Tiền béo phì
-                bgColorRes = R.color.secondary_container;
-            } else {
-                colorRes = R.color.error;  // Béo phì
-                bgColorRes = R.color.error_container;
-            }
-            tvBMI.setTextColor(requireContext().getColor(colorRes));
-            chipBMICategory.setTextColor(requireContext().getColor(colorRes));
-            chipBMICategory.setChipBackgroundColorResource(bgColorRes);
+        // Goals
+        tvActivityLevel.setText(info.getActivityLevelDisplay());
+        tvWeightGoal.setText(info.getWeightGoalDisplay());
+        tvCalorieGoal.setText(String.format(Locale.getDefault(), "%d kcal", info.getDailyCalorieGoal()));
 
-        } catch (NumberFormatException e) {
-            tvBMI.setText("--");
-            chipBMICategory.setText("--");
-        }
+        // BMI
+        updateBMIDisplay(info);
     }
 
-    private void calculateAndSetGoal() {
-        try {
-            int age = Integer.parseInt(etAge.getText().toString());
-            float height = Float.parseFloat(etHeight.getText().toString());
-            float weight = Float.parseFloat(etWeight.getText().toString());
-            boolean isMale = spinnerGender.getSelectedItemPosition() == 0;
-            int activityLevel = spinnerActivityLevel.getSelectedItemPosition() + 1;
-            int weightGoal = spinnerWeightGoal.getSelectedItemPosition();
+    private void updateBMIDisplay(UserInfo info) {
+        float bmi = info.getBmi();
+        String category = info.getBmiCategory();
 
-            float activityMultiplier = getActivityMultiplier(activityLevel);
-            int calorieGoal = CalorieCalculator.calculateDailyCalorieGoal(
-                    weight, height, age, isMale, activityMultiplier, weightGoal);
+        tvBMI.setText(String.format(Locale.getDefault(), "%.1f", bmi));
+        chipBMICategory.setText(category);
 
-            etCalorieGoal.setText(String.valueOf(calorieGoal));
-            Toast.makeText(requireContext(), "Đã tính mục tiêu calo!", Toast.LENGTH_SHORT).show();
-
-        } catch (NumberFormatException e) {
-            Toast.makeText(requireContext(), "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+        // Set color based on BMI category (Asian standard)
+        int colorRes, bgColorRes;
+        if (bmi < 18.5f) {
+            colorRes = R.color.warning;
+            bgColorRes = R.color.warning_container;
+        } else if (bmi < 23f) {
+            colorRes = R.color.success;
+            bgColorRes = R.color.success_container;
+        } else if (bmi < 25f) {
+            colorRes = R.color.warning;
+            bgColorRes = R.color.warning_container;
+        } else if (bmi < 30f) {
+            colorRes = R.color.secondary;
+            bgColorRes = R.color.secondary_container;
+        } else {
+            colorRes = R.color.error;
+            bgColorRes = R.color.error_container;
         }
+
+        tvBMI.setTextColor(requireContext().getColor(colorRes));
+        chipBMICategory.setTextColor(requireContext().getColor(colorRes));
+        chipBMICategory.setChipBackgroundColorResource(bgColorRes);
     }
 
-    private float getActivityMultiplier(int level) {
-        switch (level) {
-            case 1: return 1.2f;
-            case 2: return 1.375f;
-            case 3: return 1.55f;
-            case 4: return 1.725f;
-            case 5: return 1.9f;
-            default: return 1.55f;
+    private void updateWeightChart(List<WeightLog> logs) {
+        if (logs == null || logs.size() < 2) {
+            chartWeightTrend.setVisibility(View.GONE);
+            tvEmptyChart.setVisibility(View.VISIBLE);
+            return;
         }
+
+        chartWeightTrend.setVisibility(View.VISIBLE);
+        tvEmptyChart.setVisibility(View.GONE);
+
+        // Create entries
+        List<Entry> entries = new ArrayList<>();
+        for (WeightLog log : logs) {
+            entries.add(new Entry(log.getTimestamp(), log.getWeight()));
+        }
+
+        // Create dataset
+        LineDataSet dataSet = new LineDataSet(entries, "Cân nặng");
+        dataSet.setColor(requireContext().getColor(R.color.primary));
+        dataSet.setCircleColor(requireContext().getColor(R.color.primary));
+        dataSet.setLineWidth(2f);
+        dataSet.setCircleRadius(4f);
+        dataSet.setDrawCircleHole(true);
+        dataSet.setCircleHoleRadius(2f);
+        dataSet.setValueTextSize(10f);
+        dataSet.setValueTextColor(requireContext().getColor(R.color.text_secondary));
+        dataSet.setDrawFilled(true);
+        dataSet.setFillColor(requireContext().getColor(R.color.primary_container));
+        dataSet.setFillAlpha(50);
+        dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+
+        // Add target weight line
+        float targetWeight = viewModel.getTargetWeight();
+        if (targetWeight > 0) {
+            LimitLine targetLine = new LimitLine(targetWeight, "Mục tiêu");
+            targetLine.setLineWidth(1f);
+            targetLine.setLineColor(requireContext().getColor(R.color.secondary));
+            targetLine.enableDashedLine(10f, 10f, 0f);
+            targetLine.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_TOP);
+            targetLine.setTextSize(10f);
+            targetLine.setTextColor(requireContext().getColor(R.color.secondary));
+
+            chartWeightTrend.getAxisLeft().removeAllLimitLines();
+            chartWeightTrend.getAxisLeft().addLimitLine(targetLine);
+        }
+
+        LineData lineData = new LineData(dataSet);
+        chartWeightTrend.setData(lineData);
+        chartWeightTrend.invalidate();
     }
 
-    private void saveProfile() {
-        try {
-            String name = etName.getText().toString().trim();
-            int age = Integer.parseInt(etAge.getText().toString());
-            float height = Float.parseFloat(etHeight.getText().toString());
-            float weight = Float.parseFloat(etWeight.getText().toString());
-            int calorieGoal = Integer.parseInt(etCalorieGoal.getText().toString());
-            boolean isMale = spinnerGender.getSelectedItemPosition() == 0;
-            int activityLevel = spinnerActivityLevel.getSelectedItemPosition() + 1;
-            int weightGoal = spinnerWeightGoal.getSelectedItemPosition();
+    // ==================== DIALOGS ====================
 
-            userPreferences.setUserName(name);
-            userPreferences.setAge(age);
-            userPreferences.setHeight(height);
-            userPreferences.setWeight(weight);
-            userPreferences.setGender(isMale ? "male" : "female");
-            userPreferences.setActivityLevel(activityLevel);
-            userPreferences.setWeightGoal(weightGoal);
-            userPreferences.setDailyCalorieGoal(calorieGoal);
+    private void showEditPersonalInfoDialog() {
+        EditPersonalInfoDialogFragment dialog = EditPersonalInfoDialogFragment.newInstance();
+        dialog.show(getChildFragmentManager(), "EditPersonalInfo");
+    }
 
-            Toast.makeText(requireContext(), "Đã lưu thông tin!", Toast.LENGTH_SHORT).show();
-            updateBMI();
+    private void showEditGoalsDialog() {
+        EditGoalsDialogFragment dialog = EditGoalsDialogFragment.newInstance();
+        dialog.show(getChildFragmentManager(), "EditGoals");
+    }
 
-        } catch (NumberFormatException e) {
-            Toast.makeText(requireContext(), "Vui lòng nhập số hợp lệ", Toast.LENGTH_SHORT).show();
-        }
+    private void showQuickWeightLogDialog() {
+        QuickWeightLogDialogFragment dialog = QuickWeightLogDialogFragment.newInstance();
+        dialog.show(getChildFragmentManager(), "QuickWeightLog");
     }
 
     private void showLogoutConfirmation() {
         new MaterialAlertDialogBuilder(requireContext())
-            .setTitle(R.string.logout)
-            .setMessage(R.string.logout_confirm)
-            .setPositiveButton(R.string.confirm, (dialog, which) -> performLogout())
-            .setNegativeButton(R.string.cancel, null)
-            .show();
+                .setTitle(R.string.logout)
+                .setMessage(R.string.logout_confirm)
+                .setPositiveButton(R.string.confirm, (dialog, which) -> performLogout())
+                .setNegativeButton(R.string.cancel, null)
+                .show();
     }
 
     private void performLogout() {
-        userPreferences.logout();
+        viewModel.logout();
 
         Intent intent = new Intent(requireContext(), LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

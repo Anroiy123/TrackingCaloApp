@@ -211,5 +211,145 @@ public class CalorieCalculator {
             return 45.5f + 2.3f * (heightInInches - 60);
         }
     }
+    
+    // ==================== WEIGHT GOAL CALCULATIONS ====================
+    
+    /**
+     * Hằng số: 1kg mỡ cơ thể ≈ 7700 calories
+     */
+    public static final float CALORIES_PER_KG = 7700f;
+    
+    /**
+     * Giới hạn an toàn cho calorie deficit/surplus mỗi ngày
+     */
+    public static final int MAX_DAILY_DEFICIT = 1000;  // Tối đa giảm 1000 cal/ngày
+    public static final int MAX_DAILY_SURPLUS = 500;   // Tối đa tăng 500 cal/ngày
+    public static final int MIN_CALORIES_MALE = 1500;  // Tối thiểu cho nam
+    public static final int MIN_CALORIES_FEMALE = 1200; // Tối thiểu cho nữ
+    
+    /**
+     * Tính calorie deficit/surplus mỗi ngày dựa trên mục tiêu cân nặng cụ thể
+     * 
+     * @param currentWeight Cân nặng hiện tại (kg)
+     * @param targetWeight Cân nặng mục tiêu (kg)
+     * @param daysToGoal Số ngày để đạt mục tiêu
+     * @return Calorie deficit (âm) hoặc surplus (dương) mỗi ngày
+     */
+    public static int calculateDailyCalorieAdjustment(float currentWeight, float targetWeight, int daysToGoal) {
+        if (daysToGoal <= 0) return 0;
+        
+        float weightDiff = currentWeight - targetWeight; // Dương = cần giảm, Âm = cần tăng
+        float totalCalories = weightDiff * CALORIES_PER_KG;
+        int dailyAdjustment = Math.round(totalCalories / daysToGoal);
+        
+        // Giới hạn an toàn
+        if (dailyAdjustment > 0) {
+            // Giảm cân: giới hạn deficit
+            dailyAdjustment = Math.min(dailyAdjustment, MAX_DAILY_DEFICIT);
+        } else {
+            // Tăng cân: giới hạn surplus
+            dailyAdjustment = Math.max(dailyAdjustment, -MAX_DAILY_SURPLUS);
+        }
+        
+        return dailyAdjustment;
+    }
+    
+    /**
+     * Tính mục tiêu calo hàng ngày dựa trên mục tiêu cân nặng cụ thể
+     * 
+     * @param tdee TDEE đã tính
+     * @param currentWeight Cân nặng hiện tại (kg)
+     * @param targetWeight Cân nặng mục tiêu (kg)
+     * @param daysToGoal Số ngày để đạt mục tiêu
+     * @param isMale true nếu là nam (để áp dụng minimum calories)
+     * @return Mục tiêu calo/ngày
+     */
+    public static int calculateDailyCalorieGoalWithTarget(float tdee, float currentWeight, 
+            float targetWeight, int daysToGoal, boolean isMale) {
+        int adjustment = calculateDailyCalorieAdjustment(currentWeight, targetWeight, daysToGoal);
+        int goal = Math.round(tdee - adjustment);
+        
+        // Đảm bảo không dưới mức tối thiểu
+        int minCalories = isMale ? MIN_CALORIES_MALE : MIN_CALORIES_FEMALE;
+        return Math.max(goal, minCalories);
+    }
+    
+    /**
+     * Tính số ngày cần để đạt mục tiêu với tốc độ an toàn
+     * 
+     * @param currentWeight Cân nặng hiện tại (kg)
+     * @param targetWeight Cân nặng mục tiêu (kg)
+     * @param weeklyRate Tốc độ thay đổi mỗi tuần (kg/tuần), VD: 0.5
+     * @return Số ngày cần thiết
+     */
+    public static int calculateDaysToGoal(float currentWeight, float targetWeight, float weeklyRate) {
+        if (weeklyRate <= 0) return 0;
+        float weightDiff = Math.abs(currentWeight - targetWeight);
+        float weeks = weightDiff / weeklyRate;
+        return Math.round(weeks * 7);
+    }
+    
+    /**
+     * Tính tốc độ thay đổi cân nặng mỗi tuần dựa trên timeline
+     * 
+     * @param currentWeight Cân nặng hiện tại (kg)
+     * @param targetWeight Cân nặng mục tiêu (kg)
+     * @param days Số ngày để đạt mục tiêu
+     * @return Tốc độ thay đổi (kg/tuần)
+     */
+    public static float calculateWeeklyRate(float currentWeight, float targetWeight, int days) {
+        if (days <= 0) return 0;
+        float weightDiff = Math.abs(currentWeight - targetWeight);
+        float weeks = days / 7f;
+        return weightDiff / weeks;
+    }
+    
+    /**
+     * Kiểm tra tốc độ giảm/tăng cân có an toàn không
+     * An toàn: Giảm 0.25-1kg/tuần, Tăng 0.25-0.5kg/tuần
+     * 
+     * @param weeklyRate Tốc độ (kg/tuần)
+     * @param isLosing true nếu đang giảm cân
+     * @return true nếu an toàn
+     */
+    public static boolean isWeeklyRateSafe(float weeklyRate, boolean isLosing) {
+        if (weeklyRate < 0.1f) return true; // Quá chậm nhưng vẫn an toàn
+        
+        if (isLosing) {
+            return weeklyRate <= 1.0f; // Tối đa 1kg/tuần khi giảm
+        } else {
+            return weeklyRate <= 0.5f; // Tối đa 0.5kg/tuần khi tăng
+        }
+    }
+    
+    /**
+     * Lấy mô tả tốc độ thay đổi cân nặng
+     */
+    public static String getWeeklyRateDescription(float weeklyRate, boolean isLosing) {
+        if (weeklyRate < 0.25f) {
+            return "Rất chậm";
+        } else if (weeklyRate <= 0.5f) {
+            return "Chậm & An toàn";
+        } else if (weeklyRate <= 0.75f) {
+            return isLosing ? "Vừa phải" : "Nhanh";
+        } else if (weeklyRate <= 1.0f) {
+            return isLosing ? "Nhanh" : "Quá nhanh";
+        } else {
+            return "Quá nhanh - Không khuyến khích";
+        }
+    }
+    
+    /**
+     * Tính ngày dự kiến đạt mục tiêu
+     * 
+     * @param currentWeight Cân nặng hiện tại (kg)
+     * @param targetWeight Cân nặng mục tiêu (kg)
+     * @param weeklyRate Tốc độ thay đổi (kg/tuần)
+     * @return Timestamp của ngày dự kiến
+     */
+    public static long calculateTargetDate(float currentWeight, float targetWeight, float weeklyRate) {
+        int days = calculateDaysToGoal(currentWeight, targetWeight, weeklyRate);
+        return System.currentTimeMillis() + (days * 24L * 60L * 60L * 1000L);
+    }
 }
 

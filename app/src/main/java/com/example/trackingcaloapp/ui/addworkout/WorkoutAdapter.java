@@ -79,11 +79,15 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.ViewHold
         void bind(Workout workout, OnWorkoutClickListener listener) {
             tvWorkoutName.setText(workout.getName());
 
-            String categoryName = Constants.getWorkoutCategoryName(workout.getCategory());
-            tvWorkoutInfo.setText(String.format("%.0f cal/%s • %s",
-                    workout.getCaloriesPerUnit(), workout.getUnit(), categoryName));
+            // Format calories - show decimal for small values (< 1)
+            String calDisplay = workout.getCaloriesPerUnit() < 1
+                    ? String.format("%.1f", workout.getCaloriesPerUnit())
+                    : String.format("%.0f", workout.getCaloriesPerUnit());
 
-            tvCaloriesPerUnit.setText(String.format("%.0f", workout.getCaloriesPerUnit()));
+            String categoryName = Constants.getWorkoutCategoryName(workout.getCategory());
+            tvWorkoutInfo.setText(String.format("%s cal/%s • %s", calDisplay, workout.getUnit(), categoryName));
+
+            tvCaloriesPerUnit.setText(calDisplay);
             tvUnit.setText(String.format("cal/%s", workout.getUnit()));
 
             // Set category indicator color based on workout category

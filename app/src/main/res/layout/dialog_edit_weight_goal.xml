@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/spacing_base">
+
+        <!-- Title -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/spacing_sm"
+            android:text="Đặt mục tiêu cân nặng"
+            android:textAppearance="@style/TextAppearance.App.Title.Medium"
+            android:textColor="@color/text_primary" />
+
+        <!-- Current Weight Display -->
+        <com.google.android.material.card.MaterialCardView
+            style="@style/Widget.App.CardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/spacing_sm"
+            app:cardBackgroundColor="@color/surface_variant">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="@dimen/spacing_sm">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Hiện tại"
+                        android:textAppearance="@style/TextAppearance.App.Label.Small"
+                        android:textColor="@color/text_secondary" />
+
+                    <TextView
+                        android:id="@+id/tvCurrentWeight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="70 kg"
+                        android:textAppearance="@style/TextAppearance.App.Title.Large"
+                        android:textColor="@color/text_primary" />
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_arrow_forward"
+                    app:tint="@color/text_secondary" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Mục tiêu"
+                        android:textAppearance="@style/TextAppearance.App.Label.Small"
+                        android:textColor="@color/text_secondary" />
+
+                    <TextView
+                        android:id="@+id/tvTargetWeightPreview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="-- kg"
+                        android:textAppearance="@style/TextAppearance.App.Title.Large"
+                        android:textColor="@color/primary" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Activity Level -->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.App.TextInputLayout.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Mức độ vận động">
+
+            <AutoCompleteTextView
+                android:id="@+id/spinnerActivityLevel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Target Weight Input -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilTargetWeight"
+            style="@style/Widget.App.TextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_sm"
+            android:hint="Cân nặng mong muốn"
+            app:errorEnabled="true"
+            app:suffixText="kg">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etTargetWeight"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Timeline Selection -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_sm"
+            android:text="Thời gian thực hiện"
+            android:textAppearance="@style/TextAppearance.App.Label.Medium"
+            android:textColor="@color/text_secondary" />
+
+        <!-- Weekly Rate Chips -->
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroupWeeklyRate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_xs"
+            app:singleSelection="true"
+            app:selectionRequired="true">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipRate025"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0.25 kg/tuần" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipRate05"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="0.5 kg/tuần" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipRate075"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0.75 kg/tuần" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipRate1"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1 kg/tuần" />
+
+        </com.google.android.material.chip.ChipGroup>
+
+        <!-- Or Custom Duration -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilDuration"
+            style="@style/Widget.App.TextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_xs"
+            android:hint="Hoặc nhập số tuần"
+            app:suffixText="tuần">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etDuration"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Calculated Info Card -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardCalculatedInfo"
+            style="@style/Widget.App.CardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_sm"
+            android:visibility="gone"
+            app:cardBackgroundColor="@color/primary_container">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/spacing_sm">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Kết quả tính toán"
+                    android:textAppearance="@style/TextAppearance.App.Label.Medium"
+                    android:textColor="@color/on_primary_container" />
+
+                <!-- Daily Calorie Goal -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_xs"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Mục tiêu calo/ngày:"
+                        android:textAppearance="@style/TextAppearance.App.Body.Medium"
+                        android:textColor="@color/on_primary_container" />
+
+                    <TextView
+                        android:id="@+id/tvCalculatedCalories"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1800 kcal"
+                        android:textAppearance="@style/TextAppearance.App.Title.Medium"
+                        android:textColor="@color/on_primary_container" />
+                </LinearLayout>
+
+                <!-- Duration -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_xs"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Thời gian dự kiến:"
+                        android:textAppearance="@style/TextAppearance.App.Body.Medium"
+                        android:textColor="@color/on_primary_container" />
+
+                    <TextView
+                        android:id="@+id/tvCalculatedDuration"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="10 tuần"
+                        android:textAppearance="@style/TextAppearance.App.Body.Medium"
+                        android:textColor="@color/on_primary_container" />
+                </LinearLayout>
+
+                <!-- Target Date -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_xs"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Ngày đạt mục tiêu:"
+                        android:textAppearance="@style/TextAppearance.App.Body.Medium"
+                        android:textColor="@color/on_primary_container" />
+
+                    <TextView
+                        android:id="@+id/tvTargetDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="15/03/2026"
+                        android:textAppearance="@style/TextAppearance.App.Body.Medium"
+                        android:textColor="@color/on_primary_container" />
+                </LinearLayout>
+
+                <!-- Safety Warning -->
+                <TextView
+                    android:id="@+id/tvSafetyWarning"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_xs"
+                    android:drawableStart="@drawable/ic_info"
+                    android:drawablePadding="@dimen/spacing_xs"
+                    android:text="Tốc độ an toàn"
+                    android:textAppearance="@style/TextAppearance.App.Body.Small"
+                    android:textColor="@color/on_primary_container"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_base"
+            android:gravity="end"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCancel"
+                style="@style/Widget.App.Button.Text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cancel" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSave"
+                style="@style/Widget.App.Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_sm"
+                android:text="Lưu mục tiêu" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

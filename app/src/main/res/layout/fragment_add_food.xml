@@ -76,45 +76,53 @@
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipBreakfast"
-                    style="@style/Widget.Material3.Chip.Filter"
+                    style="@style/Widget.App.Chip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
                     android:text="@string/breakfast"
+                    android:textColor="@color/chip_text_color"
                     app:checkedIconEnabled="true"
+                    app:checkedIconTint="@color/white"
                     app:chipBackgroundColor="@color/chip_background_color"
                     app:chipStrokeColor="@color/chip_stroke_color"
                     app:chipStrokeWidth="1dp" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipLunch"
-                    style="@style/Widget.Material3.Chip.Filter"
+                    style="@style/Widget.App.Chip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/lunch"
+                    android:textColor="@color/chip_text_color"
                     app:checkedIconEnabled="true"
+                    app:checkedIconTint="@color/white"
                     app:chipBackgroundColor="@color/chip_background_color"
                     app:chipStrokeColor="@color/chip_stroke_color"
                     app:chipStrokeWidth="1dp" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipDinner"
-                    style="@style/Widget.Material3.Chip.Filter"
+                    style="@style/Widget.App.Chip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/dinner"
+                    android:textColor="@color/chip_text_color"
                     app:checkedIconEnabled="true"
+                    app:checkedIconTint="@color/white"
                     app:chipBackgroundColor="@color/chip_background_color"
                     app:chipStrokeColor="@color/chip_stroke_color"
                     app:chipStrokeWidth="1dp" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipSnack"
-                    style="@style/Widget.Material3.Chip.Filter"
+                    style="@style/Widget.App.Chip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/snack"
+                    android:textColor="@color/chip_text_color"
                     app:checkedIconEnabled="true"
+                    app:checkedIconTint="@color/white"
                     app:chipBackgroundColor="@color/chip_background_color"
                     app:chipStrokeColor="@color/chip_stroke_color"
                     app:chipStrokeWidth="1dp" />

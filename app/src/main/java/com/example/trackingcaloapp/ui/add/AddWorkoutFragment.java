@@ -191,16 +191,28 @@ public class AddWorkoutFragment extends Fragment implements WorkoutAdapter.OnWor
         TextView tvWorkoutInfo = dialogView.findViewById(R.id.tvWorkoutInfo);
         TextInputLayout tilQuantity = dialogView.findViewById(R.id.tilQuantity);
         TextInputEditText etQuantity = dialogView.findViewById(R.id.etQuantity);
+        TextInputLayout tilDuration = dialogView.findViewById(R.id.tilDuration);
         TextInputEditText etDuration = dialogView.findViewById(R.id.etDuration);
         TextInputEditText etNote = dialogView.findViewById(R.id.etNote);
         TextView tvCaloriesBurned = dialogView.findViewById(R.id.tvCaloriesBurned);
 
         tvWorkoutName.setText(workout.getName());
         String categoryName = Constants.getWorkoutCategoryName(workout.getCategory());
-        tvWorkoutInfo.setText(String.format("%.0f cal/%s • %s",
-                workout.getCaloriesPerUnit(), workout.getUnit(), categoryName));
+        
+        // Format calories display - show decimal for small values
+        String calDisplay = workout.getCaloriesPerUnit() < 1 
+                ? String.format("%.1f", workout.getCaloriesPerUnit())
+                : String.format("%.0f", workout.getCaloriesPerUnit());
+        tvWorkoutInfo.setText(String.format("%s cal/%s • %s", calDisplay, workout.getUnit(), categoryName));
 
         tilQuantity.setHint("Số lượng (" + workout.getUnit() + ")");
+        
+        // Ẩn ô thời gian nếu unit đã là "phút" (tránh duplicate input)
+        if ("phút".equals(workout.getUnit())) {
+            tilDuration.setVisibility(View.GONE);
+        } else {
+            tilDuration.setVisibility(View.VISIBLE);
+        }
 
         etQuantity.addTextChangedListener(new TextWatcher() {
             @Override
@@ -228,8 +240,14 @@ public class AddWorkoutFragment extends Fragment implements WorkoutAdapter.OnWor
                 .setPositiveButton("Thêm", (dialog, which) -> {
                     try {
                         float quantity = Float.parseFloat(etQuantity.getText().toString());
-                        String durationStr = etDuration.getText().toString();
-                        int duration = durationStr.isEmpty() ? 0 : Integer.parseInt(durationStr);
+                        int duration;
+                        // Nếu unit là "phút", duration = quantity (tự động)
+                        if ("phút".equals(workout.getUnit())) {
+                            duration = (int) quantity;
+                        } else {
+                            String durationStr = etDuration.getText().toString();
+                            duration = durationStr.isEmpty() ? 0 : Integer.parseInt(durationStr);
+                        }
                         String note = etNote.getText().toString();
                         addWorkoutEntry(workout, quantity, duration, note);
                     } catch (NumberFormatException e) {

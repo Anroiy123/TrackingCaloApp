@@ -83,6 +83,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_md"
+                    android:baselineAligned="false"
                     android:orientation="horizontal">
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -101,28 +102,21 @@
 
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <LinearLayout
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.App.TextInputLayout.ExposedDropdownMenu"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_sm"
                         android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:hint="Giới tính">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="@dimen/spacing_xs"
-                            android:text="Giới tính"
-                            android:textAppearance="@style/TextAppearance.App.Label.Small"
-                            android:textColor="@color/text_secondary" />
-
-                        <Spinner
+                        <AutoCompleteTextView
                             android:id="@+id/spinnerGender"
                             android:layout_width="match_parent"
-                            android:layout_height="@dimen/input_height"
-                            android:background="@drawable/spinner_background" />
+                            android:layout_height="wrap_content"
+                            android:inputType="none" />
 
-                    </LinearLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>
 
@@ -214,36 +208,36 @@
                 </LinearLayout>
 
                 <!-- Activity Level -->
-                <TextView
-                    android:layout_width="wrap_content"
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.App.TextInputLayout.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_base"
-                    android:text="@string/activity_level"
-                    android:textAppearance="@style/TextAppearance.App.Label.Medium"
-                    android:textColor="@color/text_secondary" />
+                    android:hint="@string/activity_level">
 
-                <Spinner
-                    android:id="@+id/spinnerActivityLevel"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/input_height"
-                    android:layout_marginTop="@dimen/spacing_xs"
-                    android:background="@drawable/spinner_background" />
+                    <AutoCompleteTextView
+                        android:id="@+id/spinnerActivityLevel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none" />
+
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- Weight Goal -->
-                <TextView
-                    android:layout_width="wrap_content"
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.App.TextInputLayout.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_md"
-                    android:text="@string/weight_goal"
-                    android:textAppearance="@style/TextAppearance.App.Label.Medium"
-                    android:textColor="@color/text_secondary" />
+                    android:hint="@string/weight_goal">
 
-                <Spinner
-                    android:id="@+id/spinnerWeightGoal"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/input_height"
-                    android:layout_marginTop="@dimen/spacing_xs"
-                    android:background="@drawable/spinner_background" />
+                    <AutoCompleteTextView
+                        android:id="@+id/spinnerWeightGoal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none" />
+
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- Calorie Goal -->
                 <com.google.android.material.textfield.TextInputLayout
@@ -331,8 +325,25 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/button_height_lg"
             android:layout_marginTop="@dimen/spacing_xl"
-            android:text="@string/save"
-            app:icon="@drawable/ic_profile" />        <!-- Divider -->        <View            android:layout_width="match_parent"            android:layout_height="1dp"            android:layout_marginTop="@dimen/spacing_xl"            android:layout_marginBottom="@dimen/spacing_base"            android:background="@color/outline" />        <!-- Logout Button -->        <com.google.android.material.button.MaterialButton            android:id="@+id/btnLogout"            style="@style/Widget.Material3.Button.OutlinedButton"            android:layout_width="match_parent"            android:layout_height="@dimen/button_height_lg"            android:text="@string/logout"            android:textColor="@color/error"            app:strokeColor="@color/error"            app:icon="@drawable/ic_close"            app:iconTint="@color/error" />
+            android:text="@string/save" />
+
+        <!-- Divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/spacing_xl"
+            android:layout_marginBottom="@dimen/spacing_base"
+            android:background="@color/outline" />
+
+        <!-- Logout Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnLogout"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/button_height_lg"
+            android:text="@string/logout"
+            android:textColor="@color/error"
+            app:strokeColor="@color/error" />
 
     </LinearLayout>
 

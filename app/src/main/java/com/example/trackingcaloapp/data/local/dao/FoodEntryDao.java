@@ -6,10 +6,14 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Transaction;
 import androidx.room.Update;
 
+import com.example.trackingcaloapp.data.local.entity.Food;
 import com.example.trackingcaloapp.data.local.entity.FoodEntry;
 import com.example.trackingcaloapp.model.DailyCalorieSum;
+import com.example.trackingcaloapp.model.FoodEntryWithFood;
+import com.example.trackingcaloapp.model.FoodWithEntry;
 import com.example.trackingcaloapp.model.HourlyCalorieSum;
 import com.example.trackingcaloapp.model.MacroSum;
 import com.example.trackingcaloapp.model.MealTypeCalories;
@@ -80,7 +84,16 @@ public interface FoodEntryDao {
      */
     @Query("SELECT * FROM food_entries WHERE date BETWEEN :startOfDay AND :endOfDay AND mealType = :mealType ORDER BY date ASC")
     LiveData<List<FoodEntry>> getEntriesByDateAndMealType(long startOfDay, long endOfDay, String mealType);
-    
+
+    /**
+     * Lấy các entries với thông tin Food trong một ngày cụ thể (JOIN)
+     * @param startOfDay Timestamp đầu ngày (00:00:00)
+     * @param endOfDay Timestamp cuối ngày (23:59:59)
+     */
+    @Transaction
+    @Query("SELECT * FROM food_entries WHERE date BETWEEN :startOfDay AND :endOfDay ORDER BY mealType ASC, date ASC")
+    LiveData<List<FoodEntryWithFood>> getEntriesWithFoodByDate(long startOfDay, long endOfDay);
+
     // ==================== AGGREGATION ====================
     
     /**

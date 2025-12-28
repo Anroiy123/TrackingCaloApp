@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData;
 import com.example.trackingcaloapp.data.local.dao.WorkoutEntryDao;
 import com.example.trackingcaloapp.data.local.database.AppDatabase;
 import com.example.trackingcaloapp.data.local.entity.WorkoutEntry;
+import com.example.trackingcaloapp.model.WorkoutEntryWithWorkout;
 
 import java.util.List;
 
@@ -50,7 +51,14 @@ public class WorkoutEntryRepository {
     public LiveData<List<WorkoutEntry>> getEntriesByDate(long startOfDay, long endOfDay) {
         return workoutEntryDao.getEntriesByDate(startOfDay, endOfDay);
     }
-    
+
+    /**
+     * Lấy entries với thông tin Workout trong một ngày (JOIN)
+     */
+    public LiveData<List<WorkoutEntryWithWorkout>> getEntriesWithWorkoutByDate(long startOfDay, long endOfDay) {
+        return workoutEntryDao.getEntriesWithWorkoutByDate(startOfDay, endOfDay);
+    }
+
     // ==================== AGGREGATION ====================
     
     /**

@@ -6,15 +6,131 @@
     android:background="@color/background"
     android:orientation="vertical">
 
-    <!-- Tab Layout -->
+    <!-- Header với Segmented Toggle -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/surface"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/spacing_xl"
+        android:paddingVertical="@dimen/spacing_sm">
+
+        <!-- Segmented Button Container -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/surface_container"
+            app:cardCornerRadius="@dimen/radius_lg"
+            app:cardElevation="0dp"
+            app:strokeWidth="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="@dimen/spacing_xs">
+
+                <!-- Food Tab Button -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardFoodTab"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:cardBackgroundColor="@color/primary"
+                    app:cardCornerRadius="@dimen/radius_base"
+                    app:cardElevation="@dimen/elevation_xs"
+                    app:rippleColor="@color/ripple_primary"
+                    app:strokeWidth="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="@dimen/spacing_md"
+                        android:paddingVertical="@dimen/spacing_sm">
+
+                        <ImageView
+                            android:id="@+id/ivFoodIcon"
+                            android:layout_width="@dimen/icon_sm"
+                            android:layout_height="@dimen/icon_sm"
+                            android:src="@drawable/ic_food"
+                            app:tint="@color/white" />
+
+                        <TextView
+                            android:id="@+id/tvFoodLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/spacing_xs"
+                            android:text="Thực phẩm"
+                            android:textAppearance="@style/TextAppearance.App.Label.Medium"
+                            android:textColor="@color/white" />
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <View
+                    android:layout_width="@dimen/spacing_xs"
+                    android:layout_height="match_parent" />
+
+                <!-- Workout Tab Button -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardWorkoutTab"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:cardBackgroundColor="@android:color/transparent"
+                    app:cardCornerRadius="@dimen/radius_base"
+                    app:cardElevation="0dp"
+                    app:rippleColor="@color/ripple_secondary"
+                    app:strokeWidth="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="@dimen/spacing_md"
+                        android:paddingVertical="@dimen/spacing_sm">
+
+                        <ImageView
+                            android:id="@+id/ivWorkoutIcon"
+                            android:layout_width="@dimen/icon_sm"
+                            android:layout_height="@dimen/icon_sm"
+                            android:src="@drawable/ic_workout"
+                            app:tint="@color/text_secondary" />
+
+                        <TextView
+                            android:id="@+id/tvWorkoutLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/spacing_xs"
+                            android:text="Bài tập"
+                            android:textAppearance="@style/TextAppearance.App.Label.Medium"
+                            android:textColor="@color/text_secondary" />
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+
+    <!-- Hidden TabLayout for ViewPager sync -->
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:tabGravity="fill"
-        app:tabMode="fixed"
-        app:tabIconTint="@color/primary"
-        app:tabIndicatorColor="@color/primary" />
+        android:layout_height="0dp"
+        android:visibility="gone" />
 
     <!-- ViewPager for Food/Workout tabs -->
     <androidx.viewpager2.widget.ViewPager2
