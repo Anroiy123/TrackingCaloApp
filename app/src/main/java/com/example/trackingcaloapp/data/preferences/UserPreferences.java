@@ -320,6 +320,9 @@ public class UserPreferences {
     
 // ==================== LOGIN STATE ====================
 
+    private static final String KEY_CURRENT_USER_ID = "current_user_id";
+    private static final String KEY_LOGIN_USERNAME = "login_username";
+
     public void setLoggedIn(boolean loggedIn) {
         sharedPreferences.edit().putBoolean(KEY_IS_LOGGED_IN, loggedIn).apply();
     }
@@ -329,7 +332,27 @@ public class UserPreferences {
     }
 
     public void logout() {
-        sharedPreferences.edit().putBoolean(KEY_IS_LOGGED_IN, false).apply();
+        sharedPreferences.edit()
+            .putBoolean(KEY_IS_LOGGED_IN, false)
+            .remove(KEY_CURRENT_USER_ID)
+            .remove(KEY_LOGIN_USERNAME)
+            .apply();
+    }
+
+    public void setCurrentUserId(int userId) {
+        sharedPreferences.edit().putInt(KEY_CURRENT_USER_ID, userId).apply();
+    }
+
+    public int getCurrentUserId() {
+        return sharedPreferences.getInt(KEY_CURRENT_USER_ID, -1);
+    }
+
+    public void setLoginUsername(String username) {
+        sharedPreferences.edit().putString(KEY_LOGIN_USERNAME, username).apply();
+    }
+
+    public String getLoginUsername() {
+        return sharedPreferences.getString(KEY_LOGIN_USERNAME, "");
     }
 
     // ==================== HELPER METHODS ====================

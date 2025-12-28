@@ -5,29 +5,33 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.trackingcaloapp.R;
+import com.example.trackingcaloapp.data.local.entity.User;
 import com.example.trackingcaloapp.data.preferences.UserPreferences;
+import com.example.trackingcaloapp.data.repository.UserRepository;
 import com.example.trackingcaloapp.ui.main.MainActivity;
+
+import java.util.concurrent.ExecutionException;
 
 /**
  * Màn hình đăng nhập của ứng dụng.
- * Sử dụng SharedPreferences để lưu trạng thái đăng nhập.
+ * Sử dụng Room Database để xác thực và SharedPreferences để lưu trạng thái.
  */
 public class LoginActivity extends AppCompatActivity {
-
-    // Hardcoded credentials (for demo purposes)
-    private static final String VALID_USERNAME = "admin";
-    private static final String VALID_PASSWORD = "123456";
 
     private EditText etUsername, etPassword;
     private CheckBox cbRememberMe;
     private Button btnLogin;
+    private TextView tvRegisterLink;
+
     private UserPreferences userPreferences;
+    private UserRepository userRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +40,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         userPreferences = new UserPreferences(this);
+        userRepository = new UserRepository(getApplication());
 
         // Check if already logged in
         if (checkLogin()) {
@@ -51,10 +56,12 @@ public class LoginActivity extends AppCompatActivity {
         etPassword = findViewById(R.id.etPassword);
         cbRememberMe = findViewById(R.id.cbRememberMe);
         btnLogin = findViewById(R.id.btnLogin);
+        tvRegisterLink = findViewById(R.id.tvRegisterLink);
     }
 
     private void setupListeners() {
         btnLogin.setOnClickListener(v -> attemptLogin());
+        tvRegisterLink.setOnClickListener(v -> navigateToRegister());
     }
 
     /**
@@ -77,16 +84,48 @@ public class LoginActivity extends AppCompatActivity {
         String username = etUsername.getText().toString().trim();
         String password = etPassword.getText().toString();
 
-        if (username.equals(VALID_USERNAME) && password.equals(VALID_PASSWORD)) {
-            // Valid credentials
-            if (cbRememberMe.isChecked()) {
-                userPreferences.setLoggedIn(true);
-            }
-            navigateToMain();
-        } else {
-            // Invalid credentials
-            Toast.makeText(this, R.string.login_error, Toast.LENGTH_SHORT).show();
+        if (username.isEmpty()) {
+            etUsername.setError(getString(R.string.error_username_required));
+            etUsername.requestFocus();
+            return;
         }
+
+        if (password.isEmpty()) {
+            etPassword.setError(getString(R.string.error_password_required));
+            etPassword.requestFocus();
+            return;
+        }
+
+        btnLogin.setEnabled(false);
+
+        try {
+            User user = userRepository.login(username, password).get();
+
+            if (user != null) {
+                // Valid credentials
+                if (cbRememberMe.isChecked()) {
+                    userPreferences.setLoggedIn(true);
+                }
+                userPreferences.setCurrentUserId(user.getId());
+                userPreferences.setLoginUsername(username);
+                navigateToMain();
+            } else {
+                // Invalid credentials
+                Toast.makeText(this, R.string.login_error, Toast.LENGTH_SHORT).show();
+                btnLogin.setEnabled(true);
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            Toast.makeText(this, R.string.login_error, Toast.LENGTH_SHORT).show();
+            btnLogin.setEnabled(true);
+        }
+    }
+
+    /**
+     * Chuyển đến RegisterActivity.
+     */
+    private void navigateToRegister() {
+        Intent intent = new Intent(this, RegisterActivity.class);
+        startActivity(intent);
     }
 
     /**

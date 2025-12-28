@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_login_gradient"
+    android:background="@color/white"
     android:gravity="center"
     android:padding="24dp"
     tools:context=".ui.login.LoginActivity">
@@ -20,7 +20,7 @@
         <ImageView
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:src="@mipmap/ic_launcher_round"
+            android:src="@drawable/logo"
             android:contentDescription="@string/app_name" />
 
         <!-- App Title -->
@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="@string/app_name"
-            android:textColor="@color/white"
+            android:textColor="@color/primary"
             android:textSize="28sp"
             android:textStyle="bold" />
 
@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="@string/login_subtitle"
-            android:textColor="#E0FFFFFF"
+            android:textColor="@color/text_secondary"
             android:textSize="14sp" />
 
         <!-- Username Input -->
@@ -47,12 +47,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:background="@drawable/bg_input_rounded"
+            android:background="@drawable/bg_input_white"
             android:hint="@string/username"
             android:inputType="text"
             android:padding="16dp"
-            android:textColor="@color/white"
-            android:textColorHint="#B0FFFFFF"
+            android:textColor="@color/text_primary"
+            android:textColorHint="@color/text_hint"
             android:textSize="16sp"
             android:autofillHints="username" />
 
@@ -62,24 +62,25 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:background="@drawable/bg_input_rounded"
+            android:background="@drawable/bg_input_white"
             android:hint="@string/password"
             android:inputType="textPassword"
             android:padding="16dp"
-            android:textColor="@color/white"
-            android:textColorHint="#B0FFFFFF"
+            android:textColor="@color/text_primary"
+            android:textColorHint="@color/text_hint"
             android:textSize="16sp"
             android:autofillHints="password" />
 
         <!-- Remember Me -->
-        <CheckBox
+        <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/cbRememberMe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:buttonTint="@color/white"
             android:text="@string/remember_me"
-            android:textColor="@color/white" />
+            android:textColor="@color/text_primary"
+            app:buttonTint="@color/primary"
+            app:useMaterialThemeColors="true" />
 
         <!-- Login Button -->
         <com.google.android.material.button.MaterialButton
@@ -88,11 +89,22 @@
             android:layout_height="56dp"
             android:layout_marginTop="24dp"
             android:text="@string/login"
-            android:textColor="@color/primary"
+            android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:backgroundTint="@color/white"
+            app:backgroundTint="@color/primary"
             app:cornerRadius="12dp" />
+
+        <!-- Register Link -->
+        <TextView
+            android:id="@+id/tvRegisterLink"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:padding="8dp"
+            android:text="@string/no_account_register"
+            android:textColor="@color/primary"
+            android:textSize="14sp" />
 
     </LinearLayout>
 

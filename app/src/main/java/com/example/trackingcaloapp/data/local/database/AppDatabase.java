@@ -11,11 +11,13 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.trackingcaloapp.data.local.dao.FoodDao;
 import com.example.trackingcaloapp.data.local.dao.FoodEntryDao;
+import com.example.trackingcaloapp.data.local.dao.UserDao;
 import com.example.trackingcaloapp.data.local.dao.WeightLogDao;
 import com.example.trackingcaloapp.data.local.dao.WorkoutDao;
 import com.example.trackingcaloapp.data.local.dao.WorkoutEntryDao;
 import com.example.trackingcaloapp.data.local.entity.Food;
 import com.example.trackingcaloapp.data.local.entity.FoodEntry;
+import com.example.trackingcaloapp.data.local.entity.User;
 import com.example.trackingcaloapp.data.local.entity.WeightLog;
 import com.example.trackingcaloapp.data.local.entity.Workout;
 import com.example.trackingcaloapp.data.local.entity.WorkoutEntry;
@@ -28,8 +30,8 @@ import java.util.concurrent.Executors;
  * Singleton pattern để đảm bảo chỉ có một instance duy nhất.
  */
 @Database(
-    entities = {Food.class, FoodEntry.class, Workout.class, WorkoutEntry.class, WeightLog.class},
-    version = 3,
+    entities = {Food.class, FoodEntry.class, Workout.class, WorkoutEntry.class, WeightLog.class, User.class},
+    version = 4,
     exportSchema = false
 )
 public abstract class AppDatabase extends RoomDatabase {
@@ -40,6 +42,7 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract WorkoutDao workoutDao();
     public abstract WorkoutEntryDao workoutEntryDao();
     public abstract WeightLogDao weightLogDao();
+    public abstract UserDao userDao();
 
     // Singleton instance
     private static volatile AppDatabase INSTANCE;
@@ -80,6 +83,22 @@ public abstract class AppDatabase extends RoomDatabase {
     };
 
     /**
+     * Migration from version 3 to 4
+     * Thêm bảng users cho User Authentication feature
+     */
+    static final Migration MIGRATION_3_4 = new Migration(3, 4) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("CREATE TABLE IF NOT EXISTS users (" +
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                    "username TEXT, " +
+                    "passwordHash TEXT, " +
+                    "createdAt INTEGER NOT NULL)");
+            database.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_users_username ON users(username)");
+        }
+    };
+
+    /**
      * Lấy instance của database (Singleton)
      */
     public static AppDatabase getDatabase(final Context context) {
@@ -91,7 +110,7 @@ public abstract class AppDatabase extends RoomDatabase {
                             AppDatabase.class,
                             "calorie_tracker_db"
                     )
-                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
                     .addCallback(sRoomDatabaseCallback)
                     .build();
                 }
