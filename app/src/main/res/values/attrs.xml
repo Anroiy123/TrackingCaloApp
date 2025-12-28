@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- OverflowProgressBar Custom Attributes -->
+    <declare-styleable name="OverflowProgressBar">
+        <!-- Progress value (0-200+, không cap) -->
+        <attr name="opb_progress" format="float" />
+        <!-- Màu của normal segment (0-100%) -->
+        <attr name="opb_normalColor" format="color" />
+        <!-- Màu của overflow segment (>100%) -->
+        <attr name="opb_overflowColor" format="color" />
+        <!-- Màu background track -->
+        <attr name="opb_backgroundColor" format="color" />
+        <!-- Màu của goal marker -->
+        <attr name="opb_markerColor" format="color" />
+        <!-- Corner radius của progress bar -->
+        <attr name="opb_cornerRadius" format="dimension" />
+    </declare-styleable>
+</resources>

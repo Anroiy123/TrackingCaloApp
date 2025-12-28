@@ -14,7 +14,7 @@
     <string name="calories_remaining">Còn lại</string>
     <string name="calories_net">Calo NET</string>
     <string name="goal">Mục tiêu</string>
-    <string name="goal_format">Mục tiêu: %d cal</string>
+    <string name="goal_format">Mục tiêu: %d cal / 1 ngày</string>
     <string name="cal">cal</string>
     <string name="kcal">kcal</string>
 
@@ -132,4 +132,7 @@
     <string name="login_subtitle">Theo dõi calo hàng ngày</string>
     <string name="login_error">Tên đăng nhập hoặc mật khẩu không đúng</string>
     <string name="logout_confirm">Bạn có chắc muốn đăng xuất?</string>
+
+    <!-- Calorie Warning -->
+    <string name="calorie_warning_format">Bạn đã tiêu thụ vượt mức %d calo. Hãy tập thể thao để giảm bớt lượng calo này!</string>
 </resources>

@@ -254,7 +254,7 @@ public class ProfileFragment extends Fragment {
         dataSet.setDrawFilled(true);
         dataSet.setFillColor(requireContext().getColor(R.color.primary_container));
         dataSet.setFillAlpha(50);
-        dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+        dataSet.setMode(LineDataSet.Mode.LINEAR);
 
         // Add target weight line
         float targetWeight = viewModel.getTargetWeight();

@@ -9,12 +9,12 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -31,6 +31,7 @@ import com.example.trackingcaloapp.model.MacroSum;
 import com.example.trackingcaloapp.model.MealTypeCalories;
 import com.example.trackingcaloapp.model.WorkoutEntryWithWorkout;
 import com.example.trackingcaloapp.ui.main.RecentActivityAdapter;
+import com.example.trackingcaloapp.ui.view.OverflowProgressBar;
 import com.example.trackingcaloapp.utils.CalorieCalculator;
 import com.example.trackingcaloapp.utils.ChartHelper;
 import com.example.trackingcaloapp.utils.DateUtils;
@@ -59,9 +60,9 @@ public class HomeFragment extends Fragment {
     private TextView tvCaloriesBurned;
     private TextView tvCaloriesRemaining;
     private TextView tvGoalInfo;
-    private TextView tvTargetInfo;
     private TextView tvProgressPercent;
-    private ProgressBar progressCalories;
+    private TextView tvCalorieWarning;
+    private OverflowProgressBar progressCalories;
     private RecyclerView rvRecentActivities;
     private TextView tvNoActivities;
     private TextView tvViewAll;
@@ -137,8 +138,21 @@ public class HomeFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        // Refresh goal info khi quay lại từ Profile (user có thể đã thay đổi mục tiêu)
+        refreshGoalDisplay();
         loadTodayData();
         loadChartData();
+    }
+    
+    /**
+     * Refresh hiển thị mục tiêu calo - gọi khi quay lại từ màn hình khác
+     */
+    private void refreshGoalDisplay() {
+        int calorieGoal = userPreferences.getDailyCalorieGoal();
+        tvGoalInfo.setText(getString(R.string.goal_format, calorieGoal));
+        
+        // Cập nhật lại net calories với goal mới
+        updateNetCalories();
     }
 
     private void initViews(View view) {
@@ -149,8 +163,8 @@ public class HomeFragment extends Fragment {
         tvCaloriesBurned = view.findViewById(R.id.tvCaloriesBurned);
         tvCaloriesRemaining = view.findViewById(R.id.tvCaloriesRemaining);
         tvGoalInfo = view.findViewById(R.id.tvGoalInfo);
-        tvTargetInfo = view.findViewById(R.id.tvTargetInfo);
         tvProgressPercent = view.findViewById(R.id.tvProgressPercent);
+        tvCalorieWarning = view.findViewById(R.id.tvCalorieWarning);
         progressCalories = view.findViewById(R.id.progressCalories);
         rvRecentActivities = view.findViewById(R.id.rvRecentActivities);
         tvNoActivities = view.findViewById(R.id.tvNoActivities);
@@ -302,25 +316,23 @@ public class HomeFragment extends Fragment {
     private void loadTodayData() {
         long startOfDay = DateUtils.getStartOfDay(System.currentTimeMillis());
         long endOfDay = DateUtils.getEndOfDay(System.currentTimeMillis());
-        int calorieGoal = userPreferences.getDailyCalorieGoal();
-
-        tvGoalInfo.setText(getString(R.string.goal_format, calorieGoal));
         
-        // Hiển thị thông tin target weight nếu có
-        updateTargetWeightInfo();
+        // Cập nhật hiển thị goal info (đọc mới mỗi lần load)
+        int calorieGoal = userPreferences.getDailyCalorieGoal();
+        tvGoalInfo.setText(getString(R.string.goal_format, calorieGoal));
 
         LiveData<Float> consumedLiveData = foodEntryRepository.getTotalCaloriesByDate(startOfDay, endOfDay);
         consumedLiveData.observe(getViewLifecycleOwner(), consumed -> {
             cachedConsumed = consumed != null ? consumed : 0f;
             tvCaloriesConsumed.setText(String.valueOf((int) cachedConsumed));
-            updateNetCalories(calorieGoal);
+            updateNetCalories(); // Không truyền calorieGoal, đọc trực tiếp trong method
         });
 
         LiveData<Float> burnedLiveData = workoutEntryRepository.getTotalCaloriesBurnedByDate(startOfDay, endOfDay);
         burnedLiveData.observe(getViewLifecycleOwner(), burned -> {
             cachedBurned = burned != null ? burned : 0f;
             tvCaloriesBurned.setText(String.valueOf((int) cachedBurned));
-            updateNetCalories(calorieGoal);
+            updateNetCalories(); // Không truyền calorieGoal, đọc trực tiếp trong method
         });
 
         LiveData<List<FoodEntryWithFood>> foodEntriesLiveData = foodEntryRepository.getEntriesWithFoodByDate(startOfDay, endOfDay);
@@ -334,54 +346,69 @@ public class HomeFragment extends Fragment {
         });
     }
     
-    private void updateTargetWeightInfo() {
-        if (tvTargetInfo == null) return;
+    /**
+     * Cập nhật net calories, remaining và progress bar.
+     * Đọc calorieGoal trực tiếp từ UserPreferences để đảm bảo luôn có giá trị mới nhất.
+     */
+    private void updateNetCalories() {
+        // Đọc calorieGoal trực tiếp để đảm bảo giá trị mới nhất sau khi user thay đổi trong Profile
+        int calorieGoal = userPreferences.getDailyCalorieGoal();
         
-        if (userPreferences.hasTargetWeight() && userPreferences.hasTargetDate()) {
-            float currentWeight = userPreferences.getUserWeight();
-            float targetWeight = userPreferences.getTargetWeight();
-            long targetDate = userPreferences.getTargetDate();
-            float weeklyRate = userPreferences.getWeeklyRate();
-            
-            // Tính số ngày còn lại
-            long now = System.currentTimeMillis();
-            long daysRemaining = (targetDate - now) / (24L * 60L * 60L * 1000L);
-            
-            if (daysRemaining > 0) {
-                boolean isLosing = currentWeight > targetWeight;
-                String direction = isLosing ? "Giảm" : "Tăng";
-                float weightDiff = Math.abs(currentWeight - targetWeight);
-                
-                // Format: "Mục tiêu: 65kg • Còn 30 ngày • Giảm 0.5kg/tuần"
-                String targetInfo = String.format("🎯 %.1fkg • Còn %d ngày • %s %.2fkg/tuần",
-                        targetWeight, daysRemaining, direction, weeklyRate);
-                tvTargetInfo.setText(targetInfo);
-                tvTargetInfo.setVisibility(View.VISIBLE);
-            } else {
-                // Đã quá hạn
-                tvTargetInfo.setText("⏰ Đã đến hạn mục tiêu - Hãy cập nhật!");
-                tvTargetInfo.setVisibility(View.VISIBLE);
-            }
-        } else {
-            tvTargetInfo.setVisibility(View.GONE);
-        }
-    }
-
-    private void updateNetCalories(int calorieGoal) {
         float netCalories = cachedConsumed - cachedBurned;
         float remaining = calorieGoal - netCalories;
 
         tvNetCalories.setText(String.valueOf((int) netCalories));
         tvCaloriesRemaining.setText(String.valueOf((int) remaining));
 
-        int progress = calorieGoal > 0 ? (int) ((netCalories / calorieGoal) * 100) : 0;
-        progress = Math.min(progress, 100);
+        // Calculate actual progress (không cap)
+        float progress = calorieGoal > 0 ? (netCalories / calorieGoal) * 100 : 0;
+        
+        // Update progress bar với giá trị thực
         progressCalories.setProgress(progress);
         
-        // Cập nhật phần trăm tiến độ
-        if (tvProgressPercent != null) {
-            tvProgressPercent.setText(progress + "%");
+        // Update percent text với màu sắc
+        updateProgressText(progress);
+        
+        // Update calorie warning message
+        updateCalorieWarning(remaining);
+    }
+
+    /**
+     * Cập nhật hiển thị cảnh báo khi vượt mức calo cho phép
+     * @param remaining Số calo còn lại (âm nếu vượt mức)
+     */
+    private void updateCalorieWarning(float remaining) {
+        if (tvCalorieWarning == null) return;
+        
+        if (remaining < 0) {
+            int overAmount = (int) Math.abs(remaining);
+            String warningText = getString(R.string.calorie_warning_format, overAmount);
+            tvCalorieWarning.setText(warningText);
+            tvCalorieWarning.setVisibility(View.VISIBLE);
+        } else {
+            tvCalorieWarning.setVisibility(View.GONE);
         }
+    }
+
+    /**
+     * Cập nhật text hiển thị phần trăm tiến độ và đổi màu khi vượt mục tiêu
+     * @param progress Phần trăm tiến độ (0-200+)
+     */
+    private void updateProgressText(float progress) {
+        if (tvProgressPercent == null) return;
+        
+        // Hiển thị text: cap tại 200%+
+        if (progress > 200) {
+            tvProgressPercent.setText("200%+");
+        } else {
+            tvProgressPercent.setText((int) progress + "%");
+        }
+        
+        // Đổi màu text khi vượt mục tiêu (>100%)
+        int textColor = progress > 100 
+            ? ContextCompat.getColor(requireContext(), R.color.error)
+            : ContextCompat.getColor(requireContext(), R.color.primary);
+        tvProgressPercent.setTextColor(textColor);
     }
 
     private void updateRecentActivities(List<FoodEntryWithFood> foodEntries, List<WorkoutEntryWithWorkout> workoutEntries) {

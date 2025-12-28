@@ -123,15 +123,17 @@
 
                     </LinearLayout>
 
-                    <ProgressBar
+                    <com.example.trackingcaloapp.ui.view.OverflowProgressBar
                         android:id="@+id/progressCalories"
-                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/calorie_progress_height"
                         android:layout_marginTop="@dimen/spacing_sm"
-                        android:max="100"
-                        android:progress="0"
-                        android:progressDrawable="@drawable/progress_bar_horizontal" />
+                        app:opb_progress="0"
+                        app:opb_normalColor="@color/progress_normal"
+                        app:opb_overflowColor="@color/progress_over"
+                        app:opb_backgroundColor="@color/progress_track"
+                        app:opb_markerColor="@color/text_primary"
+                        app:opb_cornerRadius="@dimen/radius_full" />
 
                     <TextView
                         android:id="@+id/tvGoalInfo"
@@ -139,21 +141,23 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginTop="@dimen/spacing_sm"
-                        android:text="Mục tiêu: 2000 cal"
+                        android:text="Mục tiêu: 2000 cal / 1 ngày"
                         android:textAppearance="@style/TextAppearance.App.Body.Small"
                         android:textColor="@color/text_tertiary" />
 
-                    <!-- Target Weight Info -->
+                    <!-- Calorie Warning Message -->
                     <TextView
-                        android:id="@+id/tvTargetInfo"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/tvCalorieWarning"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="@dimen/spacing_xs"
-                        android:text="🎯 65kg • Còn 30 ngày"
+                        android:layout_marginTop="@dimen/spacing_sm"
+                        android:background="@drawable/bg_warning_message"
+                        android:gravity="center"
+                        android:padding="@dimen/spacing_sm"
                         android:textAppearance="@style/TextAppearance.App.Body.Small"
-                        android:textColor="@color/primary"
-                        android:visibility="gone" />
+                        android:textColor="@color/error"
+                        android:visibility="gone"
+                        android:drawablePadding="@dimen/spacing_xs" />
 
                 </LinearLayout>
 
