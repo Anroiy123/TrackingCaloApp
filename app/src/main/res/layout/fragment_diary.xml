@@ -108,43 +108,48 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="@dimen/spacing_md">
+                    android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Tiến độ"
+                        android:text="Tiến độ hôm nay"
                         android:textAppearance="@style/TextAppearance.App.Label.Medium"
                         android:textColor="@color/text_secondary" />
 
                     <TextView
-                        android:id="@+id/tvCalorieGoal"
+                        android:id="@+id/tvProgressPercent"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="2000"
-                        android:textAppearance="@style/TextAppearance.App.Label.Medium"
+                        android:text="0%"
+                        android:textAppearance="@style/TextAppearance.App.Label.Large"
                         android:textColor="@color/primary" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=" cal"
-                        android:textAppearance="@style/TextAppearance.App.Label.Small"
-                        android:textColor="@color/text_tertiary" />
 
                 </LinearLayout>
 
-                <ProgressBar
+                <com.example.trackingcaloapp.ui.view.OverflowProgressBar
                     android:id="@+id/progressCalories"
-                    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="8dp"
+                    android:layout_height="@dimen/calorie_progress_height"
+                    android:layout_marginTop="@dimen/spacing_sm"
+                    app:opb_progress="0"
+                    app:opb_normalColor="@color/progress_normal"
+                    app:opb_overflowColor="@color/progress_over"
+                    app:opb_backgroundColor="@color/progress_track"
+                    app:opb_markerColor="@color/text_primary"
+                    app:opb_cornerRadius="@dimen/radius_full" />
+
+                <TextView
+                    android:id="@+id/tvCalorieGoal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/spacing_sm"
                     android:layout_marginBottom="@dimen/spacing_md"
-                    android:max="100"
-                    android:progress="0"
-                    android:progressDrawable="@drawable/progress_bar_horizontal" />
+                    android:text="Mục tiêu: 2000 cal"
+                    android:textAppearance="@style/TextAppearance.App.Body.Small"
+                    android:textColor="@color/text_tertiary" />
 
                 <!-- Stats Row -->
                 <LinearLayout
@@ -342,6 +347,174 @@
                     </LinearLayout>
 
                 </LinearLayout>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Macro Nutrients Card -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/spacing_base"
+            android:layout_marginTop="@dimen/spacing_base"
+            app:cardBackgroundColor="@color/surface"
+            app:cardCornerRadius="@dimen/radius_lg"
+            app:cardElevation="@dimen/elevation_none"
+            app:strokeColor="@color/outline"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/spacing_lg">
+
+                <!-- Header -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Dinh dưỡng"
+                    android:textAppearance="@style/TextAppearance.App.Title.Medium"
+                    android:textColor="@color/text_primary" />
+
+                <!-- Protein Progress -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_md"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Protein"
+                        android:textAppearance="@style/TextAppearance.App.Label.Medium"
+                        android:textColor="@color/macro_protein" />
+
+                    <TextView
+                        android:id="@+id/tvProteinPercent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0%"
+                        android:textAppearance="@style/TextAppearance.App.Label.Medium"
+                        android:textColor="@color/macro_protein" />
+
+                </LinearLayout>
+
+                <com.example.trackingcaloapp.ui.view.OverflowProgressBar
+                    android:id="@+id/progressProtein"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/progress_bar_height_thick"
+                    android:layout_marginTop="@dimen/spacing_xs"
+                    app:opb_progress="0"
+                    app:opb_normalColor="@color/macro_protein"
+                    app:opb_overflowColor="@color/progress_over"
+                    app:opb_backgroundColor="@color/progress_track"
+                    app:opb_cornerRadius="@dimen/radius_full" />
+
+                <TextView
+                    android:id="@+id/tvProteinValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_xs"
+                    android:text="0g / 0g"
+                    android:textAppearance="@style/TextAppearance.App.Body.Small"
+                    android:textColor="@color/text_tertiary" />
+
+                <!-- Carbs Progress -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_md"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Carbs"
+                        android:textAppearance="@style/TextAppearance.App.Label.Medium"
+                        android:textColor="@color/macro_carbs" />
+
+                    <TextView
+                        android:id="@+id/tvCarbsPercent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0%"
+                        android:textAppearance="@style/TextAppearance.App.Label.Medium"
+                        android:textColor="@color/macro_carbs" />
+
+                </LinearLayout>
+
+                <com.example.trackingcaloapp.ui.view.OverflowProgressBar
+                    android:id="@+id/progressCarbs"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/progress_bar_height_thick"
+                    android:layout_marginTop="@dimen/spacing_xs"
+                    app:opb_progress="0"
+                    app:opb_normalColor="@color/macro_carbs"
+                    app:opb_overflowColor="@color/progress_over"
+                    app:opb_backgroundColor="@color/progress_track"
+                    app:opb_cornerRadius="@dimen/radius_full" />
+
+                <TextView
+                    android:id="@+id/tvCarbsValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_xs"
+                    android:text="0g / 0g"
+                    android:textAppearance="@style/TextAppearance.App.Body.Small"
+                    android:textColor="@color/text_tertiary" />
+
+                <!-- Fat Progress -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_md"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Fat"
+                        android:textAppearance="@style/TextAppearance.App.Label.Medium"
+                        android:textColor="@color/macro_fat" />
+
+                    <TextView
+                        android:id="@+id/tvFatPercent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0%"
+                        android:textAppearance="@style/TextAppearance.App.Label.Medium"
+                        android:textColor="@color/macro_fat" />
+
+                </LinearLayout>
+
+                <com.example.trackingcaloapp.ui.view.OverflowProgressBar
+                    android:id="@+id/progressFat"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/progress_bar_height_thick"
+                    android:layout_marginTop="@dimen/spacing_xs"
+                    app:opb_progress="0"
+                    app:opb_normalColor="@color/macro_fat"
+                    app:opb_overflowColor="@color/progress_over"
+                    app:opb_backgroundColor="@color/progress_track"
+                    app:opb_cornerRadius="@dimen/radius_full" />
+
+                <TextView
+                    android:id="@+id/tvFatValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_xs"
+                    android:text="0g / 0g"
+                    android:textAppearance="@style/TextAppearance.App.Body.Small"
+                    android:textColor="@color/text_tertiary" />
 
             </LinearLayout>
 

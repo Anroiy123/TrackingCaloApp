@@ -157,6 +157,11 @@
     <color name="fat_light">#F3E8FF</color>
     <color name="fat_container">#FAF5FF</color>
 
+    <!-- Macro Progress Bar Colors -->
+    <color name="macro_protein">@color/protein</color>
+    <color name="macro_carbs">@color/carbs</color>
+    <color name="macro_fat">@color/fat</color>
+
     <!-- ============================================== -->
     <!-- PROGRESS BAR COLORS                           -->
     <!-- ============================================== -->
