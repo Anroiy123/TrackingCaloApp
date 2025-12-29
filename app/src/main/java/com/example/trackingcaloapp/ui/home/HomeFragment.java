@@ -54,7 +54,6 @@ public class HomeFragment extends Fragment {
     private OnNavigationListener navigationListener;
 
     private TextView tvGreeting;
-    private TextView tvDate;
     private TextView tvNetCalories;
     private TextView tvCaloriesConsumed;
     private TextView tvCaloriesBurned;
@@ -157,7 +156,6 @@ public class HomeFragment extends Fragment {
 
     private void initViews(View view) {
         tvGreeting = view.findViewById(R.id.tvGreeting);
-        tvDate = view.findViewById(R.id.tvDate);
         tvNetCalories = view.findViewById(R.id.tvNetCalories);
         tvCaloriesConsumed = view.findViewById(R.id.tvCaloriesConsumed);
         tvCaloriesBurned = view.findViewById(R.id.tvCaloriesBurned);
@@ -168,8 +166,6 @@ public class HomeFragment extends Fragment {
         progressCalories = view.findViewById(R.id.progressCalories);
         rvRecentActivities = view.findViewById(R.id.rvRecentActivities);
         tvNoActivities = view.findViewById(R.id.tvNoActivities);
-
-        tvDate.setText(DateUtils.getDisplayDate(System.currentTimeMillis()));
 
         // Set greeting with user name
         String userName = userPreferences.getUserName();

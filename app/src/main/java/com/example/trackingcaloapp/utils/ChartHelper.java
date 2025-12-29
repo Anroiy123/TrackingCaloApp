@@ -38,27 +38,74 @@ import java.util.Locale;
 /**
  * Utility class để cấu hình và cập nhật MPAndroidChart charts.
  * Cung cấp consistent styling theo theme của app.
+ * Supports both light and dark mode through dynamic color resolution.
  */
 public class ChartHelper {
 
-    // Color constants matching app theme
-    public static final int COLOR_PRIMARY = 0xFF4CAF50;         // Green
-    public static final int COLOR_PRIMARY_LIGHT = 0x804CAF50;   // Green with alpha
-    public static final int COLOR_CONSUMED = 0xFFFF5722;        // Orange
-    public static final int COLOR_BURNED = 0xFF4CAF50;          // Green
-
-    // Meal type colors
-    public static final int COLOR_BREAKFAST = 0xFFFFB74D;       // Warm orange
-    public static final int COLOR_LUNCH = 0xFF4FC3F7;           // Light blue
-    public static final int COLOR_DINNER = 0xFF7986CB;          // Purple
-    public static final int COLOR_SNACK = 0xFFAED581;           // Light green
-
-    // Macro colors
-    public static final int COLOR_PROTEIN = 0xFFE57373;         // Red
-    public static final int COLOR_CARBS = 0xFF64B5F6;           // Blue
-    public static final int COLOR_FAT = 0xFFFFD54F;             // Yellow
-
     private static final SimpleDateFormat DAY_FORMAT = new SimpleDateFormat("EEE", new Locale("vi", "VN"));
+
+    // ==================== DYNAMIC COLOR GETTERS ====================
+
+    /** Get primary color from resources (theme-aware) */
+    public static int getColorPrimary(Context ctx) {
+        return ContextCompat.getColor(ctx, R.color.primary);
+    }
+
+    /** Get primary color with alpha for fills */
+    public static int getColorPrimaryLight(Context ctx) {
+        int primary = getColorPrimary(ctx);
+        return Color.argb(128, Color.red(primary), Color.green(primary), Color.blue(primary));
+    }
+
+    /** Get consumed calories color */
+    public static int getColorConsumed(Context ctx) {
+        return ContextCompat.getColor(ctx, R.color.calories_consumed);
+    }
+
+    /** Get burned calories color */
+    public static int getColorBurned(Context ctx) {
+        return ContextCompat.getColor(ctx, R.color.calories_burned);
+    }
+
+    /** Get breakfast color */
+    public static int getColorBreakfast(Context ctx) {
+        return ContextCompat.getColor(ctx, R.color.breakfast);
+    }
+
+    /** Get lunch color */
+    public static int getColorLunch(Context ctx) {
+        return ContextCompat.getColor(ctx, R.color.lunch);
+    }
+
+    /** Get dinner color */
+    public static int getColorDinner(Context ctx) {
+        return ContextCompat.getColor(ctx, R.color.dinner);
+    }
+
+    /** Get snack color */
+    public static int getColorSnack(Context ctx) {
+        return ContextCompat.getColor(ctx, R.color.snack);
+    }
+
+    /** Get protein color */
+    public static int getColorProtein(Context ctx) {
+        return ContextCompat.getColor(ctx, R.color.protein);
+    }
+
+    /** Get carbs color */
+    public static int getColorCarbs(Context ctx) {
+        return ContextCompat.getColor(ctx, R.color.carbs);
+    }
+
+    /** Get fat color */
+    public static int getColorFat(Context ctx) {
+        return ContextCompat.getColor(ctx, R.color.fat);
+    }
+
+    /** Get surface color for transparent circles in pie chart */
+    public static int getColorSurface(Context ctx) {
+        return ContextCompat.getColor(ctx, R.color.surface);
+    }
 
     // ==================== LINE CHART ====================
 
@@ -121,9 +168,12 @@ public class ChartHelper {
             labels.add(DAY_FORMAT.format(new Date(item.getDayTimestamp())));
         }
 
+        int primaryColor = getColorPrimary(ctx);
+        int primaryLightColor = getColorPrimaryLight(ctx);
+
         LineDataSet dataSet = new LineDataSet(entries, "Calories");
-        dataSet.setColor(COLOR_PRIMARY);
-        dataSet.setCircleColor(COLOR_PRIMARY);
+        dataSet.setColor(primaryColor);
+        dataSet.setCircleColor(primaryColor);
         dataSet.setLineWidth(2.5f);
         dataSet.setCircleRadius(4f);
         dataSet.setDrawCircleHole(true);
@@ -131,7 +181,7 @@ public class ChartHelper {
         dataSet.setValueTextSize(9f);
         dataSet.setValueTextColor(ContextCompat.getColor(ctx, R.color.text_secondary));
         dataSet.setDrawFilled(true);
-        dataSet.setFillColor(COLOR_PRIMARY_LIGHT);
+        dataSet.setFillColor(primaryLightColor);
         dataSet.setFillAlpha(50);
         dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
         dataSet.setCubicIntensity(0.2f);
@@ -211,7 +261,12 @@ public class ChartHelper {
 
         List<BarEntry> entries = new ArrayList<>();
         List<String> labels = new ArrayList<>(List.of("Sáng", "Trưa", "Tối", "Phụ"));
-        int[] colors = new int[]{COLOR_BREAKFAST, COLOR_LUNCH, COLOR_DINNER, COLOR_SNACK};
+        int[] colors = new int[]{
+            getColorBreakfast(ctx),
+            getColorLunch(ctx),
+            getColorDinner(ctx),
+            getColorSnack(ctx)
+        };
 
         // Initialize all 4 meal types with 0
         float[] mealCalories = new float[4];
@@ -269,7 +324,7 @@ public class ChartHelper {
         chart.setHoleColor(Color.TRANSPARENT);
         chart.setHoleRadius(50f);
         chart.setTransparentCircleRadius(55f);
-        chart.setTransparentCircleColor(Color.WHITE);
+        chart.setTransparentCircleColor(getColorSurface(ctx));
         chart.setTransparentCircleAlpha(100);
         chart.setDrawCenterText(true);
         chart.setCenterTextSize(14f);
@@ -307,19 +362,23 @@ public class ChartHelper {
         List<PieEntry> entries = new ArrayList<>();
         List<Integer> colors = new ArrayList<>();
 
+        int proteinColor = getColorProtein(ctx);
+        int carbsColor = getColorCarbs(ctx);
+        int fatColor = getColorFat(ctx);
+
         // Không truyền label vào PieEntry - chỉ hiển thị số gam
         // Legend ở dưới sẽ hiển thị tên macro với màu tương ứng
         if (data.getProtein() > 0) {
             entries.add(new PieEntry(data.getProtein()));
-            colors.add(COLOR_PROTEIN);
+            colors.add(proteinColor);
         }
         if (data.getCarbs() > 0) {
             entries.add(new PieEntry(data.getCarbs()));
-            colors.add(COLOR_CARBS);
+            colors.add(carbsColor);
         }
         if (data.getFat() > 0) {
             entries.add(new PieEntry(data.getFat()));
-            colors.add(COLOR_FAT);
+            colors.add(fatColor);
         }
 
         if (entries.isEmpty()) {
@@ -354,13 +413,13 @@ public class ChartHelper {
         Legend legend = chart.getLegend();
         List<LegendEntry> legendEntries = new ArrayList<>();
         if (data.getProtein() > 0) {
-            legendEntries.add(new LegendEntry("Protein", Legend.LegendForm.SQUARE, 10f, 2f, null, COLOR_PROTEIN));
+            legendEntries.add(new LegendEntry("Protein", Legend.LegendForm.SQUARE, 10f, 2f, null, proteinColor));
         }
         if (data.getCarbs() > 0) {
-            legendEntries.add(new LegendEntry("Carbs", Legend.LegendForm.SQUARE, 10f, 2f, null, COLOR_CARBS));
+            legendEntries.add(new LegendEntry("Carbs", Legend.LegendForm.SQUARE, 10f, 2f, null, carbsColor));
         }
         if (data.getFat() > 0) {
-            legendEntries.add(new LegendEntry("Fat", Legend.LegendForm.SQUARE, 10f, 2f, null, COLOR_FAT));
+            legendEntries.add(new LegendEntry("Fat", Legend.LegendForm.SQUARE, 10f, 2f, null, fatColor));
         }
         legend.setCustom(legendEntries);
 
@@ -389,9 +448,12 @@ public class ChartHelper {
             labels.add(String.format(Locale.getDefault(), "%02d:00", item.getHour()));
         }
 
+        int primaryColor = getColorPrimary(ctx);
+        int primaryLightColor = getColorPrimaryLight(ctx);
+
         LineDataSet dataSet = new LineDataSet(entries, "Calories");
-        dataSet.setColor(COLOR_PRIMARY);
-        dataSet.setCircleColor(COLOR_PRIMARY);
+        dataSet.setColor(primaryColor);
+        dataSet.setCircleColor(primaryColor);
         dataSet.setLineWidth(2.5f);
         dataSet.setCircleRadius(4f);
         dataSet.setDrawCircleHole(true);
@@ -399,7 +461,7 @@ public class ChartHelper {
         dataSet.setValueTextSize(9f);
         dataSet.setValueTextColor(ContextCompat.getColor(ctx, R.color.text_secondary));
         dataSet.setDrawFilled(true);
-        dataSet.setFillColor(COLOR_PRIMARY_LIGHT);
+        dataSet.setFillColor(primaryLightColor);
         dataSet.setFillAlpha(50);
         dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
         dataSet.setCubicIntensity(0.2f);

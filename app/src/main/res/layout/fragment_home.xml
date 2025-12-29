@@ -26,17 +26,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Xin chào! 👋"
-                android:textAppearance="@style/TextAppearance.App.Headline.Small"
+                android:textAppearance="@style/TextAppearance.App.Greeting"
                 android:textColor="@color/text_primary" />
-
-            <TextView
-                android:id="@+id/tvDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_xs"
-                android:text="@string/today"
-                android:textAppearance="@style/TextAppearance.App.Body.Medium"
-                android:textColor="@color/text_secondary" />
 
         </LinearLayout>
 

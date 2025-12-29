@@ -266,6 +266,16 @@
     <!-- ============================================== -->
     <!-- TEXT APPEARANCES                              -->
     <!-- ============================================== -->
+
+    <!-- Greeting Style - Rounded Font -->
+    <style name="TextAppearance.App.Greeting" parent="TextAppearance.Material3.HeadlineSmall">
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="fontFamily">sans-serif-medium</item>
+        <item name="android:textSize">26sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:letterSpacing">-0.01</item>
+    </style>
+
     <style name="TextAppearance.App.Headline.Large" parent="TextAppearance.Material3.HeadlineLarge">
         <item name="android:textColor">@color/text_primary</item>
         <item name="fontFamily">sans-serif-medium</item>
