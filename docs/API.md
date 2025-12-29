@@ -17,6 +17,11 @@ public class Food {
     private float fat;             // Fat/100g
     private String category;       // Danh mục
     private boolean isCustom;      // User tạo?
+    
+    // API Integration fields
+    private Long apiId;            // FatSecret food_id (null = local food)
+    private String apiSource;      // "fatsecret" hoặc null
+    private long cachedAt;         // Timestamp khi cache từ API
 }
 ```
 
@@ -29,6 +34,7 @@ public class Food {
 - `Trái cây` - Các loại trái cây
 - `Đồ uống` - Nước, trà, cà phê
 - `Snack` - Đồ ăn vặt
+- `api` - Thực phẩm từ API (FatSecret/USDA)
 
 ---
 
@@ -103,6 +109,38 @@ public class WorkoutEntry {
     private long date;             // Timestamp (ms)
     private float caloriesBurned;  // Calo đốt cháy
     private String note;           // Ghi chú
+}
+```
+
+---
+
+### WeightLog Entity (Mới)
+
+```java
+@Entity(tableName = "weight_logs")
+public class WeightLog {
+    @PrimaryKey(autoGenerate = true)
+    private long id;
+    
+    private float weight;          // Cân nặng (kg)
+    private long timestamp;        // Thời điểm ghi nhận (ms)
+    private String note;           // Ghi chú (optional)
+}
+```
+
+---
+
+### User Entity (Mới)
+
+```java
+@Entity(tableName = "users")
+public class User {
+    @PrimaryKey(autoGenerate = true)
+    private int id;
+    
+    private String username;       // Tên đăng nhập (unique)
+    private String passwordHash;   // Mật khẩu đã hash (SHA-256)
+    private long createdAt;        // Thời điểm tạo tài khoản (ms)
 }
 ```
 
@@ -196,6 +234,56 @@ public interface FoodEntryDao {
 
 Tương tự FoodDao và FoodEntryDao.
 
+### WeightLogDao (Mới)
+
+```java
+@Dao
+public interface WeightLogDao {
+    @Insert
+    long insert(WeightLog log);
+    
+    @Query("SELECT * FROM weight_logs ORDER BY timestamp DESC")
+    LiveData<List<WeightLog>> getAllLogs();
+    
+    @Query("SELECT * FROM weight_logs WHERE timestamp >= :startTime ORDER BY timestamp ASC")
+    LiveData<List<WeightLog>> getLogsSince(long startTime);
+    
+    @Query("SELECT * FROM weight_logs ORDER BY timestamp DESC LIMIT 1")
+    LiveData<WeightLog> getLatestLog();
+    
+    @Query("SELECT * FROM weight_logs ORDER BY timestamp DESC LIMIT 1")
+    WeightLog getLatestLogSync();
+    
+    @Delete
+    void delete(WeightLog log);
+    
+    @Query("SELECT COUNT(*) FROM weight_logs")
+    int getLogCount();
+}
+```
+
+### UserDao (Mới)
+
+```java
+@Dao
+public interface UserDao {
+    @Insert
+    long insert(User user);
+    
+    @Query("SELECT * FROM users WHERE username = :username LIMIT 1")
+    User getUserByUsername(String username);
+    
+    @Query("SELECT * FROM users WHERE id = :userId LIMIT 1")
+    User getUserById(int userId);
+    
+    @Query("SELECT COUNT(*) FROM users WHERE username = :username")
+    int countByUsername(String username);
+    
+    @Query("SELECT EXISTS(SELECT 1 FROM users WHERE username = :username AND passwordHash = :passwordHash)")
+    boolean validateCredentials(String username, String passwordHash);
+}
+```
+
 ---
 
 ## Repositories
@@ -214,12 +302,48 @@ public class FoodRepository {
     public LiveData<List<Food>> searchFoods(String query);
     public LiveData<List<Food>> getFoodsByCategory(String category);
     public LiveData<List<String>> getAllCategories();
+    public LiveData<List<Food>> getFoodsByMealType(int mealType);
+    public LiveData<List<Food>> getCustomFoods();
+    
+    // Hybrid Search (Local + API)
+    public interface SearchCallback {
+        void onApiResults(List<Food> apiFoods);
+        void onError(String error);
+    }
+    public void searchHybrid(String query, SearchCallback callback);
     
     // Mutations (run on background thread)
     public void insert(Food food);
     public void update(Food food);
     public void delete(Food food);
     public void deleteById(int foodId);
+}
+```
+
+### WeightLogRepository (Mới)
+
+```java
+public class WeightLogRepository {
+    public WeightLogRepository(Application application);
+    
+    public void insert(WeightLog log);
+    public LiveData<List<WeightLog>> getAllLogs();
+    public LiveData<List<WeightLog>> getLogsSince(long startTime);
+    public LiveData<WeightLog> getLatestLog();
+}
+```
+
+### UserRepository (Mới)
+
+```java
+public class UserRepository {
+    public UserRepository(Application application);
+    
+    // Đăng ký - return userId nếu thành công, -1 nếu username đã tồn tại
+    public Future<Long> register(String username, String password);
+    
+    // Đăng nhập - return User nếu thành công, null nếu thất bại
+    public Future<User> login(String username, String password);
 }
 ```
 
@@ -256,12 +380,24 @@ public class CalorieCalculator {
                                                  int weightGoal);
     
     /**
+     * Tính mục tiêu calo với target weight (Mới)
+     */
+    public static int calculateDailyCalorieGoalWithTarget(float tdee, float currentWeight,
+                                                           float targetWeight, int daysToGoal,
+                                                           boolean isMale);
+    
+    /**
+     * Tính số ngày để đạt mục tiêu (Mới)
+     */
+    public static int calculateDaysToGoal(float currentWeight, float targetWeight, float weeklyRate);
+    
+    /**
      * Tính BMI (Body Mass Index)
      */
     public static float calculateBMI(float weight, float heightCm);
     
     /**
-     * Lấy phân loại BMI
+     * Lấy phân loại BMI (theo chuẩn châu Á)
      */
     public static String getBMICategory(float bmi);
     
@@ -269,6 +405,46 @@ public class CalorieCalculator {
      * Lấy hệ số hoạt động
      */
     public static float getActivityMultiplier(String activityLevel);
+}
+```
+
+### ChartHelper (Mới)
+
+```java
+public class ChartHelper {
+    /**
+     * Lấy date range cho period (7, 30, 90 ngày)
+     */
+    public static long[] getDateRangeForPeriod(int days);
+    
+    /**
+     * Setup và style cho LineChart
+     */
+    public static void setupLineChart(LineChart chart, Context context);
+    public static void updateLineChartData(LineChart chart, List<DailyCalorieSum> data, Context context);
+    
+    /**
+     * Setup và style cho BarChart
+     */
+    public static void setupBarChart(BarChart chart, Context context);
+    public static void updateBarChartData(BarChart chart, List<MealTypeCalories> data, Context context);
+    
+    /**
+     * Setup và style cho PieChart
+     */
+    public static void setupPieChart(PieChart chart, Context context);
+    public static void updatePieChartData(PieChart chart, MacroSum data, Context context);
+}
+```
+
+### PasswordUtils (Mới)
+
+```java
+public class PasswordUtils {
+    /**
+     * Hash password với SHA-256
+     */
+    public static String hashPassword(String password);
 }
 ```
 
@@ -290,23 +466,35 @@ public class DateUtils {
      * Format date thành string
      */
     public static String formatDate(long timestamp);
-    public static String formatDate(long timestamp, String pattern);
+    public static String formatDateFull(long timestamp);  // Thứ, dd/MM/yyyy
     
     /**
      * Format thời gian
      */
     public static String formatTime(long timestamp);
+    public static String formatDateTime(long timestamp);
     
     /**
-     * Kiểm tra cùng ngày
+     * Kiểm tra ngày
      */
-    public static boolean isSameDay(long timestamp1, long timestamp2);
+    public static boolean isToday(long timestamp);
+    public static boolean isYesterday(long timestamp);
     
     /**
-     * Lấy ngày hôm qua/mai
+     * Lấy display date thân thiện
      */
-    public static long getPreviousDay(long timestamp);
-    public static long getNextDay(long timestamp);
+    public static String getDisplayDate(long timestamp);  // "Hôm nay", "Hôm qua", "Thứ X, dd/MM"
+    
+    /**
+     * Lấy timestamp của n ngày trước
+     */
+    public static long getDaysAgo(int days);
+    
+    /**
+     * Lấy timestamp đầu tuần/tháng
+     */
+    public static long getStartOfWeek();
+    public static long getStartOfMonth();
 }
 ```
 
@@ -384,6 +572,29 @@ public class UserPreferences {
     public void setDailyCalorieGoal(int calories);
     public int getDailyCalorieGoal();
     
+    // Target Weight (Mới)
+    public void setTargetWeight(float weight);
+    public float getTargetWeight();
+    
+    public void setTargetDate(long timestamp);
+    public long getTargetDate();
+    
+    public void setWeeklyRate(float rate);
+    public float getWeeklyRate();
+    
+    public void clearWeightGoalTarget();
+    public boolean hasTargetWeight();
+    
+    // Login State (Mới)
+    public void setLoggedIn(boolean loggedIn);
+    public boolean isLoggedIn();
+    
+    public void setCurrentUserId(int userId);
+    public int getCurrentUserId();
+    
+    public void setLoginUsername(String username);
+    public String getLoginUsername();
+    
     // App Settings
     public void setOnboardingComplete(boolean complete);
     public boolean isOnboardingComplete();
@@ -420,42 +631,39 @@ public class UserPreferences {
 
 ## UI Components
 
-### MainActivity (Single Activity Container)
+### Activities
 
-```java
-public class MainActivity extends AppCompatActivity {
-    // Fragment container và Bottom Navigation
-    private FrameLayout fragmentContainer;
-    private BottomNavigationView bottomNav;
-    
-    // Load fragment theo tab được chọn
-    private void loadFragment(Fragment fragment);
-    
-    // Bottom Navigation listener
-    // - R.id.nav_home → HomeFragment
-    // - R.id.nav_diary → DiaryFragment
-    // - R.id.nav_add → AddFragment
-    // - R.id.nav_profile → ProfileFragment
-}
-```
+| Activity | Chức năng |
+|----------|-----------|
+| `LoginActivity` | Màn hình đăng nhập với Remember Me |
+| `RegisterActivity` | Màn hình đăng ký tài khoản mới |
+| `MainActivity` | Container chính + Bottom Navigation |
+| `OnboardingActivity` | Thiết lập ban đầu (+ target weight) |
 
 ### Main Fragments
 
 | Fragment | Chức năng |
 |----------|-----------|
-| `HomeFragment` | Dashboard - hiển thị tổng quan calo, progress bars, hoạt động gần đây |
-| `DiaryFragment` | Nhật ký - ViewPager2 với tabs FoodEntries/WorkoutEntries |
+| `HomeFragment` | Dashboard - tổng quan calo, progress bars, charts, hoạt động gần đây |
+| `DiaryFragment` | Nhật ký - ViewPager2 với tabs FoodEntries/WorkoutEntries + charts |
 | `AddFragment` | Container - ViewPager2 với tabs AddFood/AddWorkout |
-| `ProfileFragment` | Hồ sơ - quản lý thông tin cá nhân, mục tiêu, cài đặt |
+| `ProfileFragment` | Hồ sơ - thông tin cá nhân, BMI, weight chart, logout |
 
 ### Child Fragments
 
 | Fragment | Parent | Chức năng |
 |----------|--------|-----------|
-| `AddFoodFragment` | AddFragment | Tìm kiếm và thêm thực phẩm vào nhật ký |
+| `AddFoodFragment` | AddFragment | Tìm kiếm hybrid (local + API) và thêm thực phẩm |
 | `AddWorkoutFragment` | AddFragment | Tìm kiếm và thêm bài tập vào nhật ký |
 | `FoodEntriesFragment` | DiaryFragment | Hiển thị danh sách food entries theo ngày |
 | `WorkoutEntriesFragment` | DiaryFragment | Hiển thị danh sách workout entries theo ngày |
+| `QuickWeightLogDialogFragment` | ProfileFragment | Dialog ghi nhận cân nặng nhanh |
+
+### ViewModels
+
+| ViewModel | Chức năng |
+|-----------|-----------|
+| `ProfileViewModel` | Quản lý state cho ProfileFragment, weight logging, validation |
 
 ### ViewPager Adapters
 
@@ -472,4 +680,10 @@ public class AddPagerAdapter extends FragmentStateAdapter {
     // Tab 1: AddWorkoutFragment
 }
 ```
+
+### Custom Views
+
+| View | Chức năng |
+|------|-----------|
+| `OverflowProgressBar` | Progress bar hỗ trợ overflow (vượt quá 100%) |
 

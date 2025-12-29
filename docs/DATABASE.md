@@ -2,7 +2,7 @@
 
 ## Tổng Quan
 
-TrackingCaloApp sử dụng **Room Database** (SQLite wrapper) để lưu trữ dữ liệu local.
+TrackingCaloApp sử dụng **Room Database** (SQLite wrapper) để lưu trữ dữ liệu local. Database version hiện tại: **v4** với **6 entities**.
 
 ## Entity Relationship Diagram
 
@@ -18,8 +18,10 @@ TrackingCaloApp sử dụng **Room Database** (SQLite wrapper) để lưu trữ 
 │ fat             │         │ totalCalories       │
 │ category        │         │ totalProtein        │
 │ isCustom        │         │ totalCarbs          │
-└─────────────────┘         │ totalFat            │
-                            └─────────────────────┘
+│ apiId           │         │ totalFat            │
+│ apiSource       │         └─────────────────────┘
+│ cachedAt        │
+└─────────────────┘
 
 ┌─────────────────┐         ┌─────────────────────┐
 │    WORKOUTS     │         │   WORKOUT_ENTRIES   │
@@ -32,6 +34,15 @@ TrackingCaloApp sử dụng **Room Database** (SQLite wrapper) để lưu trữ 
 │ isCustom        │         │ caloriesBurned      │
 └─────────────────┘         │ note                │
                             └─────────────────────┘
+
+┌─────────────────┐         ┌─────────────────────┐
+│   WEIGHT_LOGS   │         │       USERS         │
+├─────────────────┤         ├─────────────────────┤
+│ id (PK)         │         │ id (PK)             │
+│ weight          │         │ username (UNIQUE)   │
+│ timestamp       │         │ passwordHash        │
+│ note            │         │ createdAt           │
+└─────────────────┘         └─────────────────────┘
 ```
 
 ## Tables Schema
@@ -47,7 +58,10 @@ CREATE TABLE foods (
     carbs REAL NOT NULL,
     fat REAL NOT NULL,
     category TEXT,
-    isCustom INTEGER NOT NULL DEFAULT 0
+    isCustom INTEGER NOT NULL DEFAULT 0,
+    apiId INTEGER,
+    apiSource TEXT,
+    cachedAt INTEGER DEFAULT 0
 );
 ```
 
@@ -61,6 +75,9 @@ CREATE TABLE foods (
 | fat | REAL | NO | - | Fat/100g |
 | category | TEXT | YES | NULL | Danh mục |
 | isCustom | INTEGER | NO | 0 | 1 nếu user tạo |
+| apiId | INTEGER | YES | NULL | FatSecret food_id |
+| apiSource | TEXT | YES | NULL | "fatsecret" hoặc null |
+| cachedAt | INTEGER | YES | 0 | Timestamp cache từ API |
 
 ### 2. Food Entries Table
 
@@ -143,6 +160,46 @@ CREATE INDEX index_workout_entries_date ON workout_entries(date);
 | date | INTEGER | NO | Timestamp (milliseconds) |
 | caloriesBurned | REAL | NO | = workout.caloriesPerUnit × quantity |
 | note | TEXT | YES | Ghi chú |
+
+### 5. Weight Logs Table (Mới - v3)
+
+```sql
+CREATE TABLE weight_logs (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    weight REAL NOT NULL,
+    timestamp INTEGER NOT NULL,
+    note TEXT
+);
+
+CREATE INDEX idx_weight_logs_timestamp ON weight_logs(timestamp);
+```
+
+| Column | Type | Nullable | Description |
+|--------|------|----------|-------------|
+| id | INTEGER | NO | Primary key |
+| weight | REAL | NO | Cân nặng (kg) |
+| timestamp | INTEGER | NO | Thời điểm ghi nhận (ms) |
+| note | TEXT | YES | Ghi chú |
+
+### 6. Users Table (Mới - v4)
+
+```sql
+CREATE TABLE users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT NOT NULL,
+    passwordHash TEXT NOT NULL,
+    createdAt INTEGER NOT NULL
+);
+
+CREATE UNIQUE INDEX index_users_username ON users(username);
+```
+
+| Column | Type | Nullable | Description |
+|--------|------|----------|-------------|
+| id | INTEGER | NO | Primary key |
+| username | TEXT | NO | Tên đăng nhập (unique) |
+| passwordHash | TEXT | NO | Mật khẩu đã hash (SHA-256) |
+| createdAt | INTEGER | NO | Thời điểm tạo tài khoản (ms) |
 
 ## Pre-populated Data
 
@@ -250,8 +307,8 @@ LiveData<List<FoodEntry>> getEntriesByDateAndMealType(
 
 ```java
 @Database(
-    entities = {Food.class, FoodEntry.class, Workout.class, WorkoutEntry.class},
-    version = 1,
+    entities = {Food.class, FoodEntry.class, Workout.class, WorkoutEntry.class, WeightLog.class, User.class},
+    version = 4,
     exportSchema = false
 )
 public abstract class AppDatabase extends RoomDatabase {
@@ -261,6 +318,14 @@ public abstract class AppDatabase extends RoomDatabase {
     public static final ExecutorService databaseWriteExecutor =
         Executors.newFixedThreadPool(4);
     
+    // DAOs
+    public abstract FoodDao foodDao();
+    public abstract FoodEntryDao foodEntryDao();
+    public abstract WorkoutDao workoutDao();
+    public abstract WorkoutEntryDao workoutEntryDao();
+    public abstract WeightLogDao weightLogDao();
+    public abstract UserDao userDao();
+    
     public static AppDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
             synchronized (AppDatabase.class) {
@@ -268,8 +333,9 @@ public abstract class AppDatabase extends RoomDatabase {
                     INSTANCE = Room.databaseBuilder(
                         context.getApplicationContext(),
                         AppDatabase.class,
-                        "calorie_tracker_db"
+                        "tracking_calo_database"
                     )
+                    .addMigrations(MIGRATION_2_3, MIGRATION_3_4)
                     .addCallback(sRoomDatabaseCallback)
                     .build();
                 }
@@ -301,20 +367,36 @@ public abstract class AppDatabase extends RoomDatabase {
 
 ## Migration Strategy
 
-Khi cần update database schema:
-
 ```java
-static final Migration MIGRATION_1_2 = new Migration(1, 2) {
+// Migration v2 → v3: Thêm bảng weight_logs
+static final Migration MIGRATION_2_3 = new Migration(2, 3) {
     @Override
     public void migrate(SupportSQLiteDatabase database) {
-        // Add new column
-        database.execSQL("ALTER TABLE foods ADD COLUMN fiber REAL DEFAULT 0");
+        database.execSQL("CREATE TABLE IF NOT EXISTS weight_logs (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                "weight REAL NOT NULL, " +
+                "timestamp INTEGER NOT NULL, " +
+                "note TEXT)");
+        database.execSQL("CREATE INDEX IF NOT EXISTS idx_weight_logs_timestamp ON weight_logs(timestamp)");
     }
 };
 
-// Apply migration
-Room.databaseBuilder(context, AppDatabase.class, "calorie_tracker_db")
-    .addMigrations(MIGRATION_1_2)
+// Migration v3 → v4: Thêm bảng users
+static final Migration MIGRATION_3_4 = new Migration(3, 4) {
+    @Override
+    public void migrate(SupportSQLiteDatabase database) {
+        database.execSQL("CREATE TABLE IF NOT EXISTS users (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                "username TEXT NOT NULL, " +
+                "passwordHash TEXT NOT NULL, " +
+                "createdAt INTEGER NOT NULL)");
+        database.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_users_username ON users(username)");
+    }
+};
+
+// Apply migrations
+Room.databaseBuilder(context, AppDatabase.class, "tracking_calo_database")
+    .addMigrations(MIGRATION_2_3, MIGRATION_3_4)
     .build();
 ```
 

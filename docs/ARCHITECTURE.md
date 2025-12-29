@@ -12,55 +12,63 @@ TrackingCaloApp được xây dựng theo mô hình **MVVM (Model-View-ViewModel
 │  ┌─────────────┐  ┌─────────────────────────────┐               │
 │  │  Activity   │  │         Fragments           │               │
 │  │             │  │                             │               │
-│  │ MainActivity│  │ HomeFragment    AddFragment │               │
-│  │ (Container) │  │ DiaryFragment   ProfileFrag │               │
-│  │             │  │ AddFoodFragment             │               │
-│  │ Onboarding  │  │ AddWorkoutFragment          │               │
-│  │  Activity   │  │ FoodEntriesFragment         │               │
-│  │             │  │ WorkoutEntriesFragment      │               │
+│  │ LoginActivity│  │ HomeFragment    AddFragment │               │
+│  │ RegisterAct │  │ DiaryFragment   ProfileFrag │               │
+│  │ MainActivity│  │ AddFoodFragment             │               │
+│  │ (Container) │  │ AddWorkoutFragment          │               │
+│  │ Onboarding  │  │ FoodEntriesFragment         │               │
+│  │  Activity   │  │ WorkoutEntriesFragment      │               │
 │  └──────┬──────┘  └──────────┬──────────────────┘               │
 │         │                    │                                   │
 │         └─────────┬──────────┘                                   │
 │                   │ observes LiveData                            │
 │                   ▼                                              │
 │  ┌─────────────────────────────────────────────┐                │
+│  │              ViewModels                      │                │
+│  │  ProfileViewModel                            │                │
+│  └─────────────────────────────────────────────┘                │
+│  ┌─────────────────────────────────────────────┐                │
 │  │              Adapters                        │                │
 │  │  FoodAdapter, WorkoutAdapter, EntryAdapters │                │
 │  │  DiaryPagerAdapter, AddPagerAdapter         │                │
+│  │  RecentActivityAdapter                      │                │
 │  └─────────────────────────────────────────────┘                │
 ├─────────────────────────────────────────────────────────────────┤
 │                      DATA LAYER                                  │
 │  ┌─────────────────────────────────────────────────────────┐    │
 │  │                    REPOSITORY                            │    │
-│  │  ┌──────────────┐  ┌──────────────┐                     │    │
-│  │  │FoodRepository│  │WorkoutRepo   │                     │    │
-│  │  │FoodEntryRepo │  │WorkoutEntryRepo│                   │    │
-│  │  └──────┬───────┘  └──────┬───────┘                     │    │
-│  │         │                 │                              │    │
-│  │         └────────┬────────┘                              │    │
+│  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐   │    │
+│  │  │FoodRepository│  │WorkoutRepo   │  │UserRepository│   │    │
+│  │  │FoodEntryRepo │  │WorkoutEntryRepo│ │WeightLogRepo│   │    │
+│  │  └──────┬───────┘  └──────┬───────┘  └──────┬───────┘   │    │
+│  │         │                 │                 │            │    │
+│  │         └────────┬────────┴─────────────────┘            │    │
 │  │                  │                                       │    │
 │  └──────────────────┼───────────────────────────────────────┘    │
 │                     │                                            │
-│         ┌───────────┴───────────┐                               │
-│         ▼                       ▼                               │
-│  ┌─────────────────┐    ┌─────────────────┐                     │
-│  │  Room Database  │    │SharedPreferences│                     │
-│  │                 │    │                 │                     │
-│  │  ┌───────────┐  │    │ UserPreferences │                     │
-│  │  │    DAO    │  │    │                 │                     │
-│  │  │ FoodDao   │  │    │ - userName      │                     │
-│  │  │ EntryDao  │  │    │ - calorieGoal   │                     │
-│  │  │ WorkoutDao│  │    │ - activityLevel │                     │
-│  │  └───────────┘  │    │ - weightGoal    │                     │
-│  │                 │    │                 │                     │
-│  │  ┌───────────┐  │    └─────────────────┘                     │
-│  │  │  Entity   │  │                                            │
-│  │  │ Food      │  │                                            │
-│  │  │ FoodEntry │  │                                            │
-│  │  │ Workout   │  │                                            │
-│  │  │WorkoutEntry│ │                                            │
-│  │  └───────────┘  │                                            │
-│  └─────────────────┘                                            │
+│         ┌───────────┼───────────┬───────────────┐               │
+│         ▼           ▼           ▼               ▼               │
+│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐               │
+│  │Room Database│ │SharedPrefs  │ │  API Layer  │               │
+│  │  (v4)       │ │             │ │             │               │
+│  │ ┌─────────┐ │ │UserPrefs    │ │FatSecretAPI │               │
+│  │ │  DAOs   │ │ │             │ │UsdaAPI      │               │
+│  │ │FoodDao  │ │ │- userName   │ │             │               │
+│  │ │EntryDao │ │ │- calorieGoal│ └─────────────┘               │
+│  │ │WorkoutDao│ │ │- weightGoal│                               │
+│  │ │UserDao  │ │ │- targetWeight                               │
+│  │ │WeightLog│ │ │             │                               │
+│  │ └─────────┘ │ └─────────────┘                               │
+│  │ ┌─────────┐ │                                               │
+│  │ │ Entity  │ │                                               │
+│  │ │Food     │ │                                               │
+│  │ │FoodEntry│ │                                               │
+│  │ │Workout  │ │                                               │
+│  │ │WorkoutEntry│                                              │
+│  │ │WeightLog│ │                                               │
+│  │ │User     │ │                                               │
+│  │ └─────────┘ │                                               │
+│  └─────────────┘                                               │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -97,17 +105,19 @@ Chịu trách nhiệm hiển thị data và xử lý user interactions.
 
 | Activity | Chức năng |
 |----------|-----------|
+| `LoginActivity` | Màn hình đăng nhập |
+| `RegisterActivity` | Màn hình đăng ký tài khoản |
 | `MainActivity` | Container chính, quản lý Bottom Navigation và Fragments |
-| `OnboardingActivity` | Thiết lập ban đầu cho user mới |
+| `OnboardingActivity` | Thiết lập ban đầu cho user mới (+ target weight) |
 
 #### Main Fragments (Bottom Navigation)
 
 | Fragment | Chức năng |
 |----------|-----------|
-| `HomeFragment` | Dashboard - hiển thị tổng quan calo, progress, hoạt động gần đây |
-| `DiaryFragment` | Nhật ký - ViewPager2 với tabs Food/Workout entries |
+| `HomeFragment` | Dashboard - hiển thị tổng quan calo, progress, charts, hoạt động gần đây |
+| `DiaryFragment` | Nhật ký - ViewPager2 với tabs Food/Workout entries + charts |
 | `AddFragment` | Container - ViewPager2 với tabs Thêm Food/Workout |
-| `ProfileFragment` | Hồ sơ - quản lý thông tin cá nhân và cài đặt |
+| `ProfileFragment` | Hồ sơ - quản lý thông tin cá nhân, weight tracking, BMI |
 
 #### Child Fragments
 
@@ -130,21 +140,35 @@ Chịu trách nhiệm hiển thị data và xử lý user interactions.
 | `DiaryFragmentPagerAdapter` | ViewPager2 adapter cho diary tabs (Food/Workout entries) |
 | `AddPagerAdapter` | ViewPager2 adapter cho add tabs (Food/Workout) |
 
+#### ViewModels
+
+| ViewModel | Chức năng |
+|-----------|-----------|
+| `ProfileViewModel` | Quản lý state và logic cho ProfileFragment, weight logging |
+
 ### 2. Data Layer (`data/`)
 
 #### 2.1 Local Database (`local/`)
 
-**AppDatabase.java** - Room Database Singleton
+**AppDatabase.java** - Room Database Singleton (Version 4)
 
 ```java
 @Database(
-    entities = {Food.class, FoodEntry.class, Workout.class, WorkoutEntry.class},
-    version = 1,
+    entities = {Food.class, FoodEntry.class, Workout.class, WorkoutEntry.class, WeightLog.class, User.class},
+    version = 4,
     exportSchema = false
 )
 public abstract class AppDatabase extends RoomDatabase {
+    // DAOs
+    public abstract FoodDao foodDao();
+    public abstract FoodEntryDao foodEntryDao();
+    public abstract WorkoutDao workoutDao();
+    public abstract WorkoutEntryDao workoutEntryDao();
+    public abstract WeightLogDao weightLogDao();
+    public abstract UserDao userDao();
+    
     // Singleton pattern
-    // Pre-populated data callback
+    // Migration callbacks (v2→v3: WeightLog, v3→v4: User)
     // ExecutorService for background operations
 }
 ```
@@ -153,10 +177,12 @@ public abstract class AppDatabase extends RoomDatabase {
 
 | Entity | Mô tả |
 |--------|-------|
-| `Food` | Thông tin thực phẩm (tên, calo, protein, carbs, fat) |
+| `Food` | Thông tin thực phẩm (tên, calo, protein, carbs, fat, apiId, apiSource) |
 | `FoodEntry` | Nhật ký ăn uống (foodId, quantity, mealType, date) |
 | `Workout` | Thông tin bài tập (tên, calo/unit, unit, category) |
 | `WorkoutEntry` | Nhật ký tập luyện (workoutId, quantity, duration, date) |
+| `WeightLog` | Lịch sử cân nặng (weight, timestamp, note) |
+| `User` | Tài khoản người dùng (username, passwordHash, createdAt) |
 
 **DAOs (Data Access Objects)**
 
@@ -169,14 +195,62 @@ public interface FoodDao {
     @Query("SELECT * FROM foods WHERE name LIKE '%' || :query || '%'")
     LiveData<List<Food>> searchFoods(String query);
     
+    // API Integration
+    @Query("SELECT * FROM foods WHERE apiId = :apiId AND apiSource = 'fatsecret' LIMIT 1")
+    Food getFoodByApiId(long apiId);
+    
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(Food food);
     
     // ... more queries
 }
+
+@Dao
+public interface WeightLogDao {
+    @Insert
+    long insert(WeightLog log);
+    
+    @Query("SELECT * FROM weight_logs ORDER BY timestamp DESC")
+    LiveData<List<WeightLog>> getAllLogs();
+    
+    @Query("SELECT * FROM weight_logs ORDER BY timestamp DESC LIMIT 1")
+    LiveData<WeightLog> getLatestLog();
+}
+
+@Dao
+public interface UserDao {
+    @Insert
+    long insert(User user);
+    
+    @Query("SELECT EXISTS(SELECT 1 FROM users WHERE username = :username AND passwordHash = :passwordHash)")
+    boolean validateCredentials(String username, String passwordHash);
+}
 ```
 
-#### 2.2 Preferences (`preferences/`)
+#### 2.2 API Layer (`api/`)
+
+**FatSecretApiService.java** - FatSecret Platform API
+
+```java
+public class FatSecretApiService {
+    // OAuth 2.0 authentication
+    // Food search endpoint
+    // Response parsing to Food entities
+    // Caching strategy
+}
+```
+
+**UsdaApiService.java** - USDA FoodData Central API
+
+```java
+public class UsdaApiService {
+    // API key authentication
+    // Food search endpoint
+    // Response parsing to Food entities
+}
+```
+
+#### 2.3 Preferences (`preferences/`)
 
 **UserPreferences.java** - SharedPreferences Wrapper
 
@@ -191,36 +265,49 @@ public class UserPreferences {
     - activityLevel (sedentary/light/moderate/active/very_active)
     - weightGoal (lose/maintain/gain)
     
+    // Target Weight (Mới)
+    - targetWeight
+    - targetDate
+    - weeklyRate
+    
+    // Login state (Mới)
+    - isLoggedIn
+    - currentUserId
+    - loginUsername
+    
     // App settings
     - isOnboardingComplete
     - themeMode
 }
 ```
 
-#### 2.3 Repository (`repository/`)
+#### 2.4 Repository (`repository/`)
 
 Repository pattern cung cấp clean API cho UI layer.
 
 ```java
 public class FoodRepository {
     private final FoodDao foodDao;
+    private UsdaApiService apiService;
     
-    public FoodRepository(Application application) {
-        AppDatabase db = AppDatabase.getDatabase(application);
-        foodDao = db.foodDao();
+    // Hybrid search: Local + API
+    public void searchHybrid(String query, SearchCallback callback) {
+        // 1. Return local results immediately via LiveData
+        // 2. Search API if query >= 3 chars
+        // 3. Cache API results to Room
+        // 4. Callback with API results
     }
-    
-    // Expose LiveData to UI
-    public LiveData<List<Food>> getAllFoods() {
-        return foodDao.getAllFoods();
-    }
-    
-    // Background operations
-    public void insert(Food food) {
-        AppDatabase.databaseWriteExecutor.execute(() -> {
-            foodDao.insert(food);
-        });
-    }
+}
+
+public class UserRepository {
+    public Future<Long> register(String username, String password);
+    public Future<User> login(String username, String password);
+}
+
+public class WeightLogRepository {
+    public void insert(WeightLog log);
+    public LiveData<List<WeightLog>> getAllLogs();
+    public LiveData<WeightLog> getLatestLog();
 }
 ```
 
@@ -231,8 +318,14 @@ Data classes cho UI consumption.
 | Model | Mô tả |
 |-------|-------|
 | `DailySummary` | Tổng hợp calo ngày (consumed, burned, net, remaining) |
-| `FoodWithEntry` | Wrapper kết hợp Food + FoodEntry |
-| `WorkoutWithEntry` | Wrapper kết hợp Workout + WorkoutEntry |
+| `DailyCalorieSum` | Tổng calo theo ngày (cho LineChart) |
+| `MacroSum` | Tổng macro nutrients (cho PieChart) |
+| `MealTypeCalories` | Calo theo loại bữa ăn (cho BarChart) |
+| `HourlyCalorieSum` | Calo theo giờ trong ngày |
+| `FoodEntryWithFood` | Wrapper kết hợp Food + FoodEntry |
+| `WorkoutEntryWithWorkout` | Wrapper kết hợp Workout + WorkoutEntry |
+| `UserInfo` | Thông tin user cho Profile (+ BMI, target weight) |
+| `ValidationResult` | Kết quả validate form |
 
 ### 4. Utils Layer (`utils/`)
 
@@ -240,9 +333,11 @@ Utility classes và helper functions.
 
 | Class | Chức năng |
 |-------|-----------|
-| `CalorieCalculator` | Tính BMR, TDEE, daily goal |
+| `CalorieCalculator` | Tính BMR, TDEE, daily goal, target weight calculations |
+| `ChartHelper` | Helper cho MPAndroidChart (Line, Bar, Pie) |
 | `Constants` | App constants, meal types, categories |
-| `DateUtils` | Date formatting, start/end of day |
+| `DateUtils` | Date formatting, start/end of day, period calculations |
+| `PasswordUtils` | Password hashing với SHA-256 |
 
 ## 🔐 Threading Model
 
@@ -281,9 +376,15 @@ Utility classes và helper functions.
        │
        ▼
 ┌──────────────┐     No      ┌──────────────────┐
-│  Onboarding  │◀────────────│  isOnboarding    │
-│   Activity   │             │    Complete?     │
-└──────┬───────┘             └──────────────────┘
+│   isLoggedIn │────────────▶│  LoginActivity   │
+│      ?       │             │                  │
+└──────┬───────┘             │  ┌────────────┐  │
+       │ Yes                 │  │ Register   │  │
+       ▼                     │  │ Activity   │  │
+┌──────────────┐             └──────────────────┘
+│  Onboarding  │     No              │
+│   Complete?  │◀────────────────────┘
+└──────┬───────┘
        │ Yes
        ▼
 ┌──────────────────────────────────────────────────────┐
@@ -294,6 +395,7 @@ Utility classes và helper functions.
 │  │  ┌──────────┐ ┌──────────┐ ┌──────────┐       │  │
 │  │  │  Home    │ │  Diary   │ │   Add    │       │  │
 │  │  │ Fragment │ │ Fragment │ │ Fragment │       │  │
+│  │  │ +Charts  │ │ +Charts  │ │          │       │  │
 │  │  └──────────┘ └────┬─────┘ └────┬─────┘       │  │
 │  │                    │            │              │  │
 │  │              ┌─────┴─────┐ ┌────┴────┐        │  │
@@ -303,7 +405,7 @@ Utility classes và helper functions.
 │  │              └───────────┘ └──────────┘        │  │
 │  │                                                │  │
 │  │  ┌──────────┐                                  │  │
-│  │  │ Profile  │                                  │  │
+│  │  │ Profile  │ ← Weight Chart, BMI, Logout     │  │
 │  │  │ Fragment │                                  │  │
 │  │  └──────────┘                                  │  │
 │  └────────────────────────────────────────────────┘  │
@@ -378,7 +480,13 @@ dependencies {
     implementation("androidx.recyclerview:recyclerview:1.3.2")
     implementation("androidx.cardview:cardview:1.0.0")
     implementation("androidx.viewpager2:viewpager2:1.1.0")
-    implementation("com.google.android.material:material:1.12.0")
+    implementation("com.google.android.material:material:1.13.0")
+    
+    // Charts
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+    
+    // HTTP Client
+    implementation("com.android.volley:volley:1.2.1")
 }
 ```
 
@@ -407,4 +515,11 @@ dependencies {
 - [Room Persistence Library](https://developer.android.com/training/data-storage/room)
 - [LiveData Overview](https://developer.android.com/topic/libraries/architecture/livedata)
 - [Material Design 3](https://m3.material.io/)
+- [MPAndroidChart](https://github.com/PhilJay/MPAndroidChart)
+- [FatSecret Platform API](https://platform.fatsecret.com/api/)
+- [USDA FoodData Central API](https://fdc.nal.usda.gov/api-guide.html)
 
+## 🔗 Kết nối Emulator MuMu
+```powershell
+& "D:\Program Files\Netease\MuMuPlayer\nx_main\adb.exe" connect 127.0.0.1:7555
+```
